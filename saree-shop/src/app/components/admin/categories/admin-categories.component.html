@@ -1,0 +1,136 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="s-logo-inner">
+        <div class="s-logo-mark">V</div>
+        <span class="s-logo-text">Vastra Vaibhav</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item"><span class="material-icons">dashboard</span> Dashboard</a>
+      <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item"><span class="material-icons">receipt_long</span> Orders</a>
+      <a routerLink="/admin/products" routerLinkActive="active" class="nav-item"><span class="material-icons">inventory_2</span> Products</a>
+      <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item"><span class="material-icons">category</span> Categories</a>
+      <a routerLink="/admin/homepage" routerLinkActive="active" class="nav-item"><span class="material-icons">tune</span> Homepage</a>
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-item"><span class="material-icons">group</span> Customers</a>
+      <div class="nav-divider"></div>
+      <a routerLink="/" class="nav-item"><span class="material-icons">storefront</span> View Store</a>
+      <button class="nav-item logout" (click)="auth.logout()"><span class="material-icons">logout</span> Logout</button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1 class="admin-page-title">Categories</h1>
+        <p class="admin-page-sub">{{ categories().length }} categories · manage what customers browse</p>
+      </div>
+      <button class="btn btn-primary" (click)="openAdd()">
+        <span class="material-icons">add</span> Add Category
+      </button>
+    </div>
+
+    <div *ngIf="loading()" class="loading-placeholder">Loading categories...</div>
+
+    <!-- Categories Grid -->
+    <div class="cats-grid" *ngIf="!loading()">
+      <div *ngFor="let c of categories()" class="cat-card" [class.inactive]="!c.isActive">
+        <!-- Image / Color block -->
+        <div class="cat-img-wrap">
+          <img *ngIf="c.image" [src]="c.image" [alt]="c.name">
+          <div *ngIf="!c.image" class="cat-placeholder">
+            <span class="material-icons">category</span>
+          </div>
+          <div class="cat-status-badge" [class.active]="c.isActive" [class.hidden]="!c.isActive">
+            {{ c.isActive ? 'Visible' : 'Hidden' }}
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="cat-info">
+          <h3 class="cat-name">{{ c.name }}</h3>
+          <p class="cat-desc">{{ c.description || 'No description' }}</p>
+          <div class="cat-meta">
+            <span class="cat-count">
+              <span class="material-icons">inventory_2</span>
+              {{ c.productCount }} products
+            </span>
+            <span class="cat-order">Order: {{ c.sortOrder }}</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="cat-actions">
+          <button class="cat-btn edit-btn" (click)="openEdit(c)" title="Edit">
+            <span class="material-icons">edit</span>
+          </button>
+          <button class="cat-btn toggle-btn" (click)="toggle(c)" [title]="c.isActive ? 'Hide from store' : 'Show in store'">
+            <span class="material-icons">{{ c.isActive ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+          <button class="cat-btn del-btn" (click)="confirmDelete(c)" title="Delete" [disabled]="c.productCount > 0">
+            <span class="material-icons">delete_outline</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="modal-overlay" *ngIf="modalOpen()" (click)="closeModal()">
+  <div class="modal-box cat-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editing() ? 'Edit Category' : 'Add Category' }}</h3>
+      <button class="modal-close-btn" (click)="closeModal()"><span class="material-icons">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Category Name *</label>
+        <input class="form-control" [(ngModel)]="form.name" placeholder="e.g. Tussar Silk" [disabled]="!!editing()">
+        <p class="form-hint" *ngIf="editing()">Category name cannot be changed (it links existing products).</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" [(ngModel)]="form.description" rows="2" placeholder="Brief description for customers..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Image URL</label>
+        <input class="form-control" [(ngModel)]="form.image" placeholder="https://images.unsplash.com/...">
+        <div class="img-preview" *ngIf="form.image">
+          <img [src]="form.image" alt="Preview">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sort Order <span class="form-hint-inline">(lower = appears first)</span></label>
+        <input type="number" class="form-control" [(ngModel)]="form.sortOrder" min="0">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+          <span class="material-icons">{{ saving() ? 'hourglass_top' : 'save' }}</span>
+          {{ saving() ? 'Saving...' : editing() ? 'Save Changes' : 'Create Category' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm -->
+<div class="modal-overlay" *ngIf="deleteTarget()" (click)="deleteTarget.set(null)">
+  <div class="modal-box confirm-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Delete Category</h3>
+      <button class="modal-close-btn" (click)="deleteTarget.set(null)"><span class="material-icons">close</span></button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete <strong>{{ deleteTarget()?.name }}</strong>?</p>
+      <p class="danger-note" *ngIf="deleteTarget()?.productCount === 0">This category has no products and can be safely deleted.</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" (click)="deleteTarget.set(null)">Cancel</button>
+        <button class="btn btn-danger" (click)="doDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

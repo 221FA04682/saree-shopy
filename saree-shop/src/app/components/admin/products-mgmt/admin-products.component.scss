@@ -1,0 +1,214 @@
+// Admin Products Management Styles
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+// Products grid
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.prod-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.25s;
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-warm);
+
+    .pc-acts { opacity: 1; }
+    .pc-img img { transform: scale(1.04); }
+  }
+}
+
+.pc-img {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--surface);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+}
+
+.pc-badges {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pc-acts {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.pac-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: white;
+  color: var(--text-muted);
+  box-shadow: 0 2px 6px rgba(44,24,16,0.12);
+  transition: all 0.2s;
+
+  .material-icons { font-size: 15px; }
+
+  &.edit:hover { background: var(--burgundy-pale); color: var(--burgundy); }
+  &.stock:hover { background: var(--gold-pale); color: var(--gold-warm); }
+  &.del:hover { background: rgba(192,57,43,0.1); color: var(--error); }
+}
+
+.pc-body {
+  padding: 12px 14px;
+}
+
+.pc-cat {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-warm);
+  margin-bottom: 4px;
+}
+
+.pc-name {
+  font-size: 0.875rem;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-origin {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.pc-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pc-price {
+  font-family: var(--font-display);
+  color: var(--burgundy);
+  font-size: 1rem;
+}
+
+.pc-stock {
+  font-size: 0.7rem;
+  color: var(--success);
+  font-weight: 500;
+
+  &.low { color: var(--error); }
+}
+
+// Modal styles
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--text);
+    font-weight: 400;
+  }
+}
+
+.fg-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.checkboxes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.check-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  cursor: pointer;
+
+  input[type="checkbox"] { accent-color: var(--burgundy); cursor: pointer; }
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  background: var(--error);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  transition: all 0.2s;
+
+  &:hover { background: #a93226; transform: translateY(-1px); }
+}
+
+@media (max-width: 640px) { .fg-row { grid-template-columns: 1fr; } }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .toolbar { flex-direction: column; gap: 10px; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .pc-acts { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .pc-body { padding: 10px; }
+  .pc-name { font-size: 0.8rem; }
+  .pc-price { font-size: 0.9rem; }
+  .fg-row { grid-template-columns: 1fr; }
+  .modal-body { padding: 16px; }
+  .modal-header { padding: 14px 16px; }
+}

@@ -1,0 +1,175 @@
+<!-- Loading -->
+    <div *ngIf="loading()" class="loading-wrap">
+      <div class="container" style="padding-top:80px">
+        <div class="detail-skeleton">
+          <div class="ds-img"></div>
+          <div class="ds-info">
+            <div class="skel-line sm"></div>
+            <div class="skel-line xl"></div>
+            <div class="skel-line md"></div>
+            <div class="skel-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading() && product()">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb-bar">
+        <div class="container breadcrumb">
+          <a routerLink="/">Home</a>
+          <span class="material-icons">chevron_right</span>
+          <a routerLink="/products">Collections</a>
+          <span class="material-icons">chevron_right</span>
+          <a [routerLink]="['/products']" [queryParams]="{category: product()!.category}">{{ product()!.category }}</a>
+          <span class="material-icons">chevron_right</span>
+          <span>{{ product()!.name }}</span>
+        </div>
+      </div>
+
+      <div class="container detail-layout">
+        <!-- Gallery -->
+        <div class="gallery">
+          <div class="main-img-wrap">
+            <img [src]="activeImg()" [alt]="product()!.name" class="main-img" (error)="onImgErr($event)">
+            <div class="img-badges">
+              <span *ngIf="product()!.newArrival" class="badge badge-new">New</span>
+              <span *ngIf="product()!.bestseller" class="badge badge-best">Bestseller</span>
+              <span *ngIf="product()!.discount" class="badge badge-disc">−{{ product()!.discount }}%</span>
+            </div>
+            <button class="wish-float" (click)="toggleWish()" [class.wished]="isWish()">
+              <span class="material-icons">{{ isWish() ? 'favorite' : 'favorite_border' }}</span>
+            </button>
+          </div>
+          <div class="thumbs" *ngIf="product()!.images.length > 1">
+            <img *ngFor="let img of product()!.images" [src]="img" [class.active]="img === activeImg()"
+              (click)="activeImg.set(img)" class="thumb" (error)="onImgErr($event)">
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="detail-info">
+          <div class="di-category">{{ product()!.category }} &nbsp;·&nbsp; {{ product()!.origin }}</div>
+          <h1 class="di-name">{{ product()!.name }}</h1>
+
+          <div class="di-rating">
+            <div class="stars">{{ starStr() }}</div>
+            <span class="rating-num">{{ product()!.rating }}</span>
+            <span class="review-ct">({{ product()!.reviewCount }} reviews)</span>
+            <span class="dot">·</span>
+            <span [class]="product()!.stock > 0 ? 'in-stock' : 'oos'">
+              {{ product()!.stock > 0 ? (product()!.stock <= 5 ? 'Only ' + product()!.stock + ' left' : 'In Stock') : 'Out of Stock' }}
+            </span>
+          </div>
+
+          <div class="di-price-row">
+            <span class="di-price">{{ ps.formatPrice(product()!.price) }}</span>
+            <span *ngIf="product()!.originalPrice" class="di-orig">{{ ps.formatPrice(product()!.originalPrice!) }}</span>
+            <span *ngIf="product()!.discount" class="di-disc">{{ product()!.discount }}% OFF</span>
+          </div>
+          <p class="tax-note">Inclusive of all taxes · Free shipping on orders above ₹10,000</p>
+
+          <!-- Color -->
+          <div class="di-section" *ngIf="product()!.colors.length">
+            <h4>Colour: <em>{{ selColor() }}</em></h4>
+            <div class="color-chips">
+              <button *ngFor="let c of product()!.colors" class="color-chip"
+                [class.active]="c === selColor()" (click)="selColor.set(c)">{{ c }}</button>
+            </div>
+          </div>
+
+          <!-- Qty -->
+          <div class="di-section">
+            <h4>Quantity</h4>
+            <div class="qty-row">
+              <div class="qty-ctrl">
+                <button class="qty-btn" (click)="decQty()">−</button>
+                <span>{{ qty() }}</span>
+                <button class="qty-btn" (click)="incQty()">+</button>
+              </div>
+              <span class="stock-note" [class.low]="product()!.stock <= 5">
+                {{ product()!.stock }} available
+              </span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="di-actions">
+            <button class="btn btn-primary btn-lg" (click)="addToCart()" [disabled]="product()!.stock === 0">
+              <span class="material-icons">shopping_bag</span>
+              {{ product()!.stock === 0 ? 'Out of Stock' : 'Add to Bag' }}
+            </button>
+            <button class="btn btn-outline btn-icon" (click)="toggleWish()" [class.wished-btn]="isWish()">
+              <span class="material-icons">{{ isWish() ? 'favorite' : 'favorite_border' }}</span>
+            </button>
+          </div>
+
+          <!-- Tabs -->
+          <div class="di-tabs">
+            <button *ngFor="let t of tabs" class="tab-btn" [class.active]="activeTab() === t" (click)="activeTab.set(t)">{{ t }}</button>
+          </div>
+          <div class="tab-content">
+            <div *ngIf="activeTab() === 'Description'">
+              <p class="tab-text">{{ product()!.description }}</p>
+            </div>
+            <div *ngIf="activeTab() === 'Details'">
+              <div class="specs">
+                <div class="spec"><span class="sk">Fabric</span><span class="sv">{{ product()!.fabric }}</span></div>
+                <div class="spec"><span class="sk">Length</span><span class="sv">{{ product()!.length }}</span></div>
+                <div class="spec"><span class="sk">Blouse</span><span class="sv">{{ product()!.blouseIncluded ? 'Included' : 'Not included' }}</span></div>
+                <div class="spec"><span class="sk">Origin</span><span class="sv">{{ product()!.origin }}</span></div>
+                <div class="spec"><span class="sk">Occasion</span><span class="sv">{{ product()!.occasion.join(', ') }}</span></div>
+                <div class="spec"><span class="sk">Colours</span><span class="sv">{{ product()!.colors.join(', ') }}</span></div>
+              </div>
+            </div>
+            <div *ngIf="activeTab() === 'Care'" class="tab-text">
+              <ul class="care-list">
+                <li>Dry clean only — do not machine wash silk sarees</li>
+                <li>Store wrapped in a soft muslin cloth away from direct sunlight</li>
+                <li>Avoid contact with perfume, hairspray, or deodorant</li>
+                <li>Fold with acid-free tissue paper to prevent zari tarnish</li>
+                <li>Iron on the reverse side on a low heat setting</li>
+              </ul>
+            </div>
+            <div *ngIf="activeTab() === 'Reviews'">
+              <!-- Leave Review -->
+              <div *ngIf="auth.isLoggedIn()" class="review-form">
+                <h5>Leave a Review</h5>
+                <div class="star-select">
+                  <button *ngFor="let s of [1,2,3,4,5]" class="star-btn" [class.filled]="s <= reviewRating()"
+                    (click)="reviewRating.set(s)">★</button>
+                </div>
+                <textarea class="form-control" [(ngModel)]="reviewComment" placeholder="Share your experience..." rows="3"></textarea>
+                <button class="btn btn-primary btn-sm" (click)="submitReview()" [disabled]="submittingReview()">
+                  {{ submittingReview() ? 'Submitting...' : 'Submit Review' }}
+                </button>
+              </div>
+              <p *ngIf="product()!.reviewCount === 0" class="no-reviews">No reviews yet. Be the first!</p>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="di-tags">
+            <span *ngFor="let t of product()!.tags" class="tag">{{ t }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      <div class="section container" style="padding-bottom:80px" *ngIf="related().length > 0">
+        <div style="margin-bottom:40px">
+          <div class="section-subtitle">You May Also Like</div>
+          <h2 class="section-title">Related Sarees</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="grid grid-4">
+          <app-product-card *ngFor="let p of related()" [product]="p"></app-product-card>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading() && !product()" class="empty-state container" style="padding-top:80px">
+      <span class="material-icons empty-icon">search_off</span>
+      <h3>Product not found</h3>
+      <a routerLink="/products" class="btn btn-primary">Browse Collection</a>
+    </div>

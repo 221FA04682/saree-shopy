@@ -1,0 +1,48 @@
+<div class="auth-page">
+      <div class="auth-visual">
+        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&q=85" alt="Heritage Saree">
+        <div class="auth-visual-overlay">
+          <div style="font-family:var(--font-display);font-size:2rem;color:white;margin-bottom:12px">Vastra Vaibhav</div>
+          <p style="font-family:var(--font-display);font-size:1.3rem;color:rgba(255,255,255,0.85);font-style:italic;line-height:1.5">"Draped in heritage,<br>adorned in elegance."</p>
+        </div>
+      </div>
+      <div class="auth-form-side">
+        <div class="auth-card">
+          <a routerLink="/" class="auth-brand">✦ Vastra Vaibhav</a>
+          <h1 class="auth-title">Welcome Back</h1>
+          <p class="auth-sub">Sign in to continue your saree journey</p>
+
+          <div class="demo-box">
+            <h5>Demo Credentials</h5>
+            <div class="demo-row"><span>Admin:</span><code>admin&#64;vastrav.com</code> / <code>Admin&#64;123</code> <span style="font-size:0.65rem;color:var(--gold-warm);margin-left:4px">→ Admin Panel</span><button (click)="fillAdmin()">Use</button></div>
+            <div class="demo-row"><span>User:</span><code>priya&#64;example.com</code> / <code>User&#64;123</code><button (click)="fillUser()">Use</button></div>
+          </div>
+
+          <form (ngSubmit)="onLogin()">
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+              <div class="form-label" style="display:flex;justify-content:space-between">
+                Password <a href="#" style="font-size:0.72rem;color:var(--burgundy)">Forgot?</a>
+              </div>
+              <div class="pass-wrap">
+                <input [type]="showPass()?'text':'password'" class="form-control" [(ngModel)]="password" name="password" placeholder="••••••••" required>
+                <button type="button" class="pass-eye" (click)="togglePass()">
+                  <span class="material-icons">{{ showPass()?'visibility_off':'visibility' }}</span>
+                </button>
+              </div>
+            </div>
+            <div *ngIf="error()" class="auth-error">
+              <span class="material-icons">error_outline</span> {{ error() }}
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" [disabled]="loading()">
+              {{ loading() ? 'Signing In...' : 'Sign In' }}
+            </button>
+          </form>
+
+          <p class="auth-switch">Don't have an account? <a routerLink="/register">Create one</a></p>
+        </div>
+      </div>
+    </div>

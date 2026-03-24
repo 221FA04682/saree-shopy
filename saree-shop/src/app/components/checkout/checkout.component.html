@@ -1,0 +1,146 @@
+<!-- Steps -->
+    <div class="steps-bar">
+      <div class="container steps-row">
+        <div class="step" [class.active]="step()>=1" [class.done]="step()>1">
+          <div class="step-num">{{ step()>1?'✓':'1' }}</div><span>Address</span>
+        </div>
+        <div class="step-line" [class.done]="step()>1"></div>
+        <div class="step" [class.active]="step()>=2" [class.done]="step()>2">
+          <div class="step-num">{{ step()>2?'✓':'2' }}</div><span>Payment</span>
+        </div>
+        <div class="step-line" [class.done]="step()>2"></div>
+        <div class="step" [class.active]="step()>=3">
+          <div class="step-num">3</div><span>Confirm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container checkout-layout">
+
+      <!-- STEP 1: Address -->
+      <div class="checkout-main" *ngIf="step()===1">
+        <h2 class="step-title">Delivery Address</h2>
+
+        <div *ngIf="user?.addresses?.length" class="saved-addrs">
+          <h4>Saved Addresses</h4>
+          <div *ngFor="let a of user!.addresses" class="addr-card" [class.sel]="selAddr?._id===a._id" (click)="selAddr=a">
+            <div class="addr-radio"><div class="rdot" [class.filled]="selAddr?._id===a._id"></div></div>
+            <div class="addr-body">
+              <div class="addr-label">{{ a.label }} <span *ngIf="a.isDefault" class="def-badge">Default</span></div>
+              <div class="addr-name">{{ a.name }}</div>
+              <div class="addr-detail">{{ a.street }}, {{ a.city }}, {{ a.state }} — {{ a.pincode }}</div>
+              <div class="addr-phone">{{ a.phone }}</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" (click)="showNewAddr=!showNewAddr" style="margin-top:8px">
+            <span class="material-icons">add</span> {{ showNewAddr ? 'Cancel' : 'Add New Address' }}
+          </button>
+        </div>
+
+        <div *ngIf="showNewAddr || !user?.addresses?.length" class="new-addr-form">
+          <h4>{{ user?.addresses?.length ? 'New Address' : 'Delivery Address' }}</h4>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Full Name *</label><input class="form-control" [(ngModel)]="na.name" placeholder="Recipient name"></div>
+            <div class="form-group"><label class="form-label">Phone *</label><input class="form-control" [(ngModel)]="na.phone" placeholder="10-digit mobile"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Street Address *</label><input class="form-control" [(ngModel)]="na.street" placeholder="House no., Street, Area"></div>
+          <div class="form-row-3">
+            <div class="form-group"><label class="form-label">City *</label><input class="form-control" [(ngModel)]="na.city"></div>
+            <div class="form-group"><label class="form-label">State *</label><input class="form-control" [(ngModel)]="na.state"></div>
+            <div class="form-group"><label class="form-label">Pincode *</label><input class="form-control" [(ngModel)]="na.pincode" maxlength="6"></div>
+          </div>
+          <label class="check-save"><input type="checkbox" [(ngModel)]="saveAddr"> Save this address</label>
+        </div>
+
+        <button class="btn btn-primary btn-lg" (click)="goStep2()">Continue to Payment →</button>
+      </div>
+
+      <!-- STEP 2: Payment -->
+      <div class="checkout-main" *ngIf="step()===2">
+        <h2 class="step-title">Payment Method</h2>
+        <div class="pay-methods">
+          <label *ngFor="let pm of payMethods" class="pay-option" [class.sel]="payMethod===pm.value">
+            <input type="radio" [value]="pm.value" [(ngModel)]="payMethod">
+            <span class="material-icons pm-icon">{{ pm.icon }}</span>
+            <div>
+              <div class="pm-name">{{ pm.name }}</div>
+              <div class="pm-desc">{{ pm.desc }}</div>
+            </div>
+          </label>
+        </div>
+        <div *ngIf="payMethod==='Card'" class="pay-form">
+          <div class="form-group"><label class="form-label">Card Number</label><input class="form-control" placeholder="1234 5678 9012 3456" maxlength="19"></div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Expiry</label><input class="form-control" placeholder="MM/YY"></div>
+            <div class="form-group"><label class="form-label">CVV</label><input class="form-control" placeholder="•••" maxlength="3" type="password"></div>
+          </div>
+        </div>
+        <div *ngIf="payMethod==='UPI'" class="pay-form">
+          <div class="form-group"><label class="form-label">UPI ID</label><input class="form-control" placeholder="yourname@upi"></div>
+        </div>
+        <div class="step-actions">
+          <button class="btn btn-ghost" (click)="step.set(1)">← Back</button>
+          <button class="btn btn-primary btn-lg" (click)="step.set(3)">Review Order →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Review -->
+      <div class="checkout-main" *ngIf="step()===3">
+        <h2 class="step-title">Review Order</h2>
+        <div class="review-block">
+          <div class="rb-head"><span>Delivery Address</span><button class="link-btn" (click)="step.set(1)">Change</button></div>
+          <div class="rb-body" *ngIf="getAddr()">
+            <div>{{ getAddr()!.name }} · {{ getAddr()!.phone }}</div>
+            <div>{{ getAddr()!.street }}, {{ getAddr()!.city }}</div>
+            <div>{{ getAddr()!.state }} — {{ getAddr()!.pincode }}</div>
+          </div>
+        </div>
+        <div class="review-block">
+          <div class="rb-head"><span>Payment</span><button class="link-btn" (click)="step.set(2)">Change</button></div>
+          <div class="rb-body">{{ payMethod }}</div>
+        </div>
+        <div class="review-items">
+          <h4>Items ({{ cart.count() }})</h4>
+          <div *ngFor="let i of cart.items()" class="ri-row">
+            <img [src]="i.product.images[0]" [alt]="i.product.name" class="ri-img">
+            <div class="ri-info"><div class="ri-name">{{ i.product.name }}</div><div class="ri-meta">Qty {{ i.quantity }}{{ i.color ? ' · ' + i.color : '' }}</div></div>
+            <div class="ri-price">{{ ps.formatPrice(i.product.price * i.quantity) }}</div>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn btn-ghost" (click)="step.set(2)">← Back</button>
+          <button class="btn btn-primary btn-lg" (click)="placeOrder()" [disabled]="placing()">
+            <span class="material-icons">lock</span>
+            {{ placing() ? 'Placing Order...' : 'Place Order · ' + ps.formatPrice(cart.total()) }}
+          </button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success-state" *ngIf="step()===4">
+        <div class="success-icon">✓</div>
+        <h2>Order Placed!</h2>
+        <p>Your order <strong>{{ placedOrderNumber() }}</strong> has been confirmed.</p>
+        <p style="color:var(--text-muted);font-size:0.9rem">You'll receive delivery updates by email and SMS.</p>
+        <div class="success-acts">
+          <a routerLink="/orders" class="btn btn-primary">Track My Order</a>
+          <a routerLink="/products" class="btn btn-outline">Continue Shopping</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Summary -->
+      <aside class="order-summary" *ngIf="step()<4">
+        <h3>Order Summary</h3>
+        <div *ngFor="let i of cart.items()" class="sum-item">
+          <img [src]="i.product.images[0]" [alt]="i.product.name" class="sum-img">
+          <div class="sum-info"><div class="sum-name">{{ i.product.name }}</div><div class="sum-qty">× {{ i.quantity }}</div></div>
+          <div class="sum-price">{{ ps.formatPrice(i.product.price * i.quantity) }}</div>
+        </div>
+        <div class="sum-divider"></div>
+        <div class="sum-row"><span>Subtotal</span><span>{{ ps.formatPrice(cart.subtotal()) }}</span></div>
+        <div class="sum-row"><span>Shipping</span><span [class.green]="cart.shipping()===0">{{ cart.shipping()===0?'Free':ps.formatPrice(cart.shipping()) }}</span></div>
+        <div class="sum-row"><span>GST (5%)</span><span>{{ ps.formatPrice(cart.tax()) }}</span></div>
+        <div class="sum-total"><span>Total</span><span class="st-val">{{ ps.formatPrice(cart.total()) }}</span></div>
+        <div class="secure-note"><span class="material-icons">lock</span> Secure Checkout</div>
+      </aside>
+    </div>

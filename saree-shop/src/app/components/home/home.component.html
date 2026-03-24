@@ -1,0 +1,224 @@
+
+    <section class="hero">
+      <div class="hero-bg-img">
+        <img [src]="getHeroImage()" alt="Premium Saree">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content-wrap">
+        <div class="hero-content">
+          <div class="hero-pill">New Collection · Spring 2024</div>
+          <h1 class="hero-title">
+            {{ cfg().heroTitle }}
+          </h1>
+          <p class="hero-desc">{{ cfg().heroSubtitle }}</p>
+          <div class="hero-cta">
+            <a routerLink="/products" class="btn btn-primary btn-lg">{{ cfg().heroCTA || "Explore Collection" }}</a>
+            <a routerLink="/products" [queryParams]="{occasion:'Wedding'}" class="btn btn-outline-light btn-lg">Bridal Edit</a>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-chip"><span class="material-icons">verified</span> GI-Certified</div>
+            <div class="trust-chip"><span class="material-icons">local_shipping</span> Free Shipping ₹10k+</div>
+            <div class="trust-chip"><span class="material-icons">cached</span> Easy Returns</div>
+          </div>
+        </div>
+        <div class="hero-sidebar">
+          <div class="hero-card" *ngFor="let c of getHeroSidebarCards()">
+            <a [routerLink]="['/products']" [queryParams]="{category: c.cat}" class="hero-card-link">
+              <img [src]="c.image" [alt]="c.cat">
+              <div class="hero-card-label">{{ c.cat }}</div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════ MARQUEE ════════════════════ -->
+    <div class="marquee-strip">
+      <div class="marquee-track">
+        <span *ngFor="let t of marqueeTags">✦ {{ t }}</span>
+        <span *ngFor="let t of marqueeTags">✦ {{ t }}</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════ CATEGORIES ════════════════════ -->
+    <section class="section">
+      <div class="container">
+        <div class="cats-header">
+          <div>
+            <div class="section-subtitle">Explore By</div>
+            <h2 class="section-title">Our Collections</h2>
+            <div class="section-divider"></div>
+          </div>
+          <a routerLink="/products" class="btn btn-ghost">View All →</a>
+        </div>
+        <div class="cats-grid">
+          <a *ngFor="let cat of getCategoriesForDisplay(); let i = index"
+            [routerLink]="['/products']" [queryParams]="{category: cat.name}"
+            class="cat-card" [class.cat-large]="i === 0">
+            <div class="cat-img-wrap">
+              <img [src]="cat.image" [alt]="cat.name" loading="lazy">
+              <div class="cat-overlay"></div>
+            </div>
+            <div class="cat-info">
+              <h3>{{ cat.name }}</h3>
+              <span class="cat-count">{{ cat.productCount || 0 }} styles</span>
+              <span class="cat-arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ FEATURED ════════════════════ -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-hdr-center">
+          <div class="section-subtitle" style="justify-content:center;display:flex;gap:12px;align-items:center">
+            <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+            Handpicked
+            <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+          </div>
+          <h2 class="section-title" style="text-align:center">Featured Sarees</h2>
+          <div class="section-divider" style="margin:0 auto 8px"></div>
+          <p style="text-align:center;color:var(--text-muted);max-width:min(480px,100%);margin:0 auto">Handpicked by our curation team — exceptional weaves for discerning tastes.</p>
+        </div>
+        <div class="grid grid-4" style="margin-top:48px">
+          <app-product-card *ngFor="let p of featured()" [product]="p"></app-product-card>
+        </div>
+        <div style="text-align:center;margin-top:40px">
+          <a routerLink="/products" [queryParams]="{filter:'featured'}" class="btn btn-outline btn-lg">View All Featured</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ EDITORIAL BANNER ════════════════════ -->
+    <section class="editorial-banner" *ngIf="cfg().promoBannerActive">
+      <div class="eb-left">
+        <img [src]="getPromoBannerImage()" alt="Promo banner">
+      </div>
+      <div class="eb-right">
+        <div class="eb-content">
+          <div class="section-subtitle">{{ cfg().promoBannerSubtitle }}</div>
+          <h2 class="eb-title">{{ cfg().promoBannerTitle }}</h2>
+          <p class="eb-desc">{{ cfg().promoBannerText }}</p>
+          <div class="eb-offer">
+            <div class="offer-badge">Up to<br><span>{{ cfg().promoBannerBadge }}</span><br>off</div>
+            <div class="offer-text">
+              <strong>{{ cfg().promoBannerOfferLabel }}</strong>
+              <p>{{ cfg().promoBannerOfferSub }}</p>
+            </div>
+          </div>
+          <a [routerLink]="cfg().promoBannerLink.split('?')[0]" class="btn btn-primary btn-lg">{{ cfg().promoBannerCTA }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ NEW ARRIVALS ════════════════════ -->
+    <section class="section">
+      <div class="container">
+        <div class="new-arr-header">
+          <div>
+            <div class="section-subtitle">Just In</div>
+            <h2 class="section-title">New Arrivals</h2>
+            <div class="section-divider"></div>
+          </div>
+          <a routerLink="/products" [queryParams]="{filter:'new'}" class="btn btn-ghost">See All →</a>
+        </div>
+        <div class="grid grid-4">
+          <app-product-card *ngFor="let p of newArrivals()" [product]="p"></app-product-card>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ VALUE PROPS ════════════════════ -->
+    <section class="values-section">
+      <div class="container values-grid">
+        <div class="value-item" *ngFor="let v of values">
+          <div class="value-icon">
+            <span class="material-icons">{{ v.icon }}</span>
+          </div>
+          <h4>{{ v.title }}</h4>
+          <p>{{ v.desc }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ STORY ════════════════════ -->
+    <section class="story-section">
+      <div class="container story-grid">
+        <div class="story-imgs">
+          <img class="story-main" src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=600&q=85" alt="Weaver at work">
+          <div class="story-accent-wrap">
+            <img class="story-accent" src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=400&q=80" alt="Weaving detail">
+            <div class="story-number-card">
+              <span class="sn-num">50+</span>
+              <span class="sn-label">Artisan Families</span>
+            </div>
+          </div>
+        </div>
+        <div class="story-content">
+          <div class="section-subtitle">Our Heritage</div>
+          <h2 class="section-title">Threads of Tradition, <em style="font-style:italic">Woven with Heart</em></h2>
+          <div class="section-divider"></div>
+          <p>Every saree at Vastra Vaibhav is sourced directly from master weavers across India. We partner with artisan families in Varanasi, Kanchipuram, Chanderi, Pochampalli and beyond — ensuring fair livelihoods and preservation of ancient craft.</p>
+          <p style="margin-top:1rem">When you wear a Vastra Vaibhav saree, you're not just dressed beautifully — you're part of a living legacy.</p>
+          <div class="story-stats">
+            <div class="ss-item"><span class="ss-num">50+</span><span>Artisan Families</span></div>
+            <div class="ss-div"></div>
+            <div class="ss-item"><span class="ss-num">12</span><span>States</span></div>
+            <div class="ss-div"></div>
+            <div class="ss-item"><span class="ss-num">8 yrs</span><span>Heritage Trade</span></div>
+          </div>
+          <a routerLink="/products" class="btn btn-outline" style="margin-top:2rem">Explore Our Heritage →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ TESTIMONIALS ════════════════════ -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-hdr-center" style="text-align:center;margin-bottom:48px">
+          <div class="section-subtitle" style="justify-content:center;display:flex;gap:12px;align-items:center">
+            <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+            What She Says
+            <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+          </div>
+          <h2 class="section-title">Loved by Thousands</h2>
+        </div>
+        <div class="testimonials-grid">
+          <div class="testimonial" *ngFor="let t of testimonials">
+            <div class="test-stars">★★★★★</div>
+            <p class="test-quote">"{{ t.quote }}"</p>
+            <div class="test-author">
+              <div class="test-av">{{ t.name[0] }}</div>
+              <div>
+                <div class="test-name">{{ t.name }}</div>
+                <div class="test-loc">{{ t.loc }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ INSTAGRAM STRIP ════════════════════ -->
+    <section class="insta-section">
+      <div class="container" style="text-align:center;margin-bottom:32px">
+        <div class="section-subtitle" style="justify-content:center;display:flex;gap:12px;align-items:center">
+          <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+          &#64;VastraVaibhav
+          <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+        </div>
+        <h2 class="section-title" style="font-size:1.8rem">Follow Our Story</h2>
+      </div>
+      <div class="insta-grid">
+        <div class="insta-tile" *ngFor="let img of instaImgs">
+          <img [src]="img" alt="Instagram">
+          <div class="insta-overlay"><span class="material-icons">instagram</span></div>
+        </div>
+      </div>
+    </section>

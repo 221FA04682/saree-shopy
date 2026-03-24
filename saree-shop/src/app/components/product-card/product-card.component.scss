@@ -1,0 +1,312 @@
+// Product Card Component Styles
+
+.product-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 12px 40px rgba(44, 24, 16, 0.14);
+    transform: translateY(-5px);
+    border-color: var(--border-warm);
+
+    .card-img-link img { transform: scale(1.06); }
+    .card-quick { opacity: 1; transform: translateY(0); }
+    .wish-btn { opacity: 1; }
+  }
+}
+
+// ── Image ────────────────────────────────────────────────────
+.card-img-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.card-img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+}
+
+// ── Badges ───────────────────────────────────────────────────
+.card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+// ── Wishlist button ──────────────────────────────────────────
+.wish-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.25s;
+  box-shadow: 0 2px 8px rgba(44, 24, 16, 0.1);
+
+  .material-icons { font-size: 17px; }
+
+  &:hover {
+    border-color: #e05252;
+    color: #e05252;
+    transform: scale(1.1);
+  }
+
+  &.wished {
+    opacity: 1;
+    color: #e05252;
+    border-color: #e05252;
+    background: rgba(224, 82, 82, 0.06);
+  }
+}
+
+// Show wish-btn always on touch devices
+@media (hover: none) {
+  .wish-btn { opacity: 1; }
+}
+
+// ── Quick Actions ────────────────────────────────────────────
+.card-quick {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 1px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.quick-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 6px;
+  background: rgba(44, 24, 16, 0.88);
+  backdrop-filter: blur(8px);
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  .material-icons { font-size: 18px; }
+
+  .quick-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: var(--font-body);
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--burgundy);
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ── Stock labels ─────────────────────────────────────────────
+.out-of-stock-label {
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 248, 244, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.low-stock-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--terra);
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  z-index: 2;
+}
+
+// ── Card Body ────────────────────────────────────────────────
+.card-body {
+  padding: 14px 16px 16px;
+}
+
+.card-cat {
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-warm);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cat-dot { color: var(--border-strong); }
+
+.card-origin {
+  color: var(--text-dim);
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+.card-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.3;
+  margin-bottom: 7px;
+  transition: color 0.2s;
+
+  &:hover { color: var(--burgundy); }
+}
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.stars {
+  color: var(--gold-warm);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+}
+
+.reviews {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.card-price {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--burgundy);
+  font-weight: 400;
+}
+
+.card-orig {
+  font-size: 0.78rem;
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+.add-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--burgundy-pale);
+  border: 1.5px solid var(--burgundy);
+  color: var(--burgundy);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+
+  .material-icons { font-size: 16px; }
+
+  &:hover:not(:disabled) {
+    background: var(--burgundy);
+    color: white;
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+  }
+}
+
+/* ── Additional Mobile Responsive ── */
+@media (max-width: 480px) {
+  .card-name { font-size: 0.9rem; }
+  .card-price { font-size: 1rem; }
+  .card-body { padding: 10px 12px 12px; }
+  /* Always show quick actions on touch */
+  .card-quick { opacity: 1; transform: translateY(0); }
+  .wish-btn { opacity: 1; }
+}
+
+/* Hover: none devices (touch) — show wishlist always */
+@media (hover: none) {
+  .card-quick { opacity: 1; transform: translateY(0); }
+  .wish-btn { opacity: 1; }
+  .product-card:hover { transform: none; }
+}
+
+/* Touch device - always show quick actions and wishlist */
+.product-card.touch-device {
+  .card-quick { opacity: 1; transform: translateY(0); }
+  .wish-btn   { opacity: 1; }
+  &:hover     { transform: none; }
+}

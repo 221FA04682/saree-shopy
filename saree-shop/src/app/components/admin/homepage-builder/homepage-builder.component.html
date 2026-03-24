@@ -1,0 +1,359 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="s-logo-inner"><div class="s-logo-mark">V</div><span class="s-logo-text">Vastra Vaibhav</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/admin"            routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item"><span class="material-icons">dashboard</span> Dashboard</a>
+      <a routerLink="/admin/orders"     routerLinkActive="active" class="nav-item"><span class="material-icons">receipt_long</span> Orders</a>
+      <a routerLink="/admin/products"   routerLinkActive="active" class="nav-item"><span class="material-icons">inventory_2</span> Products</a>
+      <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item"><span class="material-icons">category</span> Categories</a>
+      <a routerLink="/admin/homepage"   routerLinkActive="active" class="nav-item"><span class="material-icons">tune</span> Homepage</a>
+      <a routerLink="/admin/users"      routerLinkActive="active" class="nav-item"><span class="material-icons">group</span> Customers</a>
+      <div class="nav-divider"></div>
+      <a routerLink="/"    class="nav-item"><span class="material-icons">storefront</span> View Store</a>
+      <button class="nav-item logout" (click)="auth.logout()"><span class="material-icons">logout</span> Logout</button>
+    </nav>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1 class="admin-page-title">Homepage Builder</h1>
+        <p class="admin-page-sub">Control what customers see when they visit your store</p>
+      </div>
+      <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+        <span class="material-icons">{{ saving() ? 'hourglass_top' : 'save' }}</span>
+        {{ saving() ? 'Saving...' : 'Save All Changes' }}
+      </button>
+    </div>
+
+    <div *ngIf="loading()" class="loading-placeholder">Loading configuration...</div>
+
+    <div *ngIf="!loading()" class="builder-layout">
+
+      <!-- ── Tab Nav ── -->
+      <nav class="builder-tabs">
+        <button *ngFor="let t of tabs" class="btab" [class.active]="activeTab === t.key" (click)="activeTab = t.key">
+          <span class="material-icons">{{ t.icon }}</span>
+          {{ t.label }}
+        </button>
+      </nav>
+
+      <!-- ── Tab Panels ── -->
+      <div class="builder-panel">
+
+        <!-- ────────────── ANNOUNCEMENT ────────────── -->
+        <div *ngIf="activeTab === 'announcement'" class="section-form">
+          <div class="sf-header">
+            <h3>Announcement Bar</h3>
+            <p>The thin strip at the very top visible to all customers.</p>
+          </div>
+          <div class="toggle-row">
+            <label class="toggle-label">
+              <input type="checkbox" [checked]="announcementActive()"
+                     (change)="announcementActive.set($any($event.target).checked)" class="toggle-input">
+              <span class="toggle-slider"></span>
+              <span>Show announcement bar</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Announcement Text</label>
+            <textarea class="form-control" [value]="announcementText()"
+                      (input)="announcementText.set($any($event.target).value)"
+                      rows="2" placeholder="✦ Free Shipping above ₹10,000 ..."></textarea>
+            <p class="field-hint">Use ✦ as a decorative separator. Keep it short and punchy.</p>
+          </div>
+          <div class="preview-box" *ngIf="announcementActive()">
+            <div class="preview-label">Preview</div>
+            <div class="preview-announce">{{ announcementText() }}</div>
+          </div>
+        </div>
+
+        <!-- ────────────── HERO TEXT ────────────── -->
+        <div *ngIf="activeTab === 'hero'" class="section-form">
+          <div class="sf-header">
+            <h3>Hero Section Text</h3>
+            <p>The title, subtitle, and CTA button on the full-screen hero banner.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero Title</label>
+            <input class="form-control" [value]="heroTitle()"
+                   (input)="heroTitle.set($any($event.target).value)"
+                   placeholder="Where Heritage Meets Haute Couture">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero Subtitle</label>
+            <textarea class="form-control" [value]="heroSubtitle()"
+                      (input)="heroSubtitle.set($any($event.target).value)"
+                      rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">CTA Button Text</label>
+            <input class="form-control" [value]="heroCTA()"
+                   (input)="heroCTA.set($any($event.target).value)"
+                   placeholder="Explore Collection">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Background Image URL
+              <span class="optional-tag">optional — uses default if empty</span>
+            </label>
+            <input class="form-control" [value]="heroImage()"
+                   (input)="heroImage.set($any($event.target).value)"
+                   placeholder="https://images.unsplash.com/...">
+            <div class="img-preview-sm" *ngIf="heroImage()">
+              <img [src]="heroImage()" alt="Hero background preview">
+            </div>
+          </div>
+          <div class="preview-box hero-preview">
+            <div class="preview-label">Text Preview</div>
+            <div class="hp-title">{{ heroTitle() }}</div>
+            <div class="hp-sub">{{ heroSubtitle() }}</div>
+            <div class="hp-cta">{{ heroCTA() }} →</div>
+          </div>
+        </div>
+
+        <!-- ────────────── HERO SIDE IMAGES ────────────── -->
+        <div *ngIf="activeTab === 'hero_images'" class="section-form">
+          <div class="sf-header">
+            <h3>Hero Side Images</h3>
+            <p>The small category cards shown to the right of the hero text. Each card links to its category page.</p>
+          </div>
+
+          <div class="hero-cards-list">
+            <div *ngFor="let card of heroSidebarCards(); let i = index" class="hero-card-edit">
+              <div class="hce-num">{{ i + 1 }}</div>
+              <div class="hce-fields">
+                <div class="form-group">
+                  <label class="form-label">Category Name (links to this category)</label>
+                  <input class="form-control" [value]="card.cat"
+                         (input)="updateHeroCard(i, 'cat', $any($event.target).value)"
+                         placeholder="e.g. Banarasi">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Image URL</label>
+                  <input class="form-control" [value]="card.image"
+                         (input)="updateHeroCard(i, 'image', $any($event.target).value)"
+                         placeholder="https://images.unsplash.com/...">
+                </div>
+              </div>
+              <div class="hce-preview" *ngIf="card.image">
+                <img [src]="card.image" [alt]="card.cat">
+                <span class="hce-label">{{ card.cat }}</span>
+              </div>
+              <button class="hce-del" (click)="removeHeroCard(i)" title="Remove">
+                <span class="material-icons">delete_outline</span>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost btn-sm" (click)="addHeroCard()" style="margin-top:12px"
+                  [disabled]="heroSidebarCards().length >= 4">
+            <span class="material-icons">add</span>
+            Add Hero Card ({{ heroSidebarCards().length }}/4)
+          </button>
+        </div>
+
+        <!-- ────────────── FEATURED PRODUCTS ────────────── -->
+        <div *ngIf="activeTab === 'featured'" class="section-form">
+          <div class="sf-header">
+            <h3>Featured Products</h3>
+            <p>Hand-pick up to 8 products for the Featured section. If none selected, auto-picks products with the Featured flag.</p>
+          </div>
+
+          <div class="selected-count">
+            <span class="material-icons">star</span>
+            {{ featuredIds().length }} of 8 selected
+            <button *ngIf="featuredIds().length > 0" class="clear-sel-btn" (click)="featuredIds.set([])">
+              Clear all
+            </button>
+          </div>
+
+          <div class="product-picker">
+            <div *ngFor="let p of allProducts()"
+                 class="pick-card"
+                 [class.selected]="isFeatured(p._id)"
+                 (click)="toggleFeatured(p._id)">
+              <div class="pick-img">
+                <img [src]="p.images[0]" [alt]="p.name">
+                <div class="pick-check" *ngIf="isFeatured(p._id)">
+                  <span class="material-icons">check_circle</span>
+                </div>
+              </div>
+              <div class="pick-info">
+                <div class="pick-name">{{ p.name }}</div>
+                <div class="pick-cat">{{ p.category }}</div>
+                <div class="pick-price">{{ ps.formatPrice(p.price) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────── NEW ARRIVALS ────────────── -->
+        <div *ngIf="activeTab === 'new_arrivals'" class="section-form">
+          <div class="sf-header">
+            <h3>New Arrivals</h3>
+            <p>Choose automatic or manual for the New Arrivals section.</p>
+          </div>
+
+          <div class="mode-selector">
+            <label class="mode-opt" [class.active]="newArrivalsMode() === 'auto'">
+              <input type="radio" name="naMode" value="auto"
+                     [checked]="newArrivalsMode() === 'auto'"
+                     (change)="newArrivalsMode.set('auto')">
+              <span class="material-icons">auto_awesome</span>
+              <div>
+                <strong>Automatic</strong>
+                <p>Auto-picks latest products with the "New Arrival" flag</p>
+              </div>
+            </label>
+            <label class="mode-opt" [class.active]="newArrivalsMode() === 'manual'">
+              <input type="radio" name="naMode" value="manual"
+                     [checked]="newArrivalsMode() === 'manual'"
+                     (change)="newArrivalsMode.set('manual')">
+              <span class="material-icons">tune</span>
+              <div>
+                <strong>Manual Pick</strong>
+                <p>You choose exactly which products appear</p>
+              </div>
+            </label>
+          </div>
+
+          <div *ngIf="newArrivalsMode() === 'manual'" style="margin-top:20px">
+            <div class="selected-count">
+              <span class="material-icons">fiber_new</span>
+              {{ newArrivalIds().length }} of 8 selected
+              <button *ngIf="newArrivalIds().length > 0" class="clear-sel-btn" (click)="newArrivalIds.set([])">
+                Clear all
+              </button>
+            </div>
+            <div class="product-picker">
+              <div *ngFor="let p of allProducts()"
+                   class="pick-card"
+                   [class.selected]="isNewArrival(p._id)"
+                   (click)="toggleNewArrival(p._id)">
+                <div class="pick-img">
+                  <img [src]="p.images[0]" [alt]="p.name">
+                  <div class="pick-check" *ngIf="isNewArrival(p._id)">
+                    <span class="material-icons">check_circle</span>
+                  </div>
+                </div>
+                <div class="pick-info">
+                  <div class="pick-name">{{ p.name }}</div>
+                  <div class="pick-cat">{{ p.category }}</div>
+                  <div class="pick-price">{{ ps.formatPrice(p.price) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="newArrivalsMode() === 'auto'" class="auto-note">
+            <span class="material-icons">info</span>
+            Products flagged as "New Arrival" in inventory will automatically appear here.
+          </div>
+        </div>
+
+        <!-- ────────────── PROMO BANNER ────────────── -->
+        <div *ngIf="activeTab === 'promo_banner'" class="section-form">
+          <div class="sf-header">
+            <h3>Promotional Banner</h3>
+            <p>The editorial two-column banner displayed between Featured and New Arrivals on the homepage.</p>
+          </div>
+
+          <div class="toggle-row">
+            <label class="toggle-label">
+              <input type="checkbox" [checked]="promoBannerActive()"
+                     (change)="promoBannerActive.set($any($event.target).checked)" class="toggle-input">
+              <span class="toggle-slider"></span>
+              <span>Show promo banner</span>
+            </label>
+          </div>
+
+          <div class="promo-form-grid">
+            <div class="form-group">
+              <label class="form-label">Section Label <span class="optional-tag">small text above title</span></label>
+              <input class="form-control" [value]="promoBannerSubtitle()"
+                     (input)="promoBannerSubtitle.set($any($event.target).value)"
+                     placeholder="Bridal Season 2024">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Main Title</label>
+              <input class="form-control" [value]="promoBannerTitle()"
+                     (input)="promoBannerTitle.set($any($event.target).value)"
+                     placeholder="Bridal Season Sale">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" [value]="promoBannerText()"
+                        (input)="promoBannerText.set($any($event.target).value)"
+                        rows="2" placeholder="Up to 30% off on our exclusive bridal collection..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Offer Badge <span class="optional-tag">e.g. 30%</span></label>
+              <input class="form-control" [value]="promoBannerBadge()"
+                     (input)="promoBannerBadge.set($any($event.target).value)"
+                     placeholder="30%">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Offer Sub-label</label>
+              <input class="form-control" [value]="promoBannerOfferLabel()"
+                     (input)="promoBannerOfferLabel.set($any($event.target).value)"
+                     placeholder="Bridal Season Sale">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Offer Description</label>
+              <input class="form-control" [value]="promoBannerOfferSub()"
+                     (input)="promoBannerOfferSub.set($any($event.target).value)"
+                     placeholder="On selected bridal & festive pieces">
+            </div>
+            <div class="form-group">
+              <label class="form-label">CTA Button Text</label>
+              <input class="form-control" [value]="promoBannerCTA()"
+                     (input)="promoBannerCTA.set($any($event.target).value)"
+                     placeholder="Shop Bridal →">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Button Link</label>
+              <input class="form-control" [value]="promoBannerLink()"
+                     (input)="promoBannerLink.set($any($event.target).value)"
+                     placeholder="/products?occasion=Wedding">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label">Banner Image URL</label>
+              <input class="form-control" [value]="promoBannerImage()"
+                     (input)="promoBannerImage.set($any($event.target).value)"
+                     placeholder="https://images.unsplash.com/...">
+              <div class="img-preview-sm" *ngIf="promoBannerImage()">
+                <img [src]="promoBannerImage()" alt="Banner preview">
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Preview -->
+          <div class="promo-preview" *ngIf="promoBannerActive()">
+            <div class="preview-label">Live Preview</div>
+            <div class="pp-inner">
+              <div class="pp-img">
+                <img [src]="promoBannerImage() || 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=300&q=80'" alt="preview">
+              </div>
+              <div class="pp-content">
+                <div class="pp-sub">{{ promoBannerSubtitle() }}</div>
+                <div class="pp-title">{{ promoBannerTitle() }}</div>
+                <div class="pp-desc">{{ promoBannerText() }}</div>
+                <div class="pp-offer">
+                  <div class="pp-badge">Up to<br><span>{{ promoBannerBadge() }}</span><br>off</div>
+                  <div>
+                    <strong>{{ promoBannerOfferLabel() }}</strong>
+                    <p style="font-size:0.75rem;color:var(--text-muted)">{{ promoBannerOfferSub() }}</p>
+                  </div>
+                </div>
+                <div class="pp-cta">{{ promoBannerCTA() }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /builder-panel -->
+    </div><!-- /builder-layout -->
+  </div>
+</div>

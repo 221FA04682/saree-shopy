@@ -1,0 +1,213 @@
+<!-- Page header -->
+<div class="page-header">
+  <div class="container">
+    <div class="section-subtitle">Account</div>
+    <h1 class="section-title">My Orders</h1>
+    <div class="section-divider"></div>
+    <p class="header-desc" *ngIf="!loading()">{{ orders().length }} order{{ orders().length !== 1 ? 's' : '' }} placed</p>
+  </div>
+</div>
+
+<div class="container orders-page">
+
+  <!-- Loading skeletons -->
+  <div *ngIf="loading()" class="orders-list">
+    <div *ngFor="let s of [1,2,3]" class="order-skeleton">
+      <div class="sk-header">
+        <div class="sk-line w40"></div>
+        <div class="sk-line w20"></div>
+      </div>
+      <div class="sk-body">
+        <div class="sk-item" *ngFor="let i of [1,2]">
+          <div class="sk-img"></div>
+          <div class="sk-info">
+            <div class="sk-line w60"></div>
+            <div class="sk-line w30"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading() && orders().length === 0" class="orders-empty">
+    <div class="empty-icon-wrap">
+      <span class="material-icons">receipt_long</span>
+    </div>
+    <h3>No orders yet</h3>
+    <p>You haven't placed any orders. Start exploring our heritage saree collection.</p>
+    <a routerLink="/products" class="btn btn-primary btn-lg">
+      <span class="material-icons">auto_awesome</span>
+      Explore Collection
+    </a>
+  </div>
+
+  <!-- Orders list -->
+  <div *ngIf="!loading() && orders().length > 0" class="orders-list">
+    <div *ngFor="let o of orders()" class="order-card" [class.expanded]="expandedOrder() === o._id">
+
+      <!-- Card Header -->
+      <div class="oc-header" (click)="toggleExpand(o._id)">
+        <div class="oc-left">
+          <div class="oc-order-num">
+            <span class="material-icons oc-icon">receipt</span>
+            <span class="order-num-text">{{ o.orderNumber }}</span>
+          </div>
+          <div class="oc-date">{{ o.createdAt | date:'d MMMM yyyy' }}</div>
+        </div>
+        <div class="oc-right">
+          <span class="status-pill" [class]="'status-' + o.status">
+            <span class="status-dot"></span>
+            {{ o.status | titlecase }}
+          </span>
+          <span class="oc-total-header">{{ ps.formatPrice(o.total) }}</span>
+          <span class="material-icons expand-icon">{{ expandedOrder() === o._id ? 'expand_less' : 'expand_more' }}</span>
+        </div>
+      </div>
+
+      <!-- Order Body (always visible: items preview + progress) -->
+      <div class="oc-body">
+        <!-- Progress tracker -->
+        <div class="progress-track" *ngIf="o.status !== 'cancelled' && o.status !== 'returned'">
+          <div *ngFor="let step of trackSteps; let i = index"
+               class="progress-step"
+               [class.done]="isStepDone(o.status, i)"
+               [class.active]="isCurrentStep(o.status, i)">
+            <div class="ps-node">
+              <span class="material-icons ps-check" *ngIf="isStepDone(o.status, i)">check</span>
+              <span *ngIf="!isStepDone(o.status, i)" class="ps-num">{{ i + 1 }}</span>
+            </div>
+            <div class="ps-label">{{ step }}</div>
+            <div class="ps-connector" *ngIf="i < trackSteps.length - 1" [class.filled]="isStepDone(o.status, i)"></div>
+          </div>
+        </div>
+        <div class="cancelled-bar" *ngIf="o.status === 'cancelled' || o.status === 'returned'">
+          <span class="material-icons">cancel</span>
+          Order {{ o.status | titlecase }}
+        </div>
+
+        <!-- Items preview (first 2) -->
+        <div class="items-preview">
+          <div *ngFor="let item of o.items.slice(0, 2)" class="preview-item">
+            <img [src]="item.productImage" [alt]="item.productName" class="pi-img" (error)="onImgErr($event)">
+            <div class="pi-info">
+              <div class="pi-name">{{ item.productName }}</div>
+              <div class="pi-meta">
+                <span>Qty {{ item.quantity }}</span>
+                <span *ngIf="item.color" class="meta-sep">·</span>
+                <span *ngIf="item.color">{{ item.color }}</span>
+                <span class="meta-sep">·</span>
+                <span>{{ item.category }}</span>
+              </div>
+            </div>
+            <div class="pi-price">{{ ps.formatPrice(item.price * item.quantity) }}</div>
+          </div>
+          <div *ngIf="o.items.length > 2" class="more-items">
+            +{{ o.items.length - 2 }} more item{{ o.items.length - 2 > 1 ? 's' : '' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Expanded Details -->
+      <div class="oc-expanded" *ngIf="expandedOrder() === o._id">
+
+        <!-- All items -->
+        <div class="expanded-section" *ngIf="o.items.length > 2">
+          <h4 class="exp-title">All Items</h4>
+          <div class="all-items">
+            <div *ngFor="let item of o.items" class="exp-item">
+              <img [src]="item.productImage" [alt]="item.productName" class="ei-img" (error)="onImgErr($event)">
+              <div class="ei-info">
+                <div class="ei-name">{{ item.productName }}</div>
+                <div class="ei-meta">Qty {{ item.quantity }}{{ item.color ? ' · ' + item.color : '' }}</div>
+              </div>
+              <div class="ei-price">{{ ps.formatPrice(item.price * item.quantity) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order summary -->
+        <div class="exp-row-grid">
+          <div class="expanded-section">
+            <h4 class="exp-title">Delivery Address</h4>
+            <div class="exp-addr">
+              <div class="addr-name">{{ o.shippingAddress.name }}</div>
+              <div>{{ o.shippingAddress.street }}</div>
+              <div>{{ o.shippingAddress.city }}, {{ o.shippingAddress.state }} — {{ o.shippingAddress.pincode }}</div>
+              <div class="addr-phone">
+                <span class="material-icons">phone</span>{{ o.shippingAddress.phone }}
+              </div>
+            </div>
+          </div>
+
+          <div class="expanded-section">
+            <h4 class="exp-title">Payment Summary</h4>
+            <div class="payment-summary">
+              <div class="ps-row"><span>Method</span><span>{{ o.paymentMethod }}</span></div>
+              <div class="ps-row"><span>Status</span>
+                <span [class]="o.paymentStatus === 'paid' ? 'paid-tag' : 'pending-tag'">{{ o.paymentStatus | titlecase }}</span>
+              </div>
+              <div class="ps-row"><span>Subtotal</span><span>{{ ps.formatPrice(o.subtotal) }}</span></div>
+              <div class="ps-row"><span>Shipping</span><span [class.free]="o.shipping === 0">{{ o.shipping === 0 ? 'FREE' : ps.formatPrice(o.shipping) }}</span></div>
+              <div class="ps-row"><span>GST (5%)</span><span>{{ ps.formatPrice(o.tax) }}</span></div>
+              <div class="ps-row total-row"><span>Total</span><span class="total-amt">{{ ps.formatPrice(o.total) }}</span></div>
+            </div>
+          </div>
+
+          <div class="expanded-section" *ngIf="o.trackingEvents?.length">
+            <h4 class="exp-title">Tracking History</h4>
+            <div class="tracking-timeline">
+              <div *ngFor="let ev of o.trackingEvents.slice().reverse()" class="track-event">
+                <div class="te-dot" [class]="'te-' + ev.status"></div>
+                <div class="te-info">
+                  <div class="te-desc">{{ ev.description }}</div>
+                  <div class="te-meta">{{ ev.location }} · {{ ev.timestamp | date:'d MMM, h:mm a' }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estimated delivery -->
+        <div *ngIf="o.estimatedDelivery && !['delivered','cancelled','returned'].includes(o.status)" class="delivery-estimate">
+          <span class="material-icons">local_shipping</span>
+          <span>Estimated delivery: <strong>{{ o.estimatedDelivery | date:'EEEE, d MMMM yyyy' }}</strong></span>
+        </div>
+        <div *ngIf="o.status === 'delivered' && o.deliveredAt" class="delivered-notice">
+          <span class="material-icons">check_circle</span>
+          <span>Delivered on <strong>{{ o.deliveredAt | date:'d MMMM yyyy' }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Card Footer actions -->
+      <div class="oc-footer">
+        <div class="oc-footer-left">
+          <div class="oc-payment-chip">
+            <span class="material-icons">payment</span>
+            {{ o.paymentMethod }}
+            <span class="pay-status" [class]="o.paymentStatus === 'paid' ? 'pay-paid' : 'pay-pending'">
+              · {{ o.paymentStatus | titlecase }}
+            </span>
+          </div>
+          <div class="oc-ship-chip" *ngIf="o.trackingNumber">
+            <span class="material-icons">local_shipping</span>
+            {{ o.trackingNumber }}
+          </div>
+        </div>
+        <div class="oc-footer-actions">
+          <!-- User gets Invoice only -->
+          <button class="action-btn invoice-btn" (click)="downloadInvoice(o._id, o.orderNumber)"
+                  [disabled]="downloading() === o._id + '-inv'" [title]="'Download Invoice'">
+            <span class="material-icons">{{ downloading() === o._id + '-inv' ? 'hourglass_top' : 'receipt_long' }}</span>
+            {{ downloading() === o._id + '-inv' ? 'Generating...' : 'Download Invoice' }}
+          </button>
+          <button *ngIf="canCancel(o.status)" class="action-btn cancel-btn" (click)="cancelOrder(o._id)">
+            <span class="material-icons">cancel</span>
+            Cancel Order
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

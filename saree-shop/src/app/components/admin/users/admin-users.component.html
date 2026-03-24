@@ -1,0 +1,72 @@
+<div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="sidebar-logo"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;background:var(--gold-warm);color:white;display:flex;align-items:center;justify-content:center;border-radius:2px;font-family:var(--font-display)">V</div><span style="color:rgba(255,255,255,0.85);font-family:var(--font-display)">Vastra Vaibhav</span></div></div>
+        <nav class="sidebar-nav">
+          <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item"><span class="material-icons">dashboard</span> Dashboard</a>
+          <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item"><span class="material-icons">receipt_long</span> Orders</a>
+          <a routerLink="/admin/products" routerLinkActive="active" class="nav-item"><span class="material-icons">inventory_2</span> Products</a>
+          <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item"><span class="material-icons">category</span> Categories</a>
+          <a routerLink="/admin/homepage" routerLinkActive="active" class="nav-item"><span class="material-icons">tune</span> Homepage</a>
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-item"><span class="material-icons">group</span> Customers</a>
+          <div class="nav-divider"></div>
+          <a routerLink="/" class="nav-item"><span class="material-icons">storefront</span> View Store</a>
+          <button class="nav-item logout" (click)="auth.logout()"><span class="material-icons">logout</span> Logout</button>
+        </nav>
+      </aside>
+
+      <div class="admin-main">
+        <div class="admin-topbar">
+          <div><h1 class="admin-page-title">Customers</h1><p class="admin-page-sub">{{ total() }} registered users</p></div>
+        </div>
+
+        <div class="toolbar">
+          <div style="position:relative;flex:1">
+            <span class="material-icons" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:18px">search</span>
+            <input class="form-control" style="padding-left:36px" [(ngModel)]="searchQ" (input)="load()" placeholder="Search name or email...">
+          </div>
+          <select class="form-control" style="width:auto" [(ngModel)]="roleFilter" (change)="load()">
+            <option value="">All Roles</option>
+            <option value="user">Customers</option>
+            <option value="admin">Admins</option>
+          </select>
+        </div>
+
+        <div class="admin-section">
+          <div *ngIf="loading()" style="padding:48px;text-align:center;color:var(--text-muted)">Loading...</div>
+          <div class="table-wrapper" *ngIf="!loading()">
+            <table>
+              <thead><tr><th>Customer</th><th>Email</th><th>Phone</th><th>Role</th><th>Addresses</th><th>Wishlist</th><th>Joined</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr *ngFor="let u of users()">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <div style="width:36px;height:36px;border-radius:50%;background:var(--burgundy);color:white;font-family:var(--font-display);font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ u.name[0] }}</div>
+                      <div style="color:var(--text);font-size:0.875rem;font-weight:500">{{ u.name }}</div>
+                    </div>
+                  </td>
+                  <td style="font-size:0.82rem;color:var(--text-muted)">{{ u.email }}</td>
+                  <td style="font-size:0.82rem;color:var(--text-muted)">{{ u.phone || '—' }}</td>
+                  <td>
+                    <span style="padding:3px 10px;border-radius:20px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em"
+                      [style.background]="u.role==='admin'?'rgba(123,30,58,0.12)':'rgba(107,84,71,0.1)'"
+                      [style.color]="u.role==='admin'?'var(--burgundy)':'var(--text-muted)'">
+                      {{ u.role }}
+                    </span>
+                  </td>
+                  <td style="text-align:center;color:var(--text-muted);font-size:0.85rem">{{ u.addresses?.length || 0 }}</td>
+                  <td style="text-align:center;color:var(--text-muted);font-size:0.85rem">{{ u.wishlist?.length || 0 }}</td>
+                  <td style="font-size:0.75rem;color:var(--text-muted)">{{ u.createdAt | date:'d MMM yyyy' }}</td>
+                  <td>
+                    <button *ngIf="u.role!=='admin'" class="uact-btn" [title]="u.isActive?'Deactivate':'Activate'" (click)="toggleActive(u._id, u.isActive)"
+                      [style.color]="u.isActive?'var(--success)':'var(--error)'">
+                      <span class="material-icons" style="font-size:18px">{{ u.isActive ? 'toggle_on' : 'toggle_off' }}</span>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="users().length===0"><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">No users found</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>

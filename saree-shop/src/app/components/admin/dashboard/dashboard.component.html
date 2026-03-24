@@ -1,0 +1,85 @@
+<div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;background:var(--gold-warm);color:white;display:flex;align-items:center;justify-content:center;border-radius:2px;font-family:var(--font-display);font-size:1rem">V</div>
+            <span style="color:rgba(255,255,255,0.85);font-family:var(--font-display);font-size:1rem">Vastra Vaibhav</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item"><span class="material-icons">dashboard</span> Dashboard</a>
+          <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item"><span class="material-icons">receipt_long</span> Orders <span *ngIf="stats()?.pending" class="nav-badge">{{ stats()?.pending }}</span></a>
+          <a routerLink="/admin/products" routerLinkActive="active" class="nav-item"><span class="material-icons">inventory_2</span> Products</a>
+          <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item"><span class="material-icons">category</span> Categories</a>
+          <a routerLink="/admin/homepage" routerLinkActive="active" class="nav-item"><span class="material-icons">tune</span> Homepage</a>
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-item"><span class="material-icons">group</span> Customers</a>
+          <div class="nav-divider"></div>
+          <a routerLink="/" class="nav-item"><span class="material-icons">storefront</span> View Store</a>
+          <button class="nav-item logout" (click)="auth.logout()"><span class="material-icons">logout</span> Logout</button>
+        </nav>
+      </aside>
+
+      <div class="admin-main">
+        <div class="admin-topbar">
+          <div>
+            <h1 class="admin-page-title">Dashboard</h1>
+            <p class="admin-page-sub">Welcome back, {{ auth.currentUser()?.name }} · {{ today | date:'EEEE, d MMM yyyy' }}</p>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stats-card">
+            <div class="stats-icon"><span class="material-icons">receipt_long</span></div>
+            <div><div class="stats-value">{{ stats()?.total ?? '—' }}</div><div class="stats-label">Total Orders</div></div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-icon" style="background:rgba(45,122,79,0.12);color:var(--success)"><span class="material-icons">currency_rupee</span></div>
+            <div><div class="stats-value">{{ formatRevenue(stats()?.revenue) }}</div><div class="stats-label">Total Revenue</div></div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-icon" style="background:rgba(201,149,42,0.12);color:var(--gold-warm)"><span class="material-icons">pending</span></div>
+            <div><div class="stats-value">{{ stats()?.pending ?? '—' }}</div><div class="stats-label">Pending Orders</div></div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-icon" style="background:rgba(45,122,79,0.12);color:var(--success)"><span class="material-icons">check_circle</span></div>
+            <div><div class="stats-value">{{ stats()?.delivered ?? '—' }}</div><div class="stats-label">Delivered</div></div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-icon" style="background:rgba(37,99,235,0.1);color:var(--info)"><span class="material-icons">today</span></div>
+            <div><div class="stats-value">{{ stats()?.todayOrders ?? '—' }}</div><div class="stats-label">Today's Orders</div></div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-icon" style="background:rgba(123,30,58,0.12);color:var(--burgundy)"><span class="material-icons">group</span></div>
+            <div><div class="stats-value">{{ userStats()?.total ?? '—' }}</div><div class="stats-label">Customers</div></div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="admin-section">
+          <div class="section-header-row">
+            <span class="section-label">Recent Orders</span>
+            <a routerLink="/admin/orders" class="btn btn-ghost btn-sm">View All →</a>
+          </div>
+          <div *ngIf="loadingOrders()" style="padding:40px;text-align:center;color:var(--text-muted)">Loading...</div>
+          <div class="table-wrapper" *ngIf="!loadingOrders()">
+            <table>
+              <thead><tr>
+                <th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th>
+              </tr></thead>
+              <tbody>
+                <tr *ngFor="let o of recentOrders()">
+                  <td style="font-family:monospace;font-size:0.78rem;color:var(--burgundy)">{{ o.orderNumber }}</td>
+                  <td><div style="color:var(--text);font-size:0.85rem;font-weight:500">{{ o.userName }}</div><div style="font-size:0.72rem;color:var(--text-dim)">{{ o.userEmail }}</div></td>
+                  <td style="color:var(--text-muted)">{{ o.items.length }} item(s)</td>
+                  <td style="font-family:var(--font-display);color:var(--burgundy)">₹{{ o.total.toLocaleString('en-IN') }}</td>
+                  <td style="font-size:0.82rem">{{ o.paymentMethod }}</td>
+                  <td><span class="badge" [class]="'badge-'+o.status">{{ o.status | titlecase }}</span></td>
+                  <td style="font-size:0.78rem;color:var(--text-muted)">{{ o.createdAt | date:'d MMM' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>

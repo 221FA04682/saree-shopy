@@ -1,0 +1,228 @@
+<div class="page-header">
+  <div class="container">
+    <div class="section-subtitle">My Account</div>
+    <h1 class="section-title">{{ auth.currentUser()?.name }}</h1>
+    <div class="section-divider"></div>
+  </div>
+</div>
+
+<div class="container account-layout">
+
+  <!-- ── Sidebar ──────────────────────────────────────────── -->
+  <aside class="acct-sidebar">
+    <div class="acct-avatar-wrap">
+      <div class="acct-avatar">{{ auth.currentUser()?.name?.[0] }}</div>
+      <div class="acct-user-info">
+        <div class="acct-name">{{ auth.currentUser()?.name }}</div>
+        <div class="acct-email">{{ auth.currentUser()?.email }}</div>
+      </div>
+    </div>
+
+    <nav class="acct-nav">
+      <button *ngFor="let t of tabs" class="anav-btn" [class.active]="tab === t.key" (click)="tab = t.key">
+        <span class="material-icons">{{ t.icon }}</span>
+        {{ t.label }}
+        <span *ngIf="t.key === 'wishlist' && auth.currentUser()?.wishlist?.length" class="nav-count">
+          {{ auth.currentUser()?.wishlist?.length }}
+        </span>
+      </button>
+      <div class="nav-sep"></div>
+      <button class="anav-btn logout-btn" (click)="auth.logout()">
+        <span class="material-icons">logout</span>
+        Sign Out
+      </button>
+    </nav>
+  </aside>
+
+  <!-- ── Main Content ─────────────────────────────────────── -->
+  <div class="acct-content">
+
+    <!-- ── PROFILE ─────────────────────────────────────────── -->
+    <div *ngIf="tab === 'profile'" class="acct-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">Personal Information</h3>
+        <p class="panel-sub">Update your name, phone number, and password</p>
+      </div>
+
+      <div class="form-section">
+        <h4 class="form-section-title">Basic Details</h4>
+        <div class="fg-row">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-control" [(ngModel)]="editName" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input class="form-control" [(ngModel)]="editPhone" placeholder="10-digit mobile">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address <span class="readonly-note">(cannot be changed)</span></label>
+          <input class="form-control readonly" [value]="auth.currentUser()?.email" disabled>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4 class="form-section-title">Change Password</h4>
+        <div class="fg-row">
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-control" [(ngModel)]="currPwd" placeholder="Enter current password">
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-control" [(ngModel)]="newPwd" placeholder="Min 6 characters">
+          </div>
+        </div>
+        <p class="pwd-note">Leave password fields empty if you don't want to change it.</p>
+      </div>
+
+      <div class="panel-actions">
+        <button class="btn btn-primary" (click)="saveProfile()" [disabled]="saving()">
+          <span class="material-icons">{{ saving() ? 'hourglass_top' : 'save' }}</span>
+          {{ saving() ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ADDRESSES ───────────────────────────────────────── -->
+    <div *ngIf="tab === 'addresses'" class="acct-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">Saved Addresses</h3>
+        <p class="panel-sub">Manage your delivery addresses</p>
+      </div>
+
+      <div class="addresses-grid">
+        <div *ngFor="let a of auth.currentUser()?.addresses" class="addr-card" [class.default]="a.isDefault">
+          <div class="addr-card-header">
+            <div class="addr-label-row">
+              <span class="material-icons addr-icon">{{ a.label === 'Home' ? 'home' : a.label === 'Office' ? 'business' : 'location_on' }}</span>
+              <span class="addr-label">{{ a.label }}</span>
+              <span *ngIf="a.isDefault" class="default-badge">Default</span>
+            </div>
+            <button class="addr-delete-btn" (click)="deleteAddr(a._id!)">
+              <span class="material-icons">delete_outline</span>
+            </button>
+          </div>
+          <div class="addr-body">
+            <div class="addr-name">{{ a.name }}</div>
+            <div class="addr-street">{{ a.street }}</div>
+            <div class="addr-city">{{ a.city }}, {{ a.state }} — {{ a.pincode }}</div>
+            <div class="addr-phone">
+              <span class="material-icons">phone</span> {{ a.phone }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Add new address card trigger -->
+        <div *ngIf="!showAddr" class="addr-add-card" (click)="showAddr=true; resetNA()">
+          <span class="material-icons">add_circle_outline</span>
+          <span>Add New Address</span>
+        </div>
+      </div>
+
+      <!-- New address form -->
+      <div *ngIf="showAddr" class="new-addr-form">
+        <h4 class="form-section-title">New Address</h4>
+        <div class="fg-row">
+          <div class="form-group">
+            <label class="form-label">Label</label>
+            <select class="form-control" [(ngModel)]="na.label">
+              <option>Home</option><option>Office</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:flex;align-items:center;gap:8px;padding-top:24px">
+            <input type="checkbox" [(ngModel)]="na.isDefault" id="def-addr">
+            <label for="def-addr" style="font-size:0.85rem;color:var(--text-muted);cursor:pointer">Set as default</label>
+          </div>
+        </div>
+        <div class="fg-row">
+          <div class="form-group"><label class="form-label">Full Name *</label><input class="form-control" [(ngModel)]="na.name"></div>
+          <div class="form-group"><label class="form-label">Phone *</label><input class="form-control" [(ngModel)]="na.phone"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Street Address *</label><input class="form-control" [(ngModel)]="na.street" placeholder="House no., Street, Area"></div>
+        <div class="fg-row-3">
+          <div class="form-group"><label class="form-label">City *</label><input class="form-control" [(ngModel)]="na.city"></div>
+          <div class="form-group"><label class="form-label">State *</label><input class="form-control" [(ngModel)]="na.state"></div>
+          <div class="form-group"><label class="form-label">Pincode *</label><input class="form-control" [(ngModel)]="na.pincode" maxlength="6"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" (click)="addAddr()">
+            <span class="material-icons">add</span> Add Address
+          </button>
+          <button class="btn btn-ghost" (click)="showAddr=false">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ORDERS ───────────────────────────────────────────── -->
+    <div *ngIf="tab === 'orders'" class="acct-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">Recent Orders</h3>
+        <a routerLink="/orders" class="btn btn-ghost btn-sm">View All →</a>
+      </div>
+
+      <div *ngIf="loadingOrders()" class="panel-loading">Loading orders...</div>
+
+      <div *ngIf="!loadingOrders() && orders().length === 0" class="panel-empty">
+        <span class="material-icons">receipt_long</span>
+        <p>No orders yet. <a routerLink="/products">Start shopping!</a></p>
+      </div>
+
+      <div *ngFor="let o of orders()" class="mini-order-card">
+        <div class="moc-header">
+          <div class="moc-num">{{ o.orderNumber }}</div>
+          <span class="moc-status" [class]="'mst-' + o.status">{{ o.status | titlecase }}</span>
+        </div>
+        <div class="moc-items">
+          <img *ngFor="let i of o.items.slice(0,3)" [src]="i.productImage" [alt]="i.productName" class="moc-img">
+          <span *ngIf="o.items.length > 3" class="moc-more">+{{ o.items.length - 3 }}</span>
+        </div>
+        <div class="moc-footer">
+          <span class="moc-date">{{ o.createdAt | date:'d MMM yyyy' }}</span>
+          <span class="moc-total">{{ ps.formatPrice(o.total) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WISHLIST ─────────────────────────────────────────── -->
+    <div *ngIf="tab === 'wishlist'" class="acct-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">My Wishlist</h3>
+        <p class="panel-sub">{{ wishlistProducts().length }} saved item{{ wishlistProducts().length !== 1 ? 's' : '' }}</p>
+      </div>
+
+      <div *ngIf="loadingWishlist()" class="panel-loading">Loading wishlist...</div>
+
+      <div *ngIf="!loadingWishlist() && wishlistProducts().length === 0" class="panel-empty">
+        <span class="material-icons">favorite_border</span>
+        <p>No saved items. Tap ♥ on any saree to save it here.</p>
+        <a routerLink="/products" class="btn btn-outline btn-sm">Browse Collection</a>
+      </div>
+
+      <div *ngIf="wishlistProducts().length > 0" class="wishlist-grid">
+        <div *ngFor="let p of wishlistProducts()" class="wish-card">
+          <div class="wc-img-wrap">
+            <a [routerLink]="['/products', p._id]">
+              <img [src]="p.images[0]" [alt]="p.name">
+            </a>
+            <button class="wc-remove-btn" (click)="removeFromWishlist(p._id)" title="Remove from wishlist">
+              <span class="material-icons">favorite</span>
+            </button>
+            <span *ngIf="p.stock === 0" class="wc-oos">Sold Out</span>
+          </div>
+          <div class="wc-body">
+            <div class="wc-cat">{{ p.category }}</div>
+            <a [routerLink]="['/products', p._id]" class="wc-name">{{ p.name }}</a>
+            <div class="wc-origin">{{ p.origin }}</div>
+            <div class="wc-price-row">
+              <span class="wc-price">{{ ps.formatPrice(p.price) }}</span>
+              <span *ngIf="p.originalPrice" class="wc-orig">{{ ps.formatPrice(p.originalPrice) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,209 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="s-logo-inner">
+        <div class="s-logo-mark">V</div>
+        <span class="s-logo-text">Vastra Vaibhav</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <span class="material-icons">dashboard</span> Dashboard
+      </a>
+      <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item">
+        <span class="material-icons">receipt_long</span> Orders
+      </a>
+      <a routerLink="/admin/products" routerLinkActive="active" class="nav-item">
+        <span class="material-icons">inventory_2</span> Products
+      </a>
+      <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item"><span class="material-icons">category</span> Categories</a>
+      <a routerLink="/admin/homepage" routerLinkActive="active" class="nav-item"><span class="material-icons">tune</span> Homepage</a>
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+        <span class="material-icons">group</span> Customers
+      </a>
+      <div class="nav-divider"></div>
+      <a routerLink="/" class="nav-item"><span class="material-icons">storefront</span> View Store</a>
+      <button class="nav-item logout" (click)="auth.logout()"><span class="material-icons">logout</span> Logout</button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1 class="admin-page-title">Orders</h1>
+        <p class="admin-page-sub">{{ total() }} total orders</p>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="orders-toolbar">
+      <div class="search-wrap">
+        <span class="material-icons si">search</span>
+        <input class="form-control" style="padding-left:38px" [(ngModel)]="searchQ" (input)="load()" placeholder="Search order ID or customer...">
+      </div>
+      <select class="form-control" style="width:180px" [(ngModel)]="statusFilter" (change)="load()">
+        <option value="">All Statuses</option>
+        <option *ngFor="let s of statuses" [value]="s">{{ s | titlecase }}</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div class="admin-section">
+      <div *ngIf="loading()" class="loading-state">Loading orders...</div>
+      <div class="table-wrapper" *ngIf="!loading()">
+        <table>
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of orders()">
+              <td>
+                <span class="order-id">{{ o.orderNumber }}</span>
+              </td>
+              <td>
+                <div class="cust-name">{{ o.userName }}</div>
+                <div class="cust-email">{{ o.userEmail }}</div>
+              </td>
+              <td>
+                <div class="order-amt">₹{{ o.total.toLocaleString('en-IN') }}</div>
+                <div class="order-items-ct">{{ o.items.length }} item(s)</div>
+              </td>
+              <td>
+                <div class="pay-method">{{ o.paymentMethod }}</div>
+                <span class="pay-status-tag" [class]="o.paymentStatus === 'paid' ? 'tag-paid' : 'tag-pending'">
+                  {{ o.paymentStatus }}
+                </span>
+              </td>
+              <td>
+                <select class="status-sel" [class]="'st-' + o.status"
+                        [ngModel]="o.status" (ngModelChange)="updateStatus(o._id, $event)">
+                  <option *ngFor="let s of statuses" [value]="s">{{ s | titlecase }}</option>
+                </select>
+              </td>
+              <td class="date-cell">{{ o.createdAt | date:'d MMM yyyy' }}</td>
+              <td>
+                <div class="action-group">
+                  <button class="act-btn view-btn" (click)="viewOrder(o)" title="View & Update">
+                    <span class="material-icons">open_in_new</span>
+                  </button>
+                  <!-- Admin gets both Invoice AND Shipping Label -->
+                  <button class="act-btn inv-btn" (click)="downloadInvoice(o._id, o.orderNumber)"
+                          [disabled]="downloading() === o._id + '-inv'" title="Download Invoice">
+                    <span class="material-icons">{{ downloading() === o._id + '-inv' ? 'hourglass_top' : 'receipt_long' }}</span>
+                  </button>
+                  <button class="act-btn label-btn" (click)="downloadLabel(o._id, o.orderNumber)"
+                          [disabled]="downloading() === o._id + '-label'" title="Download Shipping Label">
+                    <span class="material-icons">{{ downloading() === o._id + '-label' ? 'hourglass_top' : 'local_shipping' }}</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="orders().length === 0">
+              <td colspan="7" class="empty-row">No orders found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pages() > 1" style="padding: 16px 24px; margin-top:0">
+        <button class="page-btn" (click)="goPage(page() - 1)" [disabled]="page() === 1">‹</button>
+        <button *ngFor="let p of pageArr()" class="page-btn" [class.active]="p === page()" (click)="goPage(p)">{{ p }}</button>
+        <button class="page-btn" (click)="goPage(page() + 1)" [disabled]="page() === pages()">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" *ngIf="selected()" (click)="selected.set(null)">
+  <div class="modal-box order-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3>{{ selected()!.orderNumber }}</h3>
+        <p class="modal-sub">{{ selected()!.userName }} · {{ selected()!.createdAt | date:'d MMM yyyy' }}</p>
+      </div>
+      <div class="modal-header-actions">
+        <button class="modal-dl-btn inv" (click)="downloadInvoice(selected()!._id, selected()!.orderNumber)" title="Invoice">
+          <span class="material-icons">receipt_long</span> Invoice
+        </button>
+        <button class="modal-dl-btn label" (click)="downloadLabel(selected()!._id, selected()!.orderNumber)" title="Shipping Label">
+          <span class="material-icons">local_shipping</span> Label
+        </button>
+        <button class="modal-close" (click)="selected.set(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body" *ngIf="selected() as o">
+      <!-- Meta grid -->
+      <div class="modal-meta">
+        <div class="meta-item"><label>Status</label><span class="badge" [class]="'badge-' + o.status">{{ o.status }}</span></div>
+        <div class="meta-item"><label>Payment</label><span>{{ o.paymentMethod }} — {{ o.paymentStatus }}</span></div>
+        <div class="meta-item" style="grid-column:1/-1"><label>Ship To</label>
+          <span>{{ o.shippingAddress.name }}, {{ o.shippingAddress.street }}, {{ o.shippingAddress.city }}, {{ o.shippingAddress.state }} {{ o.shippingAddress.pincode }}</span>
+        </div>
+      </div>
+
+      <!-- Status update form -->
+      <div class="update-form">
+        <h5 class="uf-title">Update Order</h5>
+        <div class="uf-grid">
+          <div class="form-group">
+            <label class="form-label">New Status</label>
+            <select class="form-control" [(ngModel)]="updateForm.status">
+              <option *ngFor="let s of statuses" [value]="s">{{ s | titlecase }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tracking Number</label>
+            <input class="form-control" [(ngModel)]="updateForm.trackingNumber" placeholder="e.g. DELHIVERY123">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Courier</label>
+            <input class="form-control" [(ngModel)]="updateForm.courier" placeholder="e.g. Delhivery">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Note / Description</label>
+            <input class="form-control" [(ngModel)]="updateForm.description" placeholder="e.g. Out for delivery">
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" (click)="saveUpdate()">
+          <span class="material-icons" style="font-size:15px">save</span> Save Update
+        </button>
+      </div>
+
+      <!-- Items -->
+      <div class="modal-items">
+        <h5 class="uf-title">Items ({{ o.items.length }})</h5>
+        <div *ngFor="let i of o.items" class="mi-row">
+          <img [src]="i.productImage" [alt]="i.productName" class="mi-img">
+          <div class="mi-info">
+            <div class="mi-name">{{ i.productName }}</div>
+            <div class="mi-meta">Qty {{ i.quantity }}{{ i.color ? ' · ' + i.color : '' }} · {{ i.category }}</div>
+          </div>
+          <div class="mi-price">₹{{ (i.price * i.quantity).toLocaleString('en-IN') }}</div>
+        </div>
+      </div>
+
+      <!-- Totals -->
+      <div class="modal-totals">
+        <div class="tot-row"><span>Subtotal</span><span>₹{{ o.subtotal.toLocaleString('en-IN') }}</span></div>
+        <div class="tot-row"><span>Shipping</span><span>{{ o.shipping === 0 ? 'FREE' : '₹' + o.shipping }}</span></div>
+        <div class="tot-row"><span>GST (5%)</span><span>₹{{ o.tax.toLocaleString('en-IN') }}</span></div>
+        <div class="tot-row tot-total"><span>Total</span><span class="tot-val">₹{{ o.total.toLocaleString('en-IN') }}</span></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,153 @@
+<div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="sidebar-logo"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;background:var(--gold-warm);color:white;display:flex;align-items:center;justify-content:center;border-radius:2px;font-family:var(--font-display)">V</div><span style="color:rgba(255,255,255,0.85);font-family:var(--font-display)">Vastra Vaibhav</span></div></div>
+        <nav class="sidebar-nav">
+          <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item"><span class="material-icons">dashboard</span> Dashboard</a>
+          <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item"><span class="material-icons">receipt_long</span> Orders</a>
+          <a routerLink="/admin/products" routerLinkActive="active" class="nav-item"><span class="material-icons">inventory_2</span> Products</a>
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-item"><span class="material-icons">group</span> Customers</a>
+          <div class="nav-divider"></div>
+          <a routerLink="/" class="nav-item"><span class="material-icons">storefront</span> View Store</a>
+          <button class="nav-item logout" (click)="auth.logout()"><span class="material-icons">logout</span> Logout</button>
+        </nav>
+      </aside>
+
+      <div class="admin-main">
+        <div class="admin-topbar">
+          <div><h1 class="admin-page-title">Products</h1><p class="admin-page-sub">{{ total() }} products in catalogue</p></div>
+          <button class="btn btn-primary" (click)="openAdd()"><span class="material-icons">add</span> Add Product</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div style="position:relative;flex:1">
+            <span class="material-icons" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:18px">search</span>
+            <input class="form-control" style="padding-left:36px" [(ngModel)]="searchQ" (input)="load()" placeholder="Search products...">
+          </div>
+          <select class="form-control" style="width:auto" [(ngModel)]="catFilter" (change)="load()">
+            <option value="">All Categories</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+
+        <!-- Products grid -->
+        <div *ngIf="loading()" style="text-align:center;padding:60px;color:var(--text-muted)">Loading products...</div>
+        <div class="products-grid" *ngIf="!loading()">
+          <div *ngFor="let p of products()" class="prod-card">
+            <div class="pc-img">
+              <img [src]="p.images[0]" [alt]="p.name" (error)="onImgErr($event)">
+              <div class="pc-badges">
+                <span *ngIf="p.newArrival" class="badge badge-new">New</span>
+                <span *ngIf="p.bestseller" class="badge badge-best">Best</span>
+                <span *ngIf="!p.isActive" class="badge" style="background:var(--error);color:white">Hidden</span>
+              </div>
+              <div class="pc-acts">
+                <button class="pac-btn edit" (click)="openEdit(p)"><span class="material-icons">edit</span></button>
+                <button class="pac-btn stock" (click)="openStock(p)" title="Adjust Stock"><span class="material-icons">inventory</span></button>
+                <button class="pac-btn del" (click)="askDelete(p)"><span class="material-icons">delete_outline</span></button>
+              </div>
+            </div>
+            <div class="pc-body">
+              <div class="pc-cat">{{ p.category }}</div>
+              <div class="pc-name">{{ p.name }}</div>
+              <div class="pc-origin">{{ p.origin }}</div>
+              <div class="pc-foot">
+                <span class="pc-price">₹{{ p.price.toLocaleString('en-IN') }}</span>
+                <span class="pc-stock" [class.low]="p.stock<=5">{{ p.stock }} left</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" *ngIf="modalOpen()" (click)="closeModal()">
+      <div class="modal-box" style="max-width:min(660px,96vw);width:96vw;max-height:90vh" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>{{ editing() ? 'Edit Product' : 'Add New Product' }}</h3>
+          <button class="pac-btn" (click)="closeModal()"><span class="material-icons">close</span></button>
+        </div>
+        <div style="padding:24px;overflow-y:auto;max-height:75vh">
+          <div class="fg-row">
+            <div class="form-group"><label class="form-label">Product Name *</label><input class="form-control" [(ngModel)]="form.name"></div>
+            <div class="form-group"><label class="form-label">Category *</label>
+              <select class="form-control" [(ngModel)]="form.category">
+                <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Description *</label><textarea class="form-control" [(ngModel)]="form.description" rows="3"></textarea></div>
+          <div class="fg-row">
+            <div class="form-group"><label class="form-label">Price (₹) *</label><input type="number" class="form-control" [(ngModel)]="form.price"></div>
+            <div class="form-group"><label class="form-label">Original Price (₹)</label><input type="number" class="form-control" [(ngModel)]="form.originalPrice"></div>
+            <div class="form-group"><label class="form-label">Stock *</label><input type="number" class="form-control" [(ngModel)]="form.stock"></div>
+          </div>
+          <div class="fg-row">
+            <div class="form-group"><label class="form-label">Origin</label><input class="form-control" [(ngModel)]="form.origin" placeholder="Varanasi, UP"></div>
+            <div class="form-group"><label class="form-label">Fabric</label><input class="form-control" [(ngModel)]="form.fabric" placeholder="Pure Silk"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Colors (comma-separated)</label><input class="form-control" [(ngModel)]="form.colors" placeholder="Red, Gold, Green"></div>
+          <div class="form-group"><label class="form-label">Occasions (comma-separated)</label><input class="form-control" [(ngModel)]="form.occasion" placeholder="Wedding, Party, Festive"></div>
+          <div class="form-group"><label class="form-label">Image URL</label><input class="form-control" [(ngModel)]="form.imageUrl" placeholder="https://..."></div>
+          <!-- Upload -->
+          <div class="form-group">
+            <label class="form-label">Upload Image</label>
+            <input type="file" class="form-control" accept="image/*" multiple (change)="onFileChange($event)">
+            <div *ngIf="uploadedUrls().length" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+              <img *ngFor="let u of uploadedUrls()" [src]="u" style="width:60px;height:80px;object-fit:cover;border-radius:4px;border:1px solid var(--border)">
+            </div>
+          </div>
+          <div class="checkboxes">
+            <label class="check-opt"><input type="checkbox" [(ngModel)]="form.newArrival"> New Arrival</label>
+            <label class="check-opt"><input type="checkbox" [(ngModel)]="form.bestseller"> Bestseller</label>
+            <label class="check-opt"><input type="checkbox" [(ngModel)]="form.featured"> Featured</label>
+            <label class="check-opt"><input type="checkbox" [(ngModel)]="form.blouseIncluded"> Blouse Included</label>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+            <button class="btn btn-ghost" (click)="closeModal()">Cancel</button>
+            <button class="btn btn-primary" (click)="save()" [disabled]="saving()">{{ saving()?'Saving...': editing()?'Save Changes':'Add Product' }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stock Adjust Modal -->
+    <div class="modal-overlay" *ngIf="stockModal()" (click)="stockModal.set(null)">
+      <div class="modal-box" style="max-width:min(400px,96vw);width:96vw" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Adjust Stock</h3>
+          <button class="pac-btn" (click)="stockModal.set(null)"><span class="material-icons">close</span></button>
+        </div>
+        <div style="padding:24px">
+          <p style="color:var(--text-muted);margin-bottom:16px">Current stock: <strong style="color:var(--text)">{{ stockModal()?.stock }}</strong> units</p>
+          <div class="form-group"><label class="form-label">Change (use negative for deduction)</label><input type="number" class="form-control" [(ngModel)]="stockChange" placeholder="e.g. +10 or -5"></div>
+          <div class="form-group"><label class="form-label">Reason</label>
+            <select class="form-control" [(ngModel)]="stockReason">
+              <option value="restock">Restock</option>
+              <option value="manual">Manual Adjustment</option>
+              <option value="damage">Damage / Loss</option>
+              <option value="return">Customer Return</option>
+            </select>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:16px">
+            <button class="btn btn-ghost" (click)="stockModal.set(null)">Cancel</button>
+            <button class="btn btn-primary" (click)="saveStock()">Update Stock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirm -->
+    <div class="modal-overlay" *ngIf="deleteTarget()" (click)="deleteTarget.set(null)">
+      <div class="modal-box" style="max-width:min(420px,96vw);width:96vw" (click)="$event.stopPropagation()">
+        <div class="modal-header"><h3>Remove Product</h3></div>
+        <div style="padding:24px">
+          <p style="color:var(--text-muted)">Remove <strong style="color:var(--text)">{{ deleteTarget()?.name }}</strong> from the store? It will be hidden from customers.</p>
+          <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:20px">
+            <button class="btn btn-ghost" (click)="deleteTarget.set(null)">Cancel</button>
+            <button class="btn" style="background:var(--error);color:white" (click)="doDelete()">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,62 @@
+<div class="product-card" [class.touch-device]="isTouchDevice">
+  <!-- Image wrapper -->
+  <div class="card-img-wrap">
+    <a [routerLink]="['/products', product.id]" class="card-img-link">
+      <img [src]="product.images[0]" [alt]="product.name" loading="lazy" (error)="onErr($event)">
+    </a>
+
+    <!-- Badges -->
+    <div class="card-badges">
+      <span *ngIf="product.newArrival" class="badge badge-new">New</span>
+      <span *ngIf="product.bestseller" class="badge badge-best">Best Seller</span>
+      <span *ngIf="product.discount" class="badge badge-disc">−{{ product.discount }}%</span>
+    </div>
+
+    <!-- Wishlist button (always visible top-right) -->
+    <button class="wish-btn" (click)="toggleWish()" [class.wished]="isWished()" [title]="isWished() ? 'Remove from wishlist' : 'Add to wishlist'">
+      <span class="material-icons">{{ isWished() ? 'favorite' : 'favorite_border' }}</span>
+    </button>
+
+    <!-- Quick actions overlay -->
+    <div class="card-quick">
+      <a [routerLink]="['/products', product.id]" class="quick-btn" title="View Details">
+        <span class="material-icons">visibility</span>
+        <span class="quick-label">View</span>
+      </a>
+      <button class="quick-btn" (click)="addToCart()" [disabled]="product.stock === 0" title="Add to cart">
+        <span class="material-icons">shopping_bag</span>
+        <span class="quick-label">Add to Bag</span>
+      </button>
+    </div>
+
+    <!-- Stock labels -->
+    <div *ngIf="product.stock === 0" class="out-of-stock-label">Sold Out</div>
+    <div *ngIf="product.stock > 0 && product.stock <= 5" class="low-stock-label">
+      Only {{ product.stock }} left
+    </div>
+  </div>
+
+  <!-- Card body -->
+  <div class="card-body">
+    <div class="card-cat">{{ product.category }}
+      <span class="cat-dot">·</span>
+      <span class="card-origin">{{ product.origin }}</span>
+    </div>
+    <a [routerLink]="['/products', product.id]" class="card-name">{{ product.name }}</a>
+
+    <div class="card-rating">
+      <div class="stars">{{ getStarStr() }}</div>
+      <span class="reviews">({{ product.reviewCount }})</span>
+    </div>
+
+    <div class="card-foot">
+      <div class="card-price-group">
+        <span class="card-price">{{ ps.formatPrice(product.price) }}</span>
+        <span *ngIf="product.originalPrice" class="card-orig">{{ ps.formatPrice(product.originalPrice) }}</span>
+      </div>
+      <button class="add-btn" (click)="addToCart()" [disabled]="product.stock === 0" [title]="product.stock === 0 ? 'Out of stock' : 'Add to bag'">
+        <span class="material-icons">{{ product.stock === 0 ? 'remove_shopping_cart' : 'add_shopping_cart' }}</span>
+      </button>
+    </div>
+  </div>
+</div>

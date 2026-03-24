@@ -1,0 +1,38 @@
+<div class="auth-page">
+      <div class="auth-visual">
+        <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=900&q=85" alt="Saree">
+        <div class="auth-visual-overlay">
+          <div style="font-family:var(--font-display);font-size:2rem;color:white;margin-bottom:12px">Join Our Story</div>
+          <p style="font-family:var(--font-display);font-size:1.3rem;color:rgba(255,255,255,0.85);font-style:italic;line-height:1.5">"Every woman deserves<br>to feel like royalty."</p>
+        </div>
+      </div>
+      <div class="auth-form-side">
+        <div class="auth-card">
+          <a routerLink="/" class="auth-brand">✦ Vastra Vaibhav</a>
+          <h1 class="auth-title">Create Account</h1>
+          <p class="auth-sub">Join thousands celebrating Indian fashion</p>
+
+          <form (ngSubmit)="onRegister()">
+            <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" [(ngModel)]="name" name="name" placeholder="Your full name" required></div>
+            <div class="form-group"><label class="form-label">Email Address *</label><input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="your@email.com" required></div>
+            <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-control" [(ngModel)]="phone" name="phone" placeholder="10-digit mobile number"></div>
+            <div class="form-group">
+              <label class="form-label">Password * (min 6 characters)</label>
+              <div class="pass-wrap">
+                <input [type]="showPass()?'text':'password'" class="form-control" [(ngModel)]="password" name="password" placeholder="••••••••" required minlength="6">
+                <button type="button" class="pass-eye" (click)="togglePass()">
+                  <span class="material-icons">{{ showPass()?'visibility_off':'visibility' }}</span>
+                </button>
+              </div>
+            </div>
+            <div *ngIf="error()" class="auth-error"><span class="material-icons">error_outline</span> {{ error() }}</div>
+            <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:12px">By registering, you agree to our <a href="#" style="color:var(--burgundy)">Terms</a> and <a href="#" style="color:var(--burgundy)">Privacy Policy</a>.</p>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="loading()">
+              {{ loading() ? 'Creating Account...' : 'Create Account' }}
+            </button>
+          </form>
+
+          <p class="auth-switch">Already have an account? <a routerLink="/login">Sign In</a></p>
+        </div>
+      </div>
+    </div>
