@@ -71,16 +71,16 @@ export {
   provideProtractorTestingSupport,
   withHttpTransferCacheOptions,
   withNoHttpTransferCache,
-  BrowserDomAdapter as ɵBrowserDomAdapter,
-  BrowserGetTestability as ɵBrowserGetTestability,
-  DomEventsPlugin as ɵDomEventsPlugin,
-  DomRendererFactory2 as ɵDomRendererFactory2,
-  DomSanitizerImpl as ɵDomSanitizerImpl,
-  HammerGesturesPlugin as ɵHammerGesturesPlugin,
-  INTERNAL_BROWSER_PLATFORM_PROVIDERS as ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS,
-  KeyEventsPlugin as ɵKeyEventsPlugin,
-  SharedStylesHost as ɵSharedStylesHost,
-  getDOM as ɵgetDOM,
-  initDomAdapter as ɵinitDomAdapter
+  BrowserDomAdapter as ?BrowserDomAdapter,
+  BrowserGetTestability as ?BrowserGetTestability,
+  DomEventsPlugin as ?DomEventsPlugin,
+  DomRendererFactory2 as ?DomRendererFactory2,
+  DomSanitizerImpl as ?DomSanitizerImpl,
+  HammerGesturesPlugin as ?HammerGesturesPlugin,
+  INTERNAL_BROWSER_PLATFORM_PROVIDERS as ?INTERNAL_BROWSER_PLATFORM_PROVIDERS,
+  KeyEventsPlugin as ?KeyEventsPlugin,
+  SharedStylesHost as ?SharedStylesHost,
+  getDOM as ?getDOM,
+  initDomAdapter as ?initDomAdapter
 };
 //# sourceMappingURL=@angular_platform-browser.js.map

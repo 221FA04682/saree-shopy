@@ -4,14 +4,17 @@ const { protect, adminOnly } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-// ── GET /api/products ─────────────────────────────────────────
-// Public — with filters, search, pagination, sort
+function escapeRegex(value = '') {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 router.get('/', async (req, res) => {
   try {
     const {
       q, category, minPrice, maxPrice, occasion, color,
       sort, page = 1, limit = 12,
       featured, newArrival, bestseller,
+      inStock,
     } = req.query;
 
     const filter = { isActive: true };
@@ -19,10 +22,11 @@ router.get('/', async (req, res) => {
     if (q) filter.$text = { $search: q };
     if (category) filter.category = category;
     if (occasion) filter.occasion = { $in: [occasion] };
-    if (color)    filter.colors   = { $in: [color] };
-    if (featured)   filter.featured   = true;
+    if (color) filter.colors = { $in: [color] };
+    if (featured) filter.featured = true;
     if (newArrival) filter.newArrival = true;
     if (bestseller) filter.bestseller = true;
+    if (String(inStock) === 'true') filter.stock = { $gt: 0 };
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = Number(minPrice);
@@ -30,13 +34,13 @@ router.get('/', async (req, res) => {
     }
 
     const sortMap = {
-      'price-asc':  { price: 1 },
+      'price-asc': { price: 1 },
       'price-desc': { price: -1 },
-      'rating':     { rating: -1 },
-      'newest':     { createdAt: -1 },
-      'default':    { featured: -1, rating: -1 },
+      rating: { rating: -1 },
+      newest: { createdAt: -1 },
+      default: { featured: -1, rating: -1 },
     };
-    const sortBy = sortMap[sort] || sortMap['default'];
+    const sortBy = sortMap[sort] || sortMap.default;
 
     const skip = (Number(page) - 1) * Number(limit);
     const [products, total] = await Promise.all([
@@ -59,7 +63,84 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ── GET /api/products/categories ─────────────────────────────
+router.get('/meta', async (req, res) => {
+  try {
+    const [categories, colors, occasions, priceStats] = await Promise.all([
+      Product.aggregate([
+        { $match: { isActive: true } },
+        { $group: { _id: '$category', count: { $sum: 1 } } },
+        { $sort: { _id: 1 } },
+      ]),
+      Product.aggregate([
+        { $match: { isActive: true } },
+        { $unwind: '$colors' },
+        { $group: { _id: '$colors', count: { $sum: 1 } } },
+        { $sort: { count: -1, _id: 1 } },
+      ]),
+      Product.aggregate([
+        { $match: { isActive: true } },
+        { $unwind: '$occasion' },
+        { $group: { _id: '$occasion', count: { $sum: 1 } } },
+        { $sort: { count: -1, _id: 1 } },
+      ]),
+      Product.aggregate([
+        { $match: { isActive: true } },
+        { $group: { _id: null, min: { $min: '$price' }, max: { $max: '$price' } } },
+      ]),
+    ]);
+
+    res.json({
+      success: true,
+      meta: {
+        categories,
+        colors,
+        occasions,
+        priceRange: {
+          min: priceStats[0]?.min || 0,
+          max: priceStats[0]?.max || 0,
+        },
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/search-suggestions', async (req, res) => {
+  try {
+    const q = String(req.query.q || '').trim();
+    if (!q) return res.json({ success: true, suggestions: [] });
+
+    const regex = new RegExp(escapeRegex(q), 'i');
+    const products = await Product.find({
+      isActive: true,
+      $or: [
+        { name: regex },
+        { category: regex },
+        { tags: regex },
+        { colors: regex },
+        { occasion: regex },
+      ],
+    })
+      .sort({ featured: -1, bestseller: -1, rating: -1, createdAt: -1 })
+      .limit(6)
+      .select('name category price images slug');
+
+    const suggestions = products.map((product) => ({
+      _id: product._id,
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      image: product.images?.[0] || '',
+      slug: product.slug || '',
+    }));
+
+    res.json({ success: true, suggestions });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 router.get('/categories', async (req, res) => {
   try {
     const cats = await Product.aggregate([
@@ -73,7 +154,6 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-// ── GET /api/products/:id ─────────────────────────────────────
 router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate('reviews.user', 'name');
@@ -86,7 +166,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ── POST /api/products ─── Admin only ─────────────────────────
 router.post('/', protect, adminOnly, async (req, res) => {
   try {
     const product = await Product.create(req.body);
@@ -96,7 +175,6 @@ router.post('/', protect, adminOnly, async (req, res) => {
   }
 });
 
-// ── PUT /api/products/:id ─── Admin only ──────────────────────
 router.put('/:id', protect, adminOnly, async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -107,7 +185,6 @@ router.put('/:id', protect, adminOnly, async (req, res) => {
   }
 });
 
-// ── PATCH /api/products/:id/stock ─── Admin: restock or adjust ──
 router.patch('/:id/stock', protect, adminOnly, async (req, res) => {
   try {
     const { change, reason, ref } = req.body;
@@ -124,7 +201,6 @@ router.patch('/:id/stock', protect, adminOnly, async (req, res) => {
   }
 });
 
-// ── DELETE /api/products/:id ─── Admin only (soft delete) ────
 router.delete('/:id', protect, adminOnly, async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
@@ -135,24 +211,35 @@ router.delete('/:id', protect, adminOnly, async (req, res) => {
   }
 });
 
-// ── POST /api/products/:id/review ────────────────────────────
 router.post('/:id/review', protect, async (req, res) => {
   try {
     const { rating, comment } = req.body;
+    if (!comment || !String(comment).trim()) {
+      return res.status(400).json({ success: false, message: 'Review comment is required.' });
+    }
+    if (!Number.isFinite(Number(rating)) || Number(rating) < 1 || Number(rating) > 5) {
+      return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5.' });
+    }
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ success: false, message: 'Product not found.' });
     const already = product.reviews.find(r => r.user.toString() === req.user._id.toString());
     if (already) return res.status(400).json({ success: false, message: 'You have already reviewed this product.' });
-    product.reviews.push({ user: req.user._id, name: req.user.name, rating: Number(rating), comment });
+    product.reviews.push({ user: req.user._id, name: req.user.name, rating: Number(rating), comment: String(comment).trim() });
     product.calcRating();
     await product.save();
-    res.status(201).json({ success: true, message: 'Review added.', rating: product.rating, reviewCount: product.reviewCount });
+    await product.populate('reviews.user', 'name');
+    res.status(201).json({
+      success: true,
+      message: 'Review added.',
+      rating: product.rating,
+      reviewCount: product.reviewCount,
+      product,
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// ── GET /api/products/:id/related ────────────────────────────
 router.get('/:id/related', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);

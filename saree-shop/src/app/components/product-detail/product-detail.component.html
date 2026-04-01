@@ -99,6 +99,10 @@
               <span class="material-icons">shopping_bag</span>
               {{ product()!.stock === 0 ? 'Out of Stock' : 'Add to Bag' }}
             </button>
+            <button class="btn btn-gold btn-lg" (click)="buyNow()" [disabled]="product()!.stock === 0">
+              <span class="material-icons">bolt</span>
+              Buy Now
+            </button>
             <button class="btn btn-outline btn-icon" (click)="toggleWish()" [class.wished-btn]="isWish()">
               <span class="material-icons">{{ isWish() ? 'favorite' : 'favorite_border' }}</span>
             </button>
@@ -145,12 +149,24 @@
                 </button>
               </div>
               <p *ngIf="product()!.reviewCount === 0" class="no-reviews">No reviews yet. Be the first!</p>
+              <div class="reviews-list" *ngIf="(product()!.reviews || []).length">
+                <div class="review-card" *ngFor="let review of (product()!.reviews || []).slice().reverse()">
+                  <div class="review-head">
+                    <div>
+                      <strong>{{ review.name }}</strong>
+                      <div class="review-stars">{{ '★'.repeat(review.rating) }}{{ '☆'.repeat(5 - review.rating) }}</div>
+                    </div>
+                    <span class="review-date">{{ review.createdAt | date:'d MMM yyyy' }}</span>
+                  </div>
+                  <p>{{ review.comment }}</p>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Tags -->
           <div class="di-tags">
-            <span *ngFor="let t of product()!.tags" class="tag">{{ t }}</span>
+            <span *ngFor="let t of (product()!.tags || [])" class="tag">{{ t }}</span>
           </div>
         </div>
       </div>

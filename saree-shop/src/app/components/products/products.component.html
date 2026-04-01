@@ -1,118 +1,141 @@
 <div class="page-header">
-      <div class="container">
-        <div class="section-subtitle">{{ currentFilter || 'All Styles' }}</div>
-        <h1 class="section-title">{{ pageTitle }}</h1>
-        <div class="section-divider"></div>
-        <p class="header-desc">{{ pagination()?.total ?? 0 }} sarees found</p>
+  <div class="container">
+    <div class="section-subtitle">{{ currentFilter || 'Curated Catalogue' }}</div>
+    <h1 class="section-title">{{ pageTitle }}</h1>
+    <div class="section-divider"></div>
+    <p class="header-desc">{{ pagination()?.total ?? 0 }} sarees found</p>
+  </div>
+</div>
+
+<div class="container products-layout">
+  <aside class="filters-sidebar" [class.open]="filtersOpen()">
+    <div class="filters-head">
+      <h3>Refine</h3>
+      <button class="mobile-close-btn" (click)="filtersOpen.set(false)">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <div class="filter-section">
+      <h4>Category</h4>
+      <div class="filter-opts">
+        <label class="filter-opt" *ngFor="let cat of categories">
+          <input type="radio" name="cat" [value]="cat" [(ngModel)]="selectedCat" (change)="applyFilters()">
+          <span>{{ cat }}</span>
+        </label>
       </div>
     </div>
 
-    <div class="container products-layout">
-      <!-- Sidebar -->
-      <aside class="filters-sidebar" [class.open]="filtersOpen()">
-        <div class="filters-head">
-          <h3>Refine</h3>
-          <button class="mobile-close-btn" (click)="filtersOpen.set(false)">
-            <span class="material-icons">close</span>
-          </button>
-        </div>
+    <div class="filter-section">
+      <h4>Price Range</h4>
+      <div class="price-range">
+        <input type="number" class="form-control" [placeholder]="'Min ₹' + priceBounds().min" [(ngModel)]="minPrice" (change)="applyFilters()">
+        <span>to</span>
+        <input type="number" class="form-control" [placeholder]="'Max ₹' + priceBounds().max" [(ngModel)]="maxPrice" (change)="applyFilters()">
+      </div>
+    </div>
 
-        <div class="filter-section">
-          <h4>Category</h4>
-          <div class="filter-opts">
-            <label class="filter-opt" *ngFor="let cat of categories">
-              <input type="radio" name="cat" [value]="cat" [(ngModel)]="selectedCat" (change)="applyFilters()">
-              <span>{{ cat }}</span>
-            </label>
-          </div>
-        </div>
+    <div class="filter-section">
+      <h4>Occasion</h4>
+      <div class="filter-opts">
+        <label class="filter-opt" *ngFor="let occ of occasions">
+          <input type="radio" name="occ" [value]="occ" [(ngModel)]="selectedOcc" (change)="applyFilters()">
+          <span>{{ occ }}</span>
+        </label>
+      </div>
+    </div>
 
-        <div class="filter-section">
-          <h4>Price Range</h4>
-          <div class="price-range">
-            <input type="number" class="form-control" placeholder="Min ₹" [(ngModel)]="minPrice" (change)="applyFilters()">
-            <span>to</span>
-            <input type="number" class="form-control" placeholder="Max ₹" [(ngModel)]="maxPrice" (change)="applyFilters()">
-          </div>
-        </div>
+    <div class="filter-section" *ngIf="colors.length > 1">
+      <h4>Colour</h4>
+      <div class="filter-opts colors-grid">
+        <label class="filter-opt" *ngFor="let color of colors">
+          <input type="radio" name="color" [value]="color" [(ngModel)]="selectedColor" (change)="applyFilters()">
+          <span>{{ color }}</span>
+        </label>
+      </div>
+    </div>
 
-        <div class="filter-section">
-          <h4>Occasion</h4>
-          <div class="filter-opts">
-            <label class="filter-opt" *ngFor="let occ of occasions">
-              <input type="radio" name="occ" [value]="occ" [(ngModel)]="selectedOcc" (change)="applyFilters()">
-              <span>{{ occ }}</span>
-            </label>
-          </div>
-        </div>
+    <div class="filter-section">
+      <label class="stock-toggle">
+        <input type="checkbox" [(ngModel)]="inStockOnly" (change)="applyFilters()">
+        <span>Show only in-stock sarees</span>
+      </label>
+    </div>
 
-        <button class="btn btn-ghost btn-sm clear-btn" (click)="clearFilters()">
-          <span class="material-icons" style="font-size:14px">refresh</span> Clear All
+    <button class="btn btn-ghost btn-sm clear-btn" (click)="clearFilters()">
+      <span class="material-icons" style="font-size:14px">refresh</span> Clear All
+    </button>
+  </aside>
+
+  <div class="products-main">
+    <div class="products-toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-ghost btn-sm filter-toggle" (click)="filtersOpen.set(true)">
+          <span class="material-icons">tune</span> Filters
         </button>
-      </aside>
-
-      <!-- Main -->
-      <div class="products-main">
-        <!-- Toolbar -->
-        <div class="products-toolbar">
-          <button class="btn btn-ghost btn-sm filter-toggle" (click)="filtersOpen.set(true)">
-            <span class="material-icons">tune</span> Filters
-          </button>
-          <div class="active-tags">
-            <span *ngIf="selectedCat !== 'All'" class="filter-tag">
-              {{ selectedCat }} <button (click)="selectedCat='All';applyFilters()">×</button>
-            </span>
-            <span *ngIf="selectedOcc !== 'All'" class="filter-tag">
-              {{ selectedOcc }} <button (click)="selectedOcc='All';applyFilters()">×</button>
-            </span>
-            <span *ngIf="searchQ" class="filter-tag">
-              "{{ searchQ }}" <button (click)="searchQ='';applyFilters()">×</button>
-            </span>
-          </div>
-          <div class="sort-ctrl">
-            <select class="form-control" style="width:auto;font-size:0.8rem" [(ngModel)]="sortBy" (change)="applyFilters()">
-              <option value="">Featured</option>
-              <option value="price-asc">Price: Low → High</option>
-              <option value="price-desc">Price: High → Low</option>
-              <option value="rating">Top Rated</option>
-              <option value="newest">Newest First</option>
-            </select>
-          </div>
+        <div class="toolbar-search">
+          <span class="material-icons">search</span>
+          <input class="form-control" [ngModel]="searchQ" (ngModelChange)="onSearchChange($event)" placeholder="Search by saree, weave, or style">
         </div>
+      </div>
 
-        <!-- Loading skeleton -->
-        <div *ngIf="loading()" class="grid grid-3 products-grid">
-          <div *ngFor="let s of [1,2,3,4,5,6]" class="skeleton-card">
-            <div class="skel-img"></div>
-            <div class="skel-body">
-              <div class="skel-line sm"></div>
-              <div class="skel-line"></div>
-              <div class="skel-line md"></div>
-            </div>
-          </div>
-        </div>
+      <div class="active-tags">
+        <span *ngIf="selectedCat !== 'All'" class="filter-tag">
+          {{ selectedCat }} <button (click)="selectedCat='All';applyFilters()">×</button>
+        </span>
+        <span *ngIf="selectedOcc !== 'All'" class="filter-tag">
+          {{ selectedOcc }} <button (click)="selectedOcc='All';applyFilters()">×</button>
+        </span>
+        <span *ngIf="selectedColor !== 'All'" class="filter-tag">
+          {{ selectedColor }} <button (click)="selectedColor='All';applyFilters()">×</button>
+        </span>
+        <span *ngIf="searchQ" class="filter-tag">
+          "{{ searchQ }}" <button (click)="searchQ='';applyFilters()">×</button>
+        </span>
+        <span *ngIf="inStockOnly" class="filter-tag">
+          In Stock <button (click)="inStockOnly=false;applyFilters()">×</button>
+        </span>
+      </div>
 
-        <!-- Products -->
-        <div *ngIf="!loading() && products().length > 0" class="grid grid-3 products-grid">
-          <app-product-card *ngFor="let p of products()" [product]="p"></app-product-card>
-        </div>
+      <div class="sort-ctrl">
+        <select class="form-control" [(ngModel)]="sortBy" (change)="applyFilters()">
+          <option value="">Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Rated</option>
+          <option value="newest">Newest First</option>
+        </select>
+      </div>
+    </div>
 
-        <!-- Empty -->
-        <div *ngIf="!loading() && products().length === 0" class="empty-state">
-          <span class="material-icons empty-icon">search_off</span>
-          <h3>No sarees found</h3>
-          <p>Try adjusting your filters or search terms.</p>
-          <button class="btn btn-outline" (click)="clearFilters()">Clear Filters</button>
-        </div>
-
-        <!-- Pagination -->
-        <div class="pagination" *ngIf="(pagination()?.pages ?? 0) > 1">
-          <button class="page-btn" (click)="goPage(currentPage() - 1)" [disabled]="currentPage() === 1">‹</button>
-          <button *ngFor="let p of pageNumbers()" class="page-btn" [class.active]="p === currentPage()" (click)="goPage(p)">{{ p }}</button>
-          <button class="page-btn" (click)="goPage(currentPage() + 1)" [disabled]="currentPage() === pagination()?.pages">›</button>
+    <div *ngIf="loading()" class="grid grid-3 products-grid">
+      <div *ngFor="let s of [1,2,3,4,5,6]" class="skeleton-card">
+        <div class="skel-img"></div>
+        <div class="skel-body">
+          <div class="skel-line sm"></div>
+          <div class="skel-line"></div>
+          <div class="skel-line md"></div>
         </div>
       </div>
     </div>
 
-    <!-- Mobile overlay -->
-    <div class="filter-overlay" *ngIf="filtersOpen()" (click)="filtersOpen.set(false)"></div>
+    <div *ngIf="!loading() && products().length > 0" class="grid grid-3 products-grid">
+      <app-product-card *ngFor="let p of products()" [product]="p"></app-product-card>
+    </div>
+
+    <div *ngIf="!loading() && products().length === 0" class="empty-state">
+      <span class="material-icons empty-icon">search_off</span>
+      <h3>No sarees found</h3>
+      <p>Try adjusting your filters or search terms. Catalog metadata is {{ metaLoaded() ? 'ready' : 'loading' }}.</p>
+      <button class="btn btn-outline" (click)="clearFilters()">Clear Filters</button>
+    </div>
+
+    <div class="pagination" *ngIf="(pagination()?.pages ?? 0) > 1">
+      <button class="page-btn" (click)="goPage(currentPage() - 1)" [disabled]="currentPage() === 1">‹</button>
+      <button *ngFor="let p of pageNumbers()" class="page-btn" [class.active]="p === currentPage()" (click)="goPage(p)">{{ p }}</button>
+      <button class="page-btn" (click)="goPage(currentPage() + 1)" [disabled]="currentPage() === pagination()?.pages">›</button>
+    </div>
+  </div>
+</div>
+
+<div class="filter-overlay" *ngIf="filtersOpen()" (click)="filtersOpen.set(false)"></div>

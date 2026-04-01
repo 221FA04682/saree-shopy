@@ -6,6 +6,7 @@ export interface Product {
   _id: string;
   id: string;
   name: string;
+  slug?: string;
   description: string;
   category: string;
   fabric: string;
@@ -19,6 +20,7 @@ export interface Product {
   originalPrice?: number;
   discount?: number;
   images: string[];
+  sku?: string;
   stock: number;
   rating: number;
   reviewCount: number;
@@ -26,6 +28,13 @@ export interface Product {
   newArrival: boolean;
   bestseller: boolean;
   isActive: boolean;
+  reviews?: {
+    user?: string;
+    name: string;
+    rating: number;
+    comment: string;
+    createdAt?: string;
+  }[];
   createdAt?: string;
 }
 
@@ -33,6 +42,16 @@ export interface ProductsResponse {
   success: boolean;
   products: Product[];
   pagination: { page: number; limit: number; total: number; pages: number };
+}
+
+export interface CatalogMetaResponse {
+  success: boolean;
+  meta: {
+    categories: { _id: string; count: number }[];
+    colors: { _id: string; count: number }[];
+    occasions: { _id: string; count: number }[];
+    priceRange: { min: number; max: number };
+  };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -77,6 +96,10 @@ export class ProductService {
 
   getCategories(): Observable<{ success: boolean; categories: { _id: string; count: number }[] }> {
     return this.api.get('/products/categories');
+  }
+
+  getMeta(): Observable<CatalogMetaResponse> {
+    return this.api.get('/products/meta');
   }
 
   create(data: Partial<Product>): Observable<{ success: boolean; message: string; product: Product }> {

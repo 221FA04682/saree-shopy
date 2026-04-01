@@ -98,5 +98,7 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
+  closeDeleteModal() { this.deleteTarget.set(null); }
+
   closeModal() { this.modalOpen.set(false); this.editing.set(null); }
 }

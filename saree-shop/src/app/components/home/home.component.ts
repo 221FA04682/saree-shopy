@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
 
   featured    = signal<Product[]>([]);
   newArrivals = signal<Product[]>([]);
+  bestsellers = signal<Product[]>([]);
   categories  = signal<any[]>([]);
 
   // Full config from backend — sensible defaults
@@ -78,10 +79,12 @@ export class HomeComponent implements OnInit {
         }
         this.featured.set((r.featuredProducts || []).map((p: any) => ({ ...p, id: p._id })));
         this.newArrivals.set((r.newArrivals    || []).map((p: any) => ({ ...p, id: p._id })));
+        this.bestsellers.set((r.bestsellers || []).map((p: any) => ({ ...p, id: p._id })));
       },
       error: () => {
         this.ps.getProducts({ featured:   true, limit: 4 }).subscribe(r => this.featured.set(r.products));
         this.ps.getProducts({ newArrival: true, limit: 4 }).subscribe(r => this.newArrivals.set(r.products));
+        this.ps.getProducts({ bestseller: true, limit: 4 }).subscribe(r => this.bestsellers.set(r.products));
       },
     });
 
@@ -99,6 +102,20 @@ export class HomeComponent implements OnInit {
   getPromoBannerImage(): string {
     return this.cfg().promoBannerImage ||
       'https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=700&q=85';
+  }
+
+  getPromoBannerRoute(): { path: string[]; queryParams: Record<string, string> } {
+    const link = this.cfg().promoBannerLink || '/products?occasion=Wedding';
+    const [pathPart, queryPart] = link.split('?');
+    const queryParams: Record<string, string> = {};
+    if (queryPart) {
+      const search = new URLSearchParams(queryPart);
+      search.forEach((value, key) => { queryParams[key] = value; });
+    }
+    return {
+      path: [pathPart || '/products'],
+      queryParams,
+    };
   }
 
   getHeroSidebarCards(): { cat: string; image: string }[] {

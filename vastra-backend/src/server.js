@@ -13,10 +13,20 @@ const categoryRoutes = require('./routes/category.routes');
 const homeconfigRoutes = require('./routes/homeconfig.routes');
 
 const app = express();
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:4200')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 // ── CORS ──────────────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:4200',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('CORS origin not allowed'));
+  },
   credentials: true,
 }));
 

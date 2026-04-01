@@ -27,10 +27,10 @@ import {
   setClassMetadata,
   truncateMiddle,
   whenStable,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule,
-  ɵɵinject
+  ??defineInjectable,
+  ??defineInjector,
+  ??defineNgModule,
+  ??inject
 } from "./chunk-IGJZNA3K.js";
 import {
   Observable,
@@ -1084,14 +1084,14 @@ var HttpClient = class _HttpClient {
     return this.request("PUT", url, addBody(options, body));
   }
   static {
-    this.ɵfac = function HttpClient_Factory(t) {
-      return new (t || _HttpClient)(ɵɵinject(HttpHandler));
+    this.?fac = function HttpClient_Factory(t) {
+      return new (t || _HttpClient)(??inject(HttpHandler));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HttpClient,
-      factory: _HttpClient.ɵfac
+      factory: _HttpClient.?fac
     });
   }
 };
@@ -1278,14 +1278,14 @@ var FetchBackend = class _FetchBackend {
     return chunksAll;
   }
   static {
-    this.ɵfac = function FetchBackend_Factory(t) {
+    this.?fac = function FetchBackend_Factory(t) {
       return new (t || _FetchBackend)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _FetchBackend,
-      factory: _FetchBackend.ɵfac
+      factory: _FetchBackend.?fac
     });
   }
 };
@@ -1359,14 +1359,14 @@ var HttpInterceptorHandler = class _HttpInterceptorHandler extends HttpHandler {
     return this.chain(initialRequest, (downstreamRequest) => this.backend.handle(downstreamRequest)).pipe(finalize(() => this.pendingTasks.remove(taskId)));
   }
   static {
-    this.ɵfac = function HttpInterceptorHandler_Factory(t) {
-      return new (t || _HttpInterceptorHandler)(ɵɵinject(HttpBackend), ɵɵinject(EnvironmentInjector));
+    this.?fac = function HttpInterceptorHandler_Factory(t) {
+      return new (t || _HttpInterceptorHandler)(??inject(HttpBackend), ??inject(EnvironmentInjector));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HttpInterceptorHandler,
-      factory: _HttpInterceptorHandler.ɵfac
+      factory: _HttpInterceptorHandler.?fac
     });
   }
 };
@@ -1487,14 +1487,14 @@ var JsonpClientBackend = class _JsonpClientBackend {
     foreignDocument.adoptNode(script);
   }
   static {
-    this.ɵfac = function JsonpClientBackend_Factory(t) {
-      return new (t || _JsonpClientBackend)(ɵɵinject(JsonpCallbackContext), ɵɵinject(DOCUMENT));
+    this.?fac = function JsonpClientBackend_Factory(t) {
+      return new (t || _JsonpClientBackend)(??inject(JsonpCallbackContext), ??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _JsonpClientBackend,
-      factory: _JsonpClientBackend.ɵfac
+      factory: _JsonpClientBackend.?fac
     });
   }
 };
@@ -1532,14 +1532,14 @@ var JsonpInterceptor = class _JsonpInterceptor {
     return runInInjectionContext(this.injector, () => jsonpInterceptorFn(initialRequest, (downstreamRequest) => next.handle(downstreamRequest)));
   }
   static {
-    this.ɵfac = function JsonpInterceptor_Factory(t) {
-      return new (t || _JsonpInterceptor)(ɵɵinject(EnvironmentInjector));
+    this.?fac = function JsonpInterceptor_Factory(t) {
+      return new (t || _JsonpInterceptor)(??inject(EnvironmentInjector));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _JsonpInterceptor,
-      factory: _JsonpInterceptor.ɵfac
+      factory: _JsonpInterceptor.?fac
     });
   }
 };
@@ -1574,7 +1574,7 @@ var HttpXhrBackend = class _HttpXhrBackend {
       throw new RuntimeError(-2800, (typeof ngDevMode === "undefined" || ngDevMode) && `Cannot make a JSONP request without JSONP support. To fix the problem, either add the \`withJsonpSupport()\` call (if \`provideHttpClient()\` is used) or import the \`HttpClientJsonpModule\` in the root NgModule.`);
     }
     const xhrFactory = this.xhrFactory;
-    const source = xhrFactory.ɵloadImpl ? from(xhrFactory.ɵloadImpl()) : of(null);
+    const source = xhrFactory.?loadImpl ? from(xhrFactory.?loadImpl()) : of(null);
     return source.pipe(switchMap(() => {
       return new Observable((observer) => {
         const xhr = xhrFactory.build();
@@ -1737,14 +1737,14 @@ var HttpXhrBackend = class _HttpXhrBackend {
     }));
   }
   static {
-    this.ɵfac = function HttpXhrBackend_Factory(t) {
-      return new (t || _HttpXhrBackend)(ɵɵinject(XhrFactory));
+    this.?fac = function HttpXhrBackend_Factory(t) {
+      return new (t || _HttpXhrBackend)(??inject(XhrFactory));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HttpXhrBackend,
-      factory: _HttpXhrBackend.ɵfac
+      factory: _HttpXhrBackend.?fac
     });
   }
 };
@@ -1790,14 +1790,14 @@ var HttpXsrfCookieExtractor = class _HttpXsrfCookieExtractor {
     return this.lastToken;
   }
   static {
-    this.ɵfac = function HttpXsrfCookieExtractor_Factory(t) {
-      return new (t || _HttpXsrfCookieExtractor)(ɵɵinject(DOCUMENT), ɵɵinject(PLATFORM_ID), ɵɵinject(XSRF_COOKIE_NAME));
+    this.?fac = function HttpXsrfCookieExtractor_Factory(t) {
+      return new (t || _HttpXsrfCookieExtractor)(??inject(DOCUMENT), ??inject(PLATFORM_ID), ??inject(XSRF_COOKIE_NAME));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HttpXsrfCookieExtractor,
-      factory: _HttpXsrfCookieExtractor.ɵfac
+      factory: _HttpXsrfCookieExtractor.?fac
     });
   }
 };
@@ -1846,14 +1846,14 @@ var HttpXsrfInterceptor = class _HttpXsrfInterceptor {
     return runInInjectionContext(this.injector, () => xsrfInterceptorFn(initialRequest, (downstreamRequest) => next.handle(downstreamRequest)));
   }
   static {
-    this.ɵfac = function HttpXsrfInterceptor_Factory(t) {
-      return new (t || _HttpXsrfInterceptor)(ɵɵinject(EnvironmentInjector));
+    this.?fac = function HttpXsrfInterceptor_Factory(t) {
+      return new (t || _HttpXsrfInterceptor)(??inject(EnvironmentInjector));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HttpXsrfInterceptor,
-      factory: _HttpXsrfInterceptor.ɵfac
+      factory: _HttpXsrfInterceptor.?fac
     });
   }
 };
@@ -1876,13 +1876,13 @@ var HttpFeatureKind;
 })(HttpFeatureKind || (HttpFeatureKind = {}));
 function makeHttpFeature(kind, providers) {
   return {
-    ɵkind: kind,
-    ɵproviders: providers
+    ?kind: kind,
+    ?providers: providers
   };
 }
 function provideHttpClient(...features) {
   if (ngDevMode) {
-    const featureKinds = new Set(features.map((f) => f.ɵkind));
+    const featureKinds = new Set(features.map((f) => f.?kind));
     if (featureKinds.has(HttpFeatureKind.NoXsrfProtection) && featureKinds.has(HttpFeatureKind.CustomXsrfConfiguration)) {
       throw new Error(ngDevMode ? `Configuration error: found both withXsrfConfiguration() and withNoXsrfProtection() in the same call to provideHttpClient(), which is a contradiction.` : "");
     }
@@ -1905,7 +1905,7 @@ function provideHttpClient(...features) {
     useClass: HttpXsrfCookieExtractor
   }];
   for (const feature of features) {
-    providers.push(...feature.ɵproviders);
+    providers.push(...feature.?providers);
   }
   return makeEnvironmentProviders(providers);
 }
@@ -1998,7 +1998,7 @@ var HttpClientXsrfModule = class _HttpClientXsrfModule {
   static disable() {
     return {
       ngModule: _HttpClientXsrfModule,
-      providers: [withNoXsrfProtection().ɵproviders]
+      providers: [withNoXsrfProtection().?providers]
     };
   }
   /**
@@ -2012,21 +2012,21 @@ var HttpClientXsrfModule = class _HttpClientXsrfModule {
   static withOptions(options = {}) {
     return {
       ngModule: _HttpClientXsrfModule,
-      providers: withXsrfConfiguration(options).ɵproviders
+      providers: withXsrfConfiguration(options).?providers
     };
   }
   static {
-    this.ɵfac = function HttpClientXsrfModule_Factory(t) {
+    this.?fac = function HttpClientXsrfModule_Factory(t) {
       return new (t || _HttpClientXsrfModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _HttpClientXsrfModule
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
+    this.?inj = ??defineInjector({
       providers: [HttpXsrfInterceptor, {
         provide: HTTP_INTERCEPTORS,
         useExisting: HttpXsrfInterceptor,
@@ -2037,7 +2037,7 @@ var HttpClientXsrfModule = class _HttpClientXsrfModule {
       }, withXsrfConfiguration({
         cookieName: XSRF_DEFAULT_COOKIE_NAME,
         headerName: XSRF_DEFAULT_HEADER_NAME
-      }).ɵproviders, {
+      }).?providers, {
         provide: XSRF_ENABLED,
         useValue: true
       }]
@@ -2058,7 +2058,7 @@ var HttpClientXsrfModule = class _HttpClientXsrfModule {
       }, withXsrfConfiguration({
         cookieName: XSRF_DEFAULT_COOKIE_NAME,
         headerName: XSRF_DEFAULT_HEADER_NAME
-      }).ɵproviders, {
+      }).?providers, {
         provide: XSRF_ENABLED,
         useValue: true
       }]
@@ -2067,17 +2067,17 @@ var HttpClientXsrfModule = class _HttpClientXsrfModule {
 })();
 var HttpClientModule = class _HttpClientModule {
   static {
-    this.ɵfac = function HttpClientModule_Factory(t) {
+    this.?fac = function HttpClientModule_Factory(t) {
       return new (t || _HttpClientModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _HttpClientModule
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
+    this.?inj = ??defineInjector({
       providers: [provideHttpClient(withInterceptorsFromDi())]
     });
   }
@@ -2096,18 +2096,18 @@ var HttpClientModule = class _HttpClientModule {
 })();
 var HttpClientJsonpModule = class _HttpClientJsonpModule {
   static {
-    this.ɵfac = function HttpClientJsonpModule_Factory(t) {
+    this.?fac = function HttpClientJsonpModule_Factory(t) {
       return new (t || _HttpClientJsonpModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _HttpClientJsonpModule
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
-      providers: [withJsonpSupport().ɵproviders]
+    this.?inj = ??defineInjector({
+      providers: [withJsonpSupport().?providers]
     });
   }
 };
@@ -2115,7 +2115,7 @@ var HttpClientJsonpModule = class _HttpClientJsonpModule {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(HttpClientJsonpModule, [{
     type: NgModule,
     args: [{
-      providers: [withJsonpSupport().ɵproviders]
+      providers: [withJsonpSupport().?providers]
     }]
   }], null, null);
 })();

@@ -63,10 +63,10 @@ import {
   setDocument,
   unwrapSafeValue,
   withDomHydration,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule,
-  ɵɵinject
+  ??defineInjectable,
+  ??defineInjector,
+  ??defineNgModule,
+  ??inject
 } from "./chunk-IGJZNA3K.js";
 import {
   __spreadProps,
@@ -199,14 +199,14 @@ var BrowserXhr = class _BrowserXhr {
     return new XMLHttpRequest();
   }
   static {
-    this.ɵfac = function BrowserXhr_Factory(t) {
+    this.?fac = function BrowserXhr_Factory(t) {
       return new (t || _BrowserXhr)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _BrowserXhr,
-      factory: _BrowserXhr.ɵfac
+      factory: _BrowserXhr.?fac
     });
   }
 };
@@ -262,14 +262,14 @@ var EventManager = class _EventManager {
     return plugin;
   }
   static {
-    this.ɵfac = function EventManager_Factory(t) {
-      return new (t || _EventManager)(ɵɵinject(EVENT_MANAGER_PLUGINS), ɵɵinject(NgZone));
+    this.?fac = function EventManager_Factory(t) {
+      return new (t || _EventManager)(??inject(EVENT_MANAGER_PLUGINS), ??inject(NgZone));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _EventManager,
-      factory: _EventManager.ɵfac
+      factory: _EventManager.?fac
     });
   }
 };
@@ -422,14 +422,14 @@ var SharedStylesHost = class _SharedStylesHost {
     hostNodes.add(this.doc.head);
   }
   static {
-    this.ɵfac = function SharedStylesHost_Factory(t) {
-      return new (t || _SharedStylesHost)(ɵɵinject(DOCUMENT), ɵɵinject(APP_ID), ɵɵinject(CSP_NONCE, 8), ɵɵinject(PLATFORM_ID));
+    this.?fac = function SharedStylesHost_Factory(t) {
+      return new (t || _SharedStylesHost)(??inject(DOCUMENT), ??inject(APP_ID), ??inject(CSP_NONCE, 8), ??inject(PLATFORM_ID));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _SharedStylesHost,
-      factory: _SharedStylesHost.ɵfac
+      factory: _SharedStylesHost.?fac
     });
   }
 };
@@ -549,14 +549,14 @@ var DomRendererFactory2 = class _DomRendererFactory2 {
     this.rendererByCompId.clear();
   }
   static {
-    this.ɵfac = function DomRendererFactory2_Factory(t) {
-      return new (t || _DomRendererFactory2)(ɵɵinject(EventManager), ɵɵinject(SharedStylesHost), ɵɵinject(APP_ID), ɵɵinject(REMOVE_STYLES_ON_COMPONENT_DESTROY), ɵɵinject(DOCUMENT), ɵɵinject(PLATFORM_ID), ɵɵinject(NgZone), ɵɵinject(CSP_NONCE));
+    this.?fac = function DomRendererFactory2_Factory(t) {
+      return new (t || _DomRendererFactory2)(??inject(EventManager), ??inject(SharedStylesHost), ??inject(APP_ID), ??inject(REMOVE_STYLES_ON_COMPONENT_DESTROY), ??inject(DOCUMENT), ??inject(PLATFORM_ID), ??inject(NgZone), ??inject(CSP_NONCE));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DomRendererFactory2,
-      factory: _DomRendererFactory2.ɵfac
+      factory: _DomRendererFactory2.?fac
     });
   }
 };
@@ -834,14 +834,14 @@ var DomEventsPlugin = class _DomEventsPlugin extends EventManagerPlugin {
     return target.removeEventListener(eventName, callback);
   }
   static {
-    this.ɵfac = function DomEventsPlugin_Factory(t) {
-      return new (t || _DomEventsPlugin)(ɵɵinject(DOCUMENT));
+    this.?fac = function DomEventsPlugin_Factory(t) {
+      return new (t || _DomEventsPlugin)(??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DomEventsPlugin,
-      factory: _DomEventsPlugin.ɵfac
+      factory: _DomEventsPlugin.?fac
     });
   }
 };
@@ -1001,14 +1001,14 @@ var KeyEventsPlugin = class _KeyEventsPlugin extends EventManagerPlugin {
     return keyName === "esc" ? "escape" : keyName;
   }
   static {
-    this.ɵfac = function KeyEventsPlugin_Factory(t) {
-      return new (t || _KeyEventsPlugin)(ɵɵinject(DOCUMENT));
+    this.?fac = function KeyEventsPlugin_Factory(t) {
+      return new (t || _KeyEventsPlugin)(??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _KeyEventsPlugin,
-      factory: _KeyEventsPlugin.ɵfac
+      factory: _KeyEventsPlugin.?fac
     });
   }
 };
@@ -1132,18 +1132,18 @@ var BrowserModule = class _BrowserModule {
     };
   }
   static {
-    this.ɵfac = function BrowserModule_Factory(t) {
-      return new (t || _BrowserModule)(ɵɵinject(BROWSER_MODULE_PROVIDERS_MARKER, 12));
+    this.?fac = function BrowserModule_Factory(t) {
+      return new (t || _BrowserModule)(??inject(BROWSER_MODULE_PROVIDERS_MARKER, 12));
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _BrowserModule,
       exports: [CommonModule, ApplicationModule]
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
+    this.?inj = ??defineInjector({
       providers: [...BROWSER_MODULE_PROVIDERS, ...TESTABILITY_PROVIDERS],
       imports: [CommonModule, ApplicationModule]
     });
@@ -1287,14 +1287,14 @@ var Meta = class _Meta {
     return META_KEYS_MAP[prop] || prop;
   }
   static {
-    this.ɵfac = function Meta_Factory(t) {
-      return new (t || _Meta)(ɵɵinject(DOCUMENT));
+    this.?fac = function Meta_Factory(t) {
+      return new (t || _Meta)(??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _Meta,
-      factory: _Meta.ɵfac,
+      factory: _Meta.?fac,
       providedIn: "root"
     });
   }
@@ -1334,14 +1334,14 @@ var Title = class _Title {
     this._doc.title = newTitle || "";
   }
   static {
-    this.ɵfac = function Title_Factory(t) {
-      return new (t || _Title)(ɵɵinject(DOCUMENT));
+    this.?fac = function Title_Factory(t) {
+      return new (t || _Title)(??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _Title,
-      factory: _Title.ɵfac,
+      factory: _Title.?fac,
       providedIn: "root"
     });
   }
@@ -1531,14 +1531,14 @@ var HammerGestureConfig = class _HammerGestureConfig {
     return mc;
   }
   static {
-    this.ɵfac = function HammerGestureConfig_Factory(t) {
+    this.?fac = function HammerGestureConfig_Factory(t) {
       return new (t || _HammerGestureConfig)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HammerGestureConfig,
-      factory: _HammerGestureConfig.ɵfac
+      factory: _HammerGestureConfig.?fac
     });
   }
 };
@@ -1619,14 +1619,14 @@ var HammerGesturesPlugin = class _HammerGesturesPlugin extends EventManagerPlugi
     return this._config.events.indexOf(eventName) > -1;
   }
   static {
-    this.ɵfac = function HammerGesturesPlugin_Factory(t) {
-      return new (t || _HammerGesturesPlugin)(ɵɵinject(DOCUMENT), ɵɵinject(HAMMER_GESTURE_CONFIG), ɵɵinject(Console), ɵɵinject(HAMMER_LOADER, 8));
+    this.?fac = function HammerGesturesPlugin_Factory(t) {
+      return new (t || _HammerGesturesPlugin)(??inject(DOCUMENT), ??inject(HAMMER_GESTURE_CONFIG), ??inject(Console), ??inject(HAMMER_LOADER, 8));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HammerGesturesPlugin,
-      factory: _HammerGesturesPlugin.ɵfac
+      factory: _HammerGesturesPlugin.?fac
     });
   }
 };
@@ -1659,17 +1659,17 @@ var HammerGesturesPlugin = class _HammerGesturesPlugin extends EventManagerPlugi
 })();
 var HammerModule = class _HammerModule {
   static {
-    this.ɵfac = function HammerModule_Factory(t) {
+    this.?fac = function HammerModule_Factory(t) {
       return new (t || _HammerModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _HammerModule
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
+    this.?inj = ??defineInjector({
       providers: [{
         provide: EVENT_MANAGER_PLUGINS,
         useClass: HammerGesturesPlugin,
@@ -1702,19 +1702,19 @@ var HammerModule = class _HammerModule {
 })();
 var DomSanitizer = class _DomSanitizer {
   static {
-    this.ɵfac = function DomSanitizer_Factory(t) {
+    this.?fac = function DomSanitizer_Factory(t) {
       return new (t || _DomSanitizer)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DomSanitizer,
       factory: function DomSanitizer_Factory(t) {
         let r = null;
         if (t) {
           r = new (t || _DomSanitizer)();
         } else {
-          r = ɵɵinject(DomSanitizerImpl);
+          r = ??inject(DomSanitizerImpl);
         }
         return r;
       },
@@ -1806,14 +1806,14 @@ var DomSanitizerImpl = class _DomSanitizerImpl extends DomSanitizer {
     return bypassSanitizationTrustResourceUrl(value);
   }
   static {
-    this.ɵfac = function DomSanitizerImpl_Factory(t) {
-      return new (t || _DomSanitizerImpl)(ɵɵinject(DOCUMENT));
+    this.?fac = function DomSanitizerImpl_Factory(t) {
+      return new (t || _DomSanitizerImpl)(??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DomSanitizerImpl,
-      factory: _DomSanitizerImpl.ɵfac,
+      factory: _DomSanitizerImpl.?fac,
       providedIn: "root"
     });
   }
@@ -1837,10 +1837,10 @@ var HydrationFeatureKind;
   HydrationFeatureKind2[HydrationFeatureKind2["NoHttpTransferCache"] = 0] = "NoHttpTransferCache";
   HydrationFeatureKind2[HydrationFeatureKind2["HttpTransferCacheOptions"] = 1] = "HttpTransferCacheOptions";
 })(HydrationFeatureKind || (HydrationFeatureKind = {}));
-function hydrationFeature(ɵkind, ɵproviders = [], ɵoptions = {}) {
+function hydrationFeature(?kind, ?providers = [], ?options = {}) {
   return {
-    ɵkind,
-    ɵproviders
+    ?kind,
+    ?providers
   };
 }
 function withNoHttpTransferCache() {
@@ -1868,12 +1868,12 @@ function provideClientHydration(...features) {
   const featuresKind = /* @__PURE__ */ new Set();
   const hasHttpTransferCacheOptions = featuresKind.has(HydrationFeatureKind.HttpTransferCacheOptions);
   for (const {
-    ɵproviders,
-    ɵkind
+    ?providers,
+    ?kind
   } of features) {
-    featuresKind.add(ɵkind);
-    if (ɵproviders.length) {
-      providers.push(ɵproviders);
+    featuresKind.add(?kind);
+    if (?providers.length) {
+      providers.push(?providers);
     }
   }
   if (typeof ngDevMode !== "undefined" && ngDevMode && featuresKind.has(HydrationFeatureKind.NoHttpTransferCache) && hasHttpTransferCacheOptions) {

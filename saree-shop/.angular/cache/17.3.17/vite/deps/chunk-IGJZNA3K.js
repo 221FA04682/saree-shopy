@@ -401,8 +401,8 @@ var INPUT_SIGNAL_NODE = (() => {
     }
   });
 })();
-var ɵINPUT_SIGNAL_BRAND_READ_TYPE = Symbol();
-var ɵINPUT_SIGNAL_BRAND_WRITE_TYPE = Symbol();
+var ?INPUT_SIGNAL_BRAND_READ_TYPE = Symbol();
+var ?INPUT_SIGNAL_BRAND_WRITE_TYPE = Symbol();
 function createInputSignal(initialValue, options) {
   const node = Object.create(INPUT_SIGNAL_NODE);
   node.value = initialValue;
@@ -732,7 +732,7 @@ function assertNotReactive(fn) {
     throwError(`${fn}() should never be called in a reactive context.`);
   }
 }
-function ɵɵdefineInjectable(opts) {
+function ??defineInjectable(opts) {
   return {
     token: opts.token,
     providedIn: opts.providedIn || null,
@@ -740,8 +740,8 @@ function ɵɵdefineInjectable(opts) {
     value: void 0
   };
 }
-var defineInjectable = ɵɵdefineInjectable;
-function ɵɵdefineInjector(options) {
+var defineInjectable = ??defineInjectable;
+function ??defineInjector(options) {
   return { providers: options.providers || [], imports: options.imports || [] };
 }
 function getInjectableDef(type) {
@@ -766,8 +766,8 @@ This will become an error in a future version of Angular. Please add @Injectable
 function getInjectorDef(type) {
   return type && (type.hasOwnProperty(NG_INJ_DEF) || type.hasOwnProperty(NG_INJECTOR_DEF)) ? type[NG_INJ_DEF] : null;
 }
-var NG_PROV_DEF = getClosureSafeProperty({ ɵprov: getClosureSafeProperty });
-var NG_INJ_DEF = getClosureSafeProperty({ ɵinj: getClosureSafeProperty });
+var NG_PROV_DEF = getClosureSafeProperty({ ?prov: getClosureSafeProperty });
+var NG_INJ_DEF = getClosureSafeProperty({ ?inj: getClosureSafeProperty });
 var NG_INJECTABLE_DEF = getClosureSafeProperty({ ngInjectableDef: getClosureSafeProperty });
 var NG_INJECTOR_DEF = getClosureSafeProperty({ ngInjectorDef: getClosureSafeProperty });
 var InjectionToken = class {
@@ -780,12 +780,12 @@ var InjectionToken = class {
   constructor(_desc, options) {
     this._desc = _desc;
     this.ngMetadataName = "InjectionToken";
-    this.ɵprov = void 0;
+    this.?prov = void 0;
     if (typeof options == "number") {
       (typeof ngDevMode === "undefined" || ngDevMode) && assertLessThan(options, 0, "Only negative numbers are supported here");
       this.__NG_ELEMENT_ID__ = options;
     } else if (options !== void 0) {
-      this.ɵprov = ɵɵdefineInjectable({
+      this.?prov = ??defineInjectable({
         token: this,
         providedIn: options.providedIn || "root",
         factory: options.factory
@@ -836,7 +836,7 @@ function emitProviderConfiguredEvent(eventProvider, isViewProvider = false) {
   }
   let provider = eventProvider;
   if (eventProvider instanceof InjectionToken) {
-    provider = eventProvider.ɵprov || eventProvider;
+    provider = eventProvider.?prov || eventProvider;
   }
   injectorProfiler({
     type: 2,
@@ -870,13 +870,13 @@ function runInInjectorProfilerContext(injector, token, callback) {
   }
 }
 function isEnvironmentProviders(value) {
-  return value && !!value.ɵproviders;
+  return value && !!value.?providers;
 }
-var NG_COMP_DEF = getClosureSafeProperty({ ɵcmp: getClosureSafeProperty });
-var NG_DIR_DEF = getClosureSafeProperty({ ɵdir: getClosureSafeProperty });
-var NG_PIPE_DEF = getClosureSafeProperty({ ɵpipe: getClosureSafeProperty });
-var NG_MOD_DEF = getClosureSafeProperty({ ɵmod: getClosureSafeProperty });
-var NG_FACTORY_DEF = getClosureSafeProperty({ ɵfac: getClosureSafeProperty });
+var NG_COMP_DEF = getClosureSafeProperty({ ?cmp: getClosureSafeProperty });
+var NG_DIR_DEF = getClosureSafeProperty({ ?dir: getClosureSafeProperty });
+var NG_PIPE_DEF = getClosureSafeProperty({ ?pipe: getClosureSafeProperty });
+var NG_MOD_DEF = getClosureSafeProperty({ ?mod: getClosureSafeProperty });
+var NG_FACTORY_DEF = getClosureSafeProperty({ ?fac: getClosureSafeProperty });
 var NG_ELEMENT_ID = getClosureSafeProperty({ __NG_ELEMENT_ID__: getClosureSafeProperty });
 var NG_ENV_ID = getClosureSafeProperty({ __NG_ENV_ID__: getClosureSafeProperty });
 function renderStringify(value) {
@@ -920,7 +920,7 @@ function throwInvalidProviderError(ngModuleType, providers, provider) {
     const providerDetail = providers.map((v) => v == provider ? "?" + provider + "?" : "...");
     throw new Error(`Invalid provider for the NgModule '${stringify(ngModuleType)}' - only instances of Provider and Type are allowed, got: [${providerDetail.join(", ")}]`);
   } else if (isEnvironmentProviders(provider)) {
-    if (provider.ɵfromNgModule) {
+    if (provider.?fromNgModule) {
       throw new RuntimeError(207, `Invalid providers from 'importProvidersFrom' present in a non-environment injector. 'importProvidersFrom' can't be used for component providers.`);
     } else {
       throw new RuntimeError(207, `Invalid providers present in a non-environment injector. 'EnvironmentProviders' can't be used for component providers.`);
@@ -962,7 +962,7 @@ function injectRootLimpMode(token, notFoundValue, flags) {
   throwProviderNotFoundError(token, "Injector");
 }
 function assertInjectImplementationNotEqual(fn) {
-  ngDevMode && assertNotEqual(_injectImplementation, fn, "Calling ɵɵinject would cause infinite recursion");
+  ngDevMode && assertNotEqual(_injectImplementation, fn, "Calling ??inject would cause infinite recursion");
 }
 var _THROW_IF_NOT_FOUND = {};
 var THROW_IF_NOT_FOUND = _THROW_IF_NOT_FOUND;
@@ -970,7 +970,7 @@ var DI_DECORATOR_FLAG = "__NG_DI_FLAG__";
 var NG_TEMP_TOKEN_PATH = "ngTempTokenPath";
 var NG_TOKEN_PATH = "ngTokenPath";
 var NEW_LINE = /\n/gm;
-var NO_NEW_LINE = "ɵ";
+var NO_NEW_LINE = "?";
 var SOURCE = "__source";
 var _currentInjector = void 0;
 function getCurrentInjector() {
@@ -992,17 +992,17 @@ function injectInjectorOnly(token, flags = InjectFlags.Default) {
     return value;
   }
 }
-function ɵɵinject(token, flags = InjectFlags.Default) {
+function ??inject(token, flags = InjectFlags.Default) {
   return (getInjectImplementation() || injectInjectorOnly)(resolveForwardRef(token), flags);
 }
-function ɵɵinvalidFactoryDep(index) {
+function ??invalidFactoryDep(index) {
   throw new RuntimeError(202, ngDevMode && `This constructor is not compatible with Angular Dependency Injection because its dependency at index ${index} of the parameter list is invalid.
 This can happen if the dependency type is a primitive like a string or if an ancestor of this class is missing an Angular decorator.
 
 Please check that 1) the type for the parameter at index ${index} is correct and 2) the correct Angular decorators are defined for this class and its ancestors.`);
 }
 function inject(token, flags = InjectFlags.Default) {
-  return ɵɵinject(token, convertToBitFlags(flags));
+  return ??inject(token, convertToBitFlags(flags));
 }
 function convertToBitFlags(flags) {
   if (typeof flags === "undefined" || typeof flags === "number") {
@@ -1034,9 +1034,9 @@ function injectArgs(types) {
           type = meta;
         }
       }
-      args.push(ɵɵinject(type, flags));
+      args.push(??inject(type, flags));
     } else {
-      args.push(ɵɵinject(arg));
+      args.push(??inject(arg));
     }
   }
   return args;
@@ -1122,7 +1122,7 @@ var Host = (
 function getFactoryDef(type, throwNotFound) {
   const hasFactoryDef = type.hasOwnProperty(NG_FACTORY_DEF);
   if (!hasFactoryDef && throwNotFound === true && ngDevMode) {
-    throw new Error(`Type ${stringify(type)} does not have 'ɵfac' property.`);
+    throw new Error(`Type ${stringify(type)} does not have '?fac' property.`);
   }
   return hasFactoryDef ? type[NG_FACTORY_DEF] : null;
 }
@@ -1652,7 +1652,7 @@ function extractAttrsAndClassesFromSelector(selector) {
   }
   return { attrs, classes };
 }
-function ɵɵdefineComponent(componentDefinition) {
+function ??defineComponent(componentDefinition) {
   return noSideEffects(() => {
     (typeof ngDevMode === "undefined" || ngDevMode) && initNgDevMode();
     const baseDef = getNgDirectiveDef(componentDefinition);
@@ -1700,7 +1700,7 @@ function extractDirectiveDef(type) {
 function nonNull(value) {
   return value !== null;
 }
-function ɵɵdefineNgModule(def) {
+function ??defineNgModule(def) {
   return noSideEffects(() => {
     const res = {
       type: def.type,
@@ -1743,14 +1743,14 @@ function parseAndConvertBindingsForDefinition(obj, declaredInputs) {
   }
   return newLookup;
 }
-function ɵɵdefineDirective(directiveDefinition) {
+function ??defineDirective(directiveDefinition) {
   return noSideEffects(() => {
     const def = getNgDirectiveDef(directiveDefinition);
     initFeatures(def);
     return def;
   });
 }
-function ɵɵdefinePipe(pipeDef) {
+function ??definePipe(pipeDef) {
   return {
     type: pipeDef.type,
     name: pipeDef.name,
@@ -1776,7 +1776,7 @@ function isStandalone(type) {
 function getNgModuleDef(type, throwNotFound) {
   const ngModuleDef = type[NG_MOD_DEF] || null;
   if (!ngModuleDef && throwNotFound === true) {
-    throw new Error(`Type ${stringify(type)} does not have 'ɵmod' property.`);
+    throw new Error(`Type ${stringify(type)} does not have '?mod' property.`);
   }
   return ngModuleDef;
 }
@@ -1859,13 +1859,13 @@ function getComponentId(componentDef) {
 }
 function makeEnvironmentProviders(providers) {
   return {
-    ɵproviders: providers
+    ?providers: providers
   };
 }
 function importProvidersFrom(...sources) {
   return {
-    ɵproviders: internalImportProvidersFrom(true, sources),
-    ɵfromNgModule: true
+    ?providers: internalImportProvidersFrom(true, sources),
+    ?fromNgModule: true
   };
 }
 function internalImportProvidersFrom(checkForStandaloneCmp, ...sources) {
@@ -1962,7 +1962,7 @@ function walkProviderTree(container, visitor, parents, dedup) {
       const factory = getFactoryDef(defType) || (() => new defType());
       visitor({ provide: defType, useFactory: factory, deps: EMPTY_ARRAY }, defType);
       visitor({ provide: INJECTOR_DEF_TYPES, useValue: defType, multi: true }, defType);
-      visitor({ provide: ENVIRONMENT_INITIALIZER, useValue: () => ɵɵinject(defType), multi: true }, defType);
+      visitor({ provide: ENVIRONMENT_INITIALIZER, useValue: () => ??inject(defType), multi: true }, defType);
     }
     const defProviders = injDef.providers;
     if (defProviders != null && !isDuplicate) {
@@ -1989,7 +1989,7 @@ function validateProvider(provider, providers, containerType) {
 function deepForEachProvider(providers, fn) {
   for (let provider of providers) {
     if (isEnvironmentProviders(provider)) {
-      provider = provider.ɵproviders;
+      provider = provider.?providers;
     }
     if (Array.isArray(provider)) {
       deepForEachProvider(provider, fn);
@@ -2278,7 +2278,7 @@ function injectableDefOrInjectorDefFactory(token) {
     return factory;
   }
   if (token instanceof InjectionToken) {
-    throw new RuntimeError(204, ngDevMode && `Token ${stringify(token)} is missing a ɵprov definition.`);
+    throw new RuntimeError(204, ngDevMode && `Token ${stringify(token)} is missing a ?prov definition.`);
   }
   if (token instanceof Function) {
     return getUndecoratedInjectableFactory(token);
@@ -2319,7 +2319,7 @@ function providerToFactory(provider, ngModuleType, providers) {
     } else if (isFactoryProvider(provider)) {
       factory = () => provider.useFactory(...injectArgs(provider.deps || []));
     } else if (isExistingProvider(provider)) {
-      factory = () => ɵɵinject(resolveForwardRef(provider.useExisting));
+      factory = () => ??inject(resolveForwardRef(provider.useExisting));
     } else {
       const classRef = resolveForwardRef(provider && (provider.useClass || provider.provide));
       if (ngDevMode && !classRef) {
@@ -2355,7 +2355,7 @@ function forEachSingleProvider(providers, fn) {
     if (Array.isArray(provider)) {
       forEachSingleProvider(provider, fn);
     } else if (provider && isEnvironmentProviders(provider)) {
-      forEachSingleProvider(provider.ɵproviders, fn);
+      forEachSingleProvider(provider.?providers, fn);
     } else {
       fn(provider);
     }
@@ -2409,8 +2409,8 @@ var ViewEncapsulation;
 })(ViewEncapsulation || (ViewEncapsulation = {}));
 function getCompilerFacade(request) {
   const globalNg = _global["ng"];
-  if (globalNg && globalNg.ɵcompilerFacade) {
-    return globalNg.ɵcompilerFacade;
+  if (globalNg && globalNg.?compilerFacade) {
+    return globalNg.?compilerFacade;
   }
   if (typeof ngDevMode === "undefined" || ngDevMode) {
     console.error(`JIT compilation failed for ${request.kind}`, request.type);
@@ -2438,10 +2438,10 @@ function getCompilerFacade(request) {
   }
 }
 var angularCoreDiEnv = {
-  "ɵɵdefineInjectable": ɵɵdefineInjectable,
-  "ɵɵdefineInjector": ɵɵdefineInjector,
-  "ɵɵinject": ɵɵinject,
-  "ɵɵinvalidFactoryDep": ɵɵinvalidFactoryDep,
+  "??defineInjectable": ??defineInjectable,
+  "??defineInjector": ??defineInjector,
+  "??inject": ??inject,
+  "??invalidFactoryDep": ??invalidFactoryDep,
   "resolveForwardRef": resolveForwardRef
 };
 var Type = Function;
@@ -2705,12 +2705,12 @@ function assertTIcu(tIcu) {
     throwError("Object is not of TIcu type.");
   }
 }
-function assertComponentType(actual, msg = "Type passed in is not ComponentType, it does not have 'ɵcmp' property.") {
+function assertComponentType(actual, msg = "Type passed in is not ComponentType, it does not have '?cmp' property.") {
   if (!getComponentDef(actual)) {
     throwError(msg);
   }
 }
-function assertNgModuleType(actual, msg = "Type passed in is not NgModuleType, it does not have 'ɵmod' property.") {
+function assertNgModuleType(actual, msg = "Type passed in is not NgModuleType, it does not have '?mod' property.") {
   if (!getNgModuleDef(actual)) {
     throwError(msg);
   }
@@ -2812,7 +2812,7 @@ function applyValueToInputField(instance, inputSignalNode, privateName, value) {
     instance[privateName] = value;
   }
 }
-function ɵɵNgOnChangesFeature() {
+function ??NgOnChangesFeature() {
   return NgOnChangesFeatureImpl;
 }
 function NgOnChangesFeatureImpl(definition) {
@@ -2821,7 +2821,7 @@ function NgOnChangesFeatureImpl(definition) {
   }
   return rememberChangeHistoryAndInvokeOnChangesHook;
 }
-ɵɵNgOnChangesFeature.ngInherit = true;
+??NgOnChangesFeature.ngInherit = true;
 function rememberChangeHistoryAndInvokeOnChangesHook() {
   const simpleChangesStore = getSimpleChangesStore(this);
   const current = simpleChangesStore?.current;
@@ -3038,13 +3038,13 @@ function isInSkipHydrationBlock$1() {
 function isSkipHydrationRootTNode(tNode) {
   return instructionState.skipHydrationRootTNode === tNode;
 }
-function ɵɵenableBindings() {
+function ??enableBindings() {
   instructionState.bindingsEnabled = true;
 }
 function enterSkipHydrationBlock(tNode) {
   instructionState.skipHydrationRootTNode = tNode;
 }
-function ɵɵdisableBindings() {
+function ??disableBindings() {
   instructionState.bindingsEnabled = false;
 }
 function leaveSkipHydrationBlock() {
@@ -3056,11 +3056,11 @@ function getLView() {
 function getTView() {
   return instructionState.lFrame.tView;
 }
-function ɵɵrestoreView(viewToRestore) {
+function ??restoreView(viewToRestore) {
   instructionState.lFrame.contextLView = viewToRestore;
   return viewToRestore[CONTEXT];
 }
-function ɵɵresetView(value) {
+function ??resetView(value) {
   instructionState.lFrame.contextLView = null;
   return value;
 }
@@ -3289,13 +3289,13 @@ function getSelectedTNode() {
   const lFrame = instructionState.lFrame;
   return getTNode(lFrame.tView, lFrame.selectedIndex);
 }
-function ɵɵnamespaceSVG() {
+function ??namespaceSVG() {
   instructionState.lFrame.currentNamespace = SVG_NAMESPACE;
 }
-function ɵɵnamespaceMathML() {
+function ??namespaceMathML() {
   instructionState.lFrame.currentNamespace = MATH_ML_NAMESPACE;
 }
-function ɵɵnamespaceHTML() {
+function ??namespaceHTML() {
   namespaceHTMLInternal();
 }
 function namespaceHTMLInternal() {
@@ -3885,7 +3885,7 @@ var NodeInjector = class {
 function createNodeInjector() {
   return new NodeInjector(getCurrentTNode(), getLView());
 }
-function ɵɵgetInheritedFactory(type) {
+function ??getInheritedFactory(type) {
   return noSideEffects(() => {
     const ownConstructor = type.prototype.constructor;
     const ownFactory = ownConstructor[NG_FACTORY_DEF] || getFactoryOf(ownConstructor);
@@ -3946,10 +3946,10 @@ function getTNodeFromLView(lView) {
   }
   return null;
 }
-function ɵɵinjectAttribute(attrNameToInject) {
+function ??injectAttribute(attrNameToInject) {
   return injectAttributeImpl(getCurrentTNode(), attrNameToInject);
 }
-var Attribute = makeParamDecorator("Attribute", (attributeName) => ({ attributeName, __NG_ELEMENT_ID__: () => ɵɵinjectAttribute(attributeName) }));
+var Attribute = makeParamDecorator("Attribute", (attributeName) => ({ attributeName, __NG_ELEMENT_ID__: () => ??injectAttribute(attributeName) }));
 var _reflect = null;
 function getReflect() {
   return _reflect = _reflect || new ReflectionCapabilities();
@@ -4010,7 +4010,7 @@ function compileInjectable(type, meta) {
       get: () => {
         if (ngInjectableDef === null) {
           const compiler = getCompilerFacade({ usage: 0, kind: "injectable", type });
-          ngInjectableDef = compiler.compileInjectable(angularCoreDiEnv, `ng:///${type.name}/ɵprov.js`, getInjectableMetadata(type, meta));
+          ngInjectableDef = compiler.compileInjectable(angularCoreDiEnv, `ng:///${type.name}/?prov.js`, getInjectableMetadata(type, meta));
         }
         return ngInjectableDef;
       }
@@ -4021,7 +4021,7 @@ function compileInjectable(type, meta) {
       get: () => {
         if (ngFactoryDef === null) {
           const compiler = getCompilerFacade({ usage: 0, kind: "injectable", type });
-          ngFactoryDef = compiler.compileFactory(angularCoreDiEnv, `ng:///${type.name}/ɵfac.js`, {
+          ngFactoryDef = compiler.compileFactory(angularCoreDiEnv, `ng:///${type.name}/?fac.js`, {
             name: type.name,
             type,
             typeArgumentCount: 0,
@@ -4102,10 +4102,10 @@ var Injector = class _Injector {
     }
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _Injector,
       providedIn: "any",
-      factory: () => ɵɵinject(INJECTOR$1)
+      factory: () => ??inject(INJECTOR$1)
     });
   }
   static {
@@ -4115,7 +4115,7 @@ var Injector = class _Injector {
 var HostAttributeToken = class {
   constructor(attributeName) {
     this.attributeName = attributeName;
-    this.__NG_ELEMENT_ID__ = () => ɵɵinjectAttribute(this.attributeName);
+    this.__NG_ELEMENT_ID__ = () => ??injectAttribute(this.attributeName);
   }
   toString() {
     return `HostAttributeToken ${this.attributeName}`;
@@ -4610,10 +4610,10 @@ function readPatchedLView(target) {
   return null;
 }
 function isComponentInstance(instance) {
-  return instance && instance.constructor && instance.constructor.ɵcmp;
+  return instance && instance.constructor && instance.constructor.?cmp;
 }
 function isDirectiveInstance(instance) {
-  return instance && instance.constructor && instance.constructor.ɵdir;
+  return instance && instance.constructor && instance.constructor.?dir;
 }
 function findViaNativeElement(lView, target) {
   const tView = lView[TVIEW];
@@ -4962,8 +4962,8 @@ var TransferState = class _TransferState {
     this.onSerializeCallbacks = {};
   }
   static {
-    this.ɵprov = /** @pureOrBreakMyCode */
-    ɵɵdefineInjectable({
+    this.?prov = /** @pureOrBreakMyCode */
+    ??defineInjectable({
       token: _TransferState,
       providedIn: "root",
       factory: initTransferState
@@ -5576,7 +5576,7 @@ var SecurityContext;
   SecurityContext2[SecurityContext2["URL"] = 4] = "URL";
   SecurityContext2[SecurityContext2["RESOURCE_URL"] = 5] = "RESOURCE_URL";
 })(SecurityContext || (SecurityContext = {}));
-function ɵɵsanitizeHtml(unsafeHtml) {
+function ??sanitizeHtml(unsafeHtml) {
   const sanitizer = getSanitizer();
   if (sanitizer) {
     return trustedHTMLFromStringBypass(sanitizer.sanitize(SecurityContext.HTML, unsafeHtml) || "");
@@ -5590,7 +5590,7 @@ function ɵɵsanitizeHtml(unsafeHtml) {
   }
   return _sanitizeHtml(getDocument(), renderStringify(unsafeHtml));
 }
-function ɵɵsanitizeStyle(unsafeStyle) {
+function ??sanitizeStyle(unsafeStyle) {
   const sanitizer = getSanitizer();
   if (sanitizer) {
     return sanitizer.sanitize(SecurityContext.STYLE, unsafeStyle) || "";
@@ -5604,7 +5604,7 @@ function ɵɵsanitizeStyle(unsafeStyle) {
   }
   return renderStringify(unsafeStyle);
 }
-function ɵɵsanitizeUrl(unsafeUrl) {
+function ??sanitizeUrl(unsafeUrl) {
   const sanitizer = getSanitizer();
   if (sanitizer) {
     return sanitizer.sanitize(SecurityContext.URL, unsafeUrl) || "";
@@ -5618,7 +5618,7 @@ function ɵɵsanitizeUrl(unsafeUrl) {
   }
   return _sanitizeUrl(renderStringify(unsafeUrl));
 }
-function ɵɵsanitizeResourceUrl(unsafeResourceUrl) {
+function ??sanitizeResourceUrl(unsafeResourceUrl) {
   const sanitizer = getSanitizer();
   if (sanitizer) {
     return trustedScriptURLFromStringBypass(sanitizer.sanitize(SecurityContext.RESOURCE_URL, unsafeResourceUrl) || "");
@@ -5632,7 +5632,7 @@ function ɵɵsanitizeResourceUrl(unsafeResourceUrl) {
   }
   throw new RuntimeError(904, ngDevMode && `unsafe value used in a resource URL context (see ${XSS_SECURITY_URL})`);
 }
-function ɵɵsanitizeScript(unsafeScript) {
+function ??sanitizeScript(unsafeScript) {
   const sanitizer = getSanitizer();
   if (sanitizer) {
     return trustedScriptFromStringBypass(sanitizer.sanitize(SecurityContext.SCRIPT, unsafeScript) || "");
@@ -5646,13 +5646,13 @@ function ɵɵsanitizeScript(unsafeScript) {
   }
   throw new RuntimeError(905, ngDevMode && "unsafe value used in a script context");
 }
-function ɵɵtrustConstantHtml(html) {
+function ??trustConstantHtml(html) {
   if (ngDevMode && (!Array.isArray(html) || !Array.isArray(html.raw) || html.length !== 1)) {
     throw new Error(`Unexpected interpolation in trusted HTML constant: ${html.join("?")}`);
   }
   return trustedHTMLFromString(html[0]);
 }
-function ɵɵtrustConstantResourceUrl(url) {
+function ??trustConstantResourceUrl(url) {
   if (ngDevMode && (!Array.isArray(url) || !Array.isArray(url.raw) || url.length !== 1)) {
     throw new Error(`Unexpected interpolation in trusted URL constant: ${url.join("?")}`);
   }
@@ -5660,11 +5660,11 @@ function ɵɵtrustConstantResourceUrl(url) {
 }
 function getUrlSanitizer(tag, prop) {
   if (prop === "src" && (tag === "embed" || tag === "frame" || tag === "iframe" || tag === "media" || tag === "script") || prop === "href" && (tag === "base" || tag === "link")) {
-    return ɵɵsanitizeResourceUrl;
+    return ??sanitizeResourceUrl;
   }
-  return ɵɵsanitizeUrl;
+  return ??sanitizeUrl;
 }
-function ɵɵsanitizeUrlOrResourceUrl(unsafeUrl, tag, prop) {
+function ??sanitizeUrlOrResourceUrl(unsafeUrl, tag, prop) {
   return getUrlSanitizer(tag, prop)(unsafeUrl);
 }
 function validateAgainstEventProperties(name) {
@@ -5686,7 +5686,7 @@ function getSanitizer() {
 }
 var COMMENT_DISALLOWED = /^>|^->|<!--|-->|--!>|<!-$/g;
 var COMMENT_DELIMITER = /(<|>)/g;
-var COMMENT_DELIMITER_ESCAPED = "​$1​";
+var COMMENT_DELIMITER_ESCAPED = "?$1?";
 function escapeCommentText(value) {
   return value.replace(COMMENT_DISALLOWED, (text) => text.replace(COMMENT_DELIMITER, COMMENT_DELIMITER_ESCAPED));
 }
@@ -5712,17 +5712,17 @@ var NO_ERRORS_SCHEMA = {
   name: "no-errors-schema"
 };
 var shouldThrowErrorOnUnknownElement = false;
-function ɵsetUnknownElementStrictMode(shouldThrow) {
+function ?setUnknownElementStrictMode(shouldThrow) {
   shouldThrowErrorOnUnknownElement = shouldThrow;
 }
-function ɵgetUnknownElementStrictMode() {
+function ?getUnknownElementStrictMode() {
   return shouldThrowErrorOnUnknownElement;
 }
 var shouldThrowErrorOnUnknownProperty = false;
-function ɵsetUnknownPropertyStrictMode(shouldThrow) {
+function ?setUnknownPropertyStrictMode(shouldThrow) {
   shouldThrowErrorOnUnknownProperty = shouldThrow;
 }
-function ɵgetUnknownPropertyStrictMode() {
+function ?getUnknownPropertyStrictMode() {
   return shouldThrowErrorOnUnknownProperty;
 }
 function validateElementIsKnown(element, lView, tagName, schemas, hasDirectives) {
@@ -5834,16 +5834,16 @@ function matchingSchemas(schemas, tagName) {
   }
   return false;
 }
-function ɵɵresolveWindow(element) {
+function ??resolveWindow(element) {
   return element.ownerDocument.defaultView;
 }
-function ɵɵresolveDocument(element) {
+function ??resolveDocument(element) {
   return element.ownerDocument;
 }
-function ɵɵresolveBody(element) {
+function ??resolveBody(element) {
   return element.ownerDocument.body;
 }
-var INTERPOLATION_DELIMITER = `�`;
+var INTERPOLATION_DELIMITER = `?`;
 function maybeUnwrapFn(value) {
   if (value instanceof Function) {
     return value();
@@ -5888,7 +5888,7 @@ function formatValue(value) {
     }
   } catch (error) {
   }
-  return strValue.length > VALUE_STRING_LENGTH_LIMIT ? strValue.substring(0, VALUE_STRING_LENGTH_LIMIT) + "…" : strValue;
+  return strValue.length > VALUE_STRING_LENGTH_LIMIT ? strValue.substring(0, VALUE_STRING_LENGTH_LIMIT) + "�" : strValue;
 }
 function constructDetailsForInterpolation(lView, rootIndex, expressionIndex, meta, changedValue) {
   const [propName, prefix, ...chunks] = meta.split(INTERPOLATION_DELIMITER);
@@ -6511,7 +6511,7 @@ function setupStaticAttributes(renderer, element, tNode) {
   }
 }
 var NO_CHANGE = typeof ngDevMode === "undefined" || ngDevMode ? { __brand__: "NO_CHANGE" } : {};
-function ɵɵadvance(delta = 1) {
+function ??advance(delta = 1) {
   ngDevMode && assertGreaterThan(delta, 0, "Can only advance forward");
   selectIndexInternal(getTView(), getLView(), getSelectedIndex() + delta, !!ngDevMode && isInCheckNoChangesMode());
 }
@@ -6533,18 +6533,18 @@ function selectIndexInternal(tView, lView, index, checkNoChangesMode) {
   }
   setSelectedIndex(index);
 }
-function ɵɵdirectiveInject(token, flags = InjectFlags.Default) {
+function ??directiveInject(token, flags = InjectFlags.Default) {
   const lView = getLView();
   if (lView === null) {
-    ngDevMode && assertInjectImplementationNotEqual(ɵɵdirectiveInject);
-    return ɵɵinject(token, flags);
+    ngDevMode && assertInjectImplementationNotEqual(??directiveInject);
+    return ??inject(token, flags);
   }
   const tNode = getCurrentTNode();
   const value = getOrCreateInjectable(tNode, lView, resolveForwardRef(token), flags);
   ngDevMode && emitInjectEvent(token, value, flags);
   return value;
 }
-function ɵɵinvalidFactory() {
+function ??invalidFactory() {
   const msg = ngDevMode ? `This constructor was not compatible with Dependency Injection.` : "invalid";
   throw new Error(msg);
 }
@@ -7251,7 +7251,7 @@ function configureViewWithDirective(tView, tNode, lView, directiveIndex, def) {
   ngDevMode && assertGreaterThanOrEqual(directiveIndex, HEADER_OFFSET, "Must be in Expando section");
   tView.data[directiveIndex] = def;
   const directiveFactory = def.factory || (def.factory = getFactoryDef(def.type, true));
-  const nodeInjectorFactory = new NodeInjectorFactory(directiveFactory, isComponentDef(def), ɵɵdirectiveInject);
+  const nodeInjectorFactory = new NodeInjectorFactory(directiveFactory, isComponentDef(def), ??directiveInject);
   tView.blueprint[directiveIndex] = nodeInjectorFactory;
   lView[directiveIndex] = nodeInjectorFactory;
   registerHostBindingOpCodes(tView, tNode, directiveIndex, allocExpando(tView, lView, def.hostVars, NO_CHANGE), def);
@@ -8344,7 +8344,7 @@ function stringifyRNodeAttrs(rNode) {
   }
   return results.join(" ");
 }
-function describeTNode(tNode, innerContent = "…") {
+function describeTNode(tNode, innerContent = "�") {
   switch (tNode.type) {
     case 1:
       const content = tNode.value ? `(${tNode.value})` : "";
@@ -8362,7 +8362,7 @@ function describeTNode(tNode, innerContent = "…") {
       return `#node(${typeAsString})`;
   }
 }
-function describeRNode(rNode, innerContent = "…") {
+function describeRNode(rNode, innerContent = "�") {
   const node = rNode;
   switch (node.nodeType) {
     case Node.ELEMENT_NODE:
@@ -8382,10 +8382,10 @@ function describeExpectedDom(lView, tNode, isViewContainerAnchor) {
   const spacer = "  ";
   let content = "";
   if (tNode.prev) {
-    content += spacer + "…\n";
+    content += spacer + "�\n";
     content += spacer + describeTNode(tNode.prev) + "\n";
   } else if (tNode.type && tNode.type & 12) {
-    content += spacer + "…\n";
+    content += spacer + "�\n";
   }
   if (isViewContainerAnchor) {
     content += spacer + describeTNode(tNode) + "\n";
@@ -8395,7 +8395,7 @@ function describeExpectedDom(lView, tNode, isViewContainerAnchor) {
     content += spacer + describeTNode(tNode) + `  ${AT_THIS_LOCATION}
 `;
   }
-  content += spacer + "…\n";
+  content += spacer + "�\n";
   const parentRNode = tNode.type ? getParentRElement(lView[TVIEW], tNode, lView) : null;
   if (parentRNode) {
     content = describeRNode(parentRNode, "\n" + content);
@@ -8407,13 +8407,13 @@ function describeDomFromNode(node) {
   let content = "";
   const currentNode = node;
   if (currentNode.previousSibling) {
-    content += spacer + "…\n";
+    content += spacer + "�\n";
     content += spacer + describeRNode(currentNode.previousSibling) + "\n";
   }
   content += spacer + describeRNode(currentNode) + `  ${AT_THIS_LOCATION}
 `;
   if (node.nextSibling) {
-    content += spacer + "…\n";
+    content += spacer + "�\n";
   }
   if (node.parentNode) {
     content = describeRNode(currentNode.parentNode, "\n" + content);
@@ -8453,7 +8453,7 @@ function shorten(input2, maxLength = 50) {
     return "";
   }
   input2 = stripNewlines(input2);
-  return input2.length > maxLength ? `${input2.substring(0, maxLength - 1)}…` : input2;
+  return input2.length > maxLength ? `${input2.substring(0, maxLength - 1)}�` : input2;
 }
 function removeDehydratedViews(lContainer) {
   const views = lContainer[DEHYDRATED_VIEWS] ?? [];
@@ -8653,7 +8653,7 @@ function locateRNodeByPath(path, lView) {
   if (referenceNode === REFERENCE_NODE_HOST) {
     ref = lView[DECLARATION_COMPONENT_VIEW][HOST];
   } else if (referenceNode === REFERENCE_NODE_BODY) {
-    ref = ɵɵresolveBody(lView[DECLARATION_COMPONENT_VIEW][HOST]);
+    ref = ??resolveBody(lView[DECLARATION_COMPONENT_VIEW][HOST]);
   } else {
     const parentElementId = Number(referenceNode);
     ref = unwrapRNode(lView[parentElementId + HEADER_OFFSET]);
@@ -8805,7 +8805,7 @@ function injectRenderer2() {
 }
 var Sanitizer = class _Sanitizer {
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _Sanitizer,
       providedIn: "root",
       factory: () => null
@@ -9268,7 +9268,7 @@ var AfterRenderEventManager = class _AfterRenderEventManager {
     this.internalCallbacks.length = 0;
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _AfterRenderEventManager,
       providedIn: "root",
       factory: () => new _AfterRenderEventManager()
@@ -9388,7 +9388,7 @@ var DepsTracker = class {
   /**
    * @override
    * This implementation does not make use of param scopeInfo since it assumes the scope info is
-   * already added to the type itself through methods like {@link ɵɵsetNgModuleScope}
+   * already added to the type itself through methods like {@link ??setNgModuleScope}
    */
   registerNgModule(type, scopeInfo) {
     if (!isNgModule(type)) {
@@ -10443,8 +10443,8 @@ function getQueryResults(lView, queryIndex) {
 function isSignal(value) {
   return typeof value === "function" && value[SIGNAL] !== void 0;
 }
-var ɵWRITABLE_SIGNAL = Symbol("WRITABLE_SIGNAL");
-function ɵunwrapWritableSignal(value) {
+var ?WRITABLE_SIGNAL = Symbol("WRITABLE_SIGNAL");
+function ?unwrapWritableSignal(value) {
   return null;
 }
 function signal(initialValue, options) {
@@ -10735,7 +10735,7 @@ function getRegisteredNgModuleType(id) {
 function setAllowDuplicateNgModuleIdsForTest(allowDuplicates) {
   checkForDuplicateNgModules = !allowDuplicates;
 }
-function ɵɵvalidateIframeAttribute(attrValue, tagName, attrName) {
+function ??validateIframeAttribute(attrValue, tagName, attrName) {
   const lView = getLView();
   const tNode = getSelectedTNode();
   const element = getNativeByTNode(tNode, lView);
@@ -10753,19 +10753,19 @@ To fix this, switch the \`${attrName}\` binding to a static attribute in a templ
 function getSuperType(type) {
   return Object.getPrototypeOf(type.prototype).constructor;
 }
-function ɵɵInheritDefinitionFeature(definition) {
+function ??InheritDefinitionFeature(definition) {
   let superType = getSuperType(definition.type);
   let shouldInheritFields = true;
   const inheritanceChain = [definition];
   while (superType) {
     let superDef = void 0;
     if (isComponentDef(definition)) {
-      superDef = superType.ɵcmp || superType.ɵdir;
+      superDef = superType.?cmp || superType.?dir;
     } else {
-      if (superType.ɵcmp) {
+      if (superType.?cmp) {
         throw new RuntimeError(903, ngDevMode && `Directives cannot inherit Components. Directive ${stringifyForError(definition.type)} is attempting to extend component ${stringifyForError(superType)}`);
       }
-      superDef = superType.ɵdir;
+      superDef = superType.?dir;
     }
     if (superDef) {
       if (shouldInheritFields) {
@@ -10795,7 +10795,7 @@ function ɵɵInheritDefinitionFeature(definition) {
           if (feature && feature.ngInherit) {
             feature(definition);
           }
-          if (feature === ɵɵInheritDefinitionFeature) {
+          if (feature === ??InheritDefinitionFeature) {
             shouldInheritFields = false;
           }
         }
@@ -10883,7 +10883,7 @@ function inheritHostBindings(definition, superHostBindings) {
 var COPY_DIRECTIVE_FIELDS = [
   // The child class should use the providers of its parent.
   "providersResolver"
-  // Not listed here are any fields which are handled by the `ɵɵInheritDefinitionFeature`, such
+  // Not listed here are any fields which are handled by the `??InheritDefinitionFeature`, such
   // as inputs, outputs, and host binding functions.
 ];
 var COPY_COMPONENT_FIELDS = [
@@ -10901,13 +10901,13 @@ var COPY_COMPONENT_FIELDS = [
   // The child class should be checked by the runtime in the same way as its parent.
   "schemas"
 ];
-function ɵɵCopyDefinitionFeature(definition) {
+function ??CopyDefinitionFeature(definition) {
   let superType = getSuperType(definition.type);
   let superDef = void 0;
   if (isComponentDef(definition)) {
-    superDef = superType.ɵcmp;
+    superDef = superType.?cmp;
   } else {
-    superDef = superType.ɵdir;
+    superDef = superType.?dir;
   }
   const defAny = definition;
   for (const field of COPY_DIRECTIVE_FIELDS) {
@@ -10919,7 +10919,7 @@ function ɵɵCopyDefinitionFeature(definition) {
     }
   }
 }
-function ɵɵHostDirectivesFeature(rawHostDirectives) {
+function ??HostDirectivesFeature(rawHostDirectives) {
   const feature = (definition) => {
     const resolved = (Array.isArray(rawHostDirectives) ? rawHostDirectives : rawHostDirectives()).map((dir) => {
       return typeof dir === "function" ? { directive: resolveForwardRef(dir), inputs: EMPTY_OBJ, outputs: EMPTY_OBJ } : {
@@ -11003,7 +11003,7 @@ function validateMappings(bindingType, def, hostDirectiveBindings) {
     }
   }
 }
-function ɵɵInputTransformsFeature(definition) {
+function ??InputTransformsFeature(definition) {
   const inputs = definition.inputConfig;
   const inputTransforms = {};
   for (const minifiedKey in inputs) {
@@ -11121,7 +11121,7 @@ var CachedInjectorService = class _CachedInjectorService {
     }
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _CachedInjectorService,
       providedIn: "environment",
       factory: () => new _CachedInjectorService()
@@ -11194,12 +11194,12 @@ var PendingTasks = class _PendingTasks {
     }
   }
   static {
-    this.ɵfac = function PendingTasks_Factory(t) {
+    this.?fac = function PendingTasks_Factory(t) {
       return new (t || _PendingTasks)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _PendingTasks, factory: _PendingTasks.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _PendingTasks, factory: _PendingTasks.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -11328,7 +11328,7 @@ function templateFirstCreatePass(index, tView, lView, templateFn, decls, vars, t
   }
   return tNode;
 }
-function ɵɵtemplate(index, templateFn, decls, vars, tagName, attrsIndex, localRefsIndex, localRefExtractor) {
+function ??template(index, templateFn, decls, vars, tagName, attrsIndex, localRefsIndex, localRefExtractor) {
   const lView = getLView();
   const tView = getTView();
   const adjustedIndex = index + HEADER_OFFSET;
@@ -11349,7 +11349,7 @@ function ɵɵtemplate(index, templateFn, decls, vars, tagName, attrsIndex, local
   if (localRefsIndex != null) {
     saveResolvedLocalsInData(lView, tNode, localRefExtractor);
   }
-  return ɵɵtemplate;
+  return ??template;
 }
 var _locateOrCreateContainerAnchor = createContainerAnchorImpl;
 function createContainerAnchorImpl(tView, lView, tNode, index) {
@@ -11729,7 +11729,7 @@ var IdleScheduler = class _IdleScheduler {
     this.deferred.clear();
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _IdleScheduler,
       providedIn: "root",
       factory: () => new _IdleScheduler()
@@ -11859,7 +11859,7 @@ var TimerScheduler = class _TimerScheduler {
     this.deferred.length = 0;
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _TimerScheduler,
       providedIn: "root",
       factory: () => new _TimerScheduler()
@@ -11876,7 +11876,7 @@ function shouldTriggerDeferBlock(injector) {
   return isPlatformBrowser(injector);
 }
 var applyDeferBlockStateWithSchedulingImpl = null;
-function ɵɵdeferEnableTimerScheduling(tView, tDetails, placeholderConfigIndex, loadingConfigIndex) {
+function ??deferEnableTimerScheduling(tView, tDetails, placeholderConfigIndex, loadingConfigIndex) {
   const tViewConsts = tView.consts;
   if (placeholderConfigIndex != null) {
     tDetails.placeholderBlockConfig = getConstant(tViewConsts, placeholderConfigIndex);
@@ -11888,11 +11888,11 @@ function ɵɵdeferEnableTimerScheduling(tView, tDetails, placeholderConfigIndex,
     applyDeferBlockStateWithSchedulingImpl = applyDeferBlockStateWithScheduling;
   }
 }
-function ɵɵdefer(index, primaryTmplIndex, dependencyResolverFn, loadingTmplIndex, placeholderTmplIndex, errorTmplIndex, loadingConfigIndex, placeholderConfigIndex, enableTimerScheduling) {
+function ??defer(index, primaryTmplIndex, dependencyResolverFn, loadingTmplIndex, placeholderTmplIndex, errorTmplIndex, loadingConfigIndex, placeholderConfigIndex, enableTimerScheduling) {
   const lView = getLView();
   const tView = getTView();
   const adjustedIndex = index + HEADER_OFFSET;
-  ɵɵtemplate(index, null, 0, 0);
+  ??template(index, null, 0, 0);
   if (tView.firstCreatePass) {
     performanceMarkFeature("NgDefer");
     const tDetails = {
@@ -11932,7 +11932,7 @@ function ɵɵdefer(index, primaryTmplIndex, dependencyResolverFn, loadingTmplInd
   storeTriggerCleanupFn(0, lDetails, () => removeLViewOnDestroy(lView, cleanupTriggersFn));
   storeLViewOnDestroy(lView, cleanupTriggersFn);
 }
-function ɵɵdeferWhen(rawValue) {
+function ??deferWhen(rawValue) {
   const lView = getLView();
   const bindingIndex = nextBindingIndex();
   if (bindingUpdated(lView, bindingIndex, rawValue)) {
@@ -11952,7 +11952,7 @@ function ɵɵdeferWhen(rawValue) {
     }
   }
 }
-function ɵɵdeferPrefetchWhen(rawValue) {
+function ??deferPrefetchWhen(rawValue) {
   const lView = getLView();
   const bindingIndex = nextBindingIndex();
   if (bindingUpdated(lView, bindingIndex, rawValue)) {
@@ -11970,13 +11970,13 @@ function ɵɵdeferPrefetchWhen(rawValue) {
     }
   }
 }
-function ɵɵdeferOnIdle() {
+function ??deferOnIdle() {
   scheduleDelayedTrigger(onIdle);
 }
-function ɵɵdeferPrefetchOnIdle() {
+function ??deferPrefetchOnIdle() {
   scheduleDelayedPrefetching(onIdle);
 }
-function ɵɵdeferOnImmediate() {
+function ??deferOnImmediate() {
   const lView = getLView();
   const tNode = getCurrentTNode();
   const tView = lView[TVIEW];
@@ -11987,7 +11987,7 @@ function ɵɵdeferOnImmediate() {
   }
   triggerDeferBlock(lView, tNode);
 }
-function ɵɵdeferPrefetchOnImmediate() {
+function ??deferPrefetchOnImmediate() {
   const lView = getLView();
   const tNode = getCurrentTNode();
   const tView = lView[TVIEW];
@@ -11996,13 +11996,13 @@ function ɵɵdeferPrefetchOnImmediate() {
     triggerResourceLoading(tDetails, lView, tNode);
   }
 }
-function ɵɵdeferOnTimer(delay) {
+function ??deferOnTimer(delay) {
   scheduleDelayedTrigger(onTimer(delay));
 }
-function ɵɵdeferPrefetchOnTimer(delay) {
+function ??deferPrefetchOnTimer(delay) {
   scheduleDelayedPrefetching(onTimer(delay));
 }
-function ɵɵdeferOnHover(triggerIndex, walkUpTimes) {
+function ??deferOnHover(triggerIndex, walkUpTimes) {
   const lView = getLView();
   const tNode = getCurrentTNode();
   renderPlaceholder(lView, tNode);
@@ -12017,7 +12017,7 @@ function ɵɵdeferOnHover(triggerIndex, walkUpTimes) {
     /* TriggerType.Regular */
   );
 }
-function ɵɵdeferPrefetchOnHover(triggerIndex, walkUpTimes) {
+function ??deferPrefetchOnHover(triggerIndex, walkUpTimes) {
   const lView = getLView();
   const tNode = getCurrentTNode();
   const tView = lView[TVIEW];
@@ -12035,7 +12035,7 @@ function ɵɵdeferPrefetchOnHover(triggerIndex, walkUpTimes) {
     );
   }
 }
-function ɵɵdeferOnInteraction(triggerIndex, walkUpTimes) {
+function ??deferOnInteraction(triggerIndex, walkUpTimes) {
   const lView = getLView();
   const tNode = getCurrentTNode();
   renderPlaceholder(lView, tNode);
@@ -12050,7 +12050,7 @@ function ɵɵdeferOnInteraction(triggerIndex, walkUpTimes) {
     /* TriggerType.Regular */
   );
 }
-function ɵɵdeferPrefetchOnInteraction(triggerIndex, walkUpTimes) {
+function ??deferPrefetchOnInteraction(triggerIndex, walkUpTimes) {
   const lView = getLView();
   const tNode = getCurrentTNode();
   const tView = lView[TVIEW];
@@ -12068,7 +12068,7 @@ function ɵɵdeferPrefetchOnInteraction(triggerIndex, walkUpTimes) {
     );
   }
 }
-function ɵɵdeferOnViewport(triggerIndex, walkUpTimes) {
+function ??deferOnViewport(triggerIndex, walkUpTimes) {
   const lView = getLView();
   const tNode = getCurrentTNode();
   renderPlaceholder(lView, tNode);
@@ -12083,7 +12083,7 @@ function ɵɵdeferOnViewport(triggerIndex, walkUpTimes) {
     /* TriggerType.Regular */
   );
 }
-function ɵɵdeferPrefetchOnViewport(triggerIndex, walkUpTimes) {
+function ??deferPrefetchOnViewport(triggerIndex, walkUpTimes) {
   const lView = getLView();
   const tNode = getCurrentTNode();
   const tView = lView[TVIEW];
@@ -12357,7 +12357,7 @@ function triggerDeferBlock(lView, tNode) {
       }
   }
 }
-function ɵɵattribute(name, value, sanitizer, namespace) {
+function ??attribute(name, value, sanitizer, namespace) {
   const lView = getLView();
   const bindingIndex = nextBindingIndex();
   if (bindingUpdated(lView, bindingIndex, value)) {
@@ -12366,7 +12366,7 @@ function ɵɵattribute(name, value, sanitizer, namespace) {
     elementAttributeInternal(tNode, lView, name, value, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, "attr." + name, bindingIndex);
   }
-  return ɵɵattribute;
+  return ??attribute;
 }
 function interpolationV(lView, values) {
   ngDevMode && assertLessThan(2, values.length, "should have at least 3 values");
@@ -12436,7 +12436,7 @@ function interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v
   incrementBindingIndex(8);
   return different ? prefix + renderStringify(v0) + i0 + renderStringify(v1) + i1 + renderStringify(v2) + i2 + renderStringify(v3) + i3 + renderStringify(v4) + i4 + renderStringify(v5) + i5 + renderStringify(v6) + i6 + renderStringify(v7) + suffix : NO_CHANGE;
 }
-function ɵɵattributeInterpolate1(attrName, prefix, v0, suffix, sanitizer, namespace) {
+function ??attributeInterpolate1(attrName, prefix, v0, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation1(lView, prefix, v0, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12444,9 +12444,9 @@ function ɵɵattributeInterpolate1(attrName, prefix, v0, suffix, sanitizer, name
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 1, prefix, suffix);
   }
-  return ɵɵattributeInterpolate1;
+  return ??attributeInterpolate1;
 }
-function ɵɵattributeInterpolate2(attrName, prefix, v0, i0, v1, suffix, sanitizer, namespace) {
+function ??attributeInterpolate2(attrName, prefix, v0, i0, v1, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation2(lView, prefix, v0, i0, v1, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12454,9 +12454,9 @@ function ɵɵattributeInterpolate2(attrName, prefix, v0, i0, v1, suffix, sanitiz
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 2, prefix, i0, suffix);
   }
-  return ɵɵattributeInterpolate2;
+  return ??attributeInterpolate2;
 }
-function ɵɵattributeInterpolate3(attrName, prefix, v0, i0, v1, i1, v2, suffix, sanitizer, namespace) {
+function ??attributeInterpolate3(attrName, prefix, v0, i0, v1, i1, v2, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation3(lView, prefix, v0, i0, v1, i1, v2, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12464,9 +12464,9 @@ function ɵɵattributeInterpolate3(attrName, prefix, v0, i0, v1, i1, v2, suffix,
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 3, prefix, i0, i1, suffix);
   }
-  return ɵɵattributeInterpolate3;
+  return ??attributeInterpolate3;
 }
-function ɵɵattributeInterpolate4(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, suffix, sanitizer, namespace) {
+function ??attributeInterpolate4(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation4(lView, prefix, v0, i0, v1, i1, v2, i2, v3, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12474,9 +12474,9 @@ function ɵɵattributeInterpolate4(attrName, prefix, v0, i0, v1, i1, v2, i2, v3,
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 4, prefix, i0, i1, i2, suffix);
   }
-  return ɵɵattributeInterpolate4;
+  return ??attributeInterpolate4;
 }
-function ɵɵattributeInterpolate5(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix, sanitizer, namespace) {
+function ??attributeInterpolate5(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation5(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12484,9 +12484,9 @@ function ɵɵattributeInterpolate5(attrName, prefix, v0, i0, v1, i1, v2, i2, v3,
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 5, prefix, i0, i1, i2, i3, suffix);
   }
-  return ɵɵattributeInterpolate5;
+  return ??attributeInterpolate5;
 }
-function ɵɵattributeInterpolate6(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix, sanitizer, namespace) {
+function ??attributeInterpolate6(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation6(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12494,9 +12494,9 @@ function ɵɵattributeInterpolate6(attrName, prefix, v0, i0, v1, i1, v2, i2, v3,
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 6, prefix, i0, i1, i2, i3, i4, suffix);
   }
-  return ɵɵattributeInterpolate6;
+  return ??attributeInterpolate6;
 }
-function ɵɵattributeInterpolate7(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix, sanitizer, namespace) {
+function ??attributeInterpolate7(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation7(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12504,9 +12504,9 @@ function ɵɵattributeInterpolate7(attrName, prefix, v0, i0, v1, i1, v2, i2, v3,
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 7, prefix, i0, i1, i2, i3, i4, i5, suffix);
   }
-  return ɵɵattributeInterpolate7;
+  return ??attributeInterpolate7;
 }
-function ɵɵattributeInterpolate8(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix, sanitizer, namespace) {
+function ??attributeInterpolate8(attrName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix, sanitizer, namespace) {
   const lView = getLView();
   const interpolatedValue = interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -12514,9 +12514,9 @@ function ɵɵattributeInterpolate8(attrName, prefix, v0, i0, v1, i1, v2, i2, v3,
     elementAttributeInternal(tNode, lView, attrName, interpolatedValue, sanitizer, namespace);
     ngDevMode && storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - 8, prefix, i0, i1, i2, i3, i4, i5, i6, suffix);
   }
-  return ɵɵattributeInterpolate8;
+  return ??attributeInterpolate8;
 }
-function ɵɵattributeInterpolateV(attrName, values, sanitizer, namespace) {
+function ??attributeInterpolateV(attrName, values, sanitizer, namespace) {
   const lView = getLView();
   const interpolated = interpolationV(lView, values);
   if (interpolated !== NO_CHANGE) {
@@ -12530,7 +12530,7 @@ function ɵɵattributeInterpolateV(attrName, values, sanitizer, namespace) {
       storePropertyBindingMetadata(getTView().data, tNode, "attr." + attrName, getBindingIndex() - interpolationInBetween.length + 1, ...interpolationInBetween);
     }
   }
-  return ɵɵattributeInterpolateV;
+  return ??attributeInterpolateV;
 }
 function toTStylingRange(prev, next) {
   ngDevMode && assertNumberInRange(
@@ -12819,7 +12819,7 @@ function malformedStyleError(text, expecting, index) {
   ngDevMode && assertEqual(typeof text === "string", true, "String expected here");
   throw throwError(`Malformed style at location ${index} in string '` + text.substring(0, index) + "[>>" + text.substring(index, index + 1) + "<<]" + text.slice(index + 1) + `'. Expecting '${expecting}'.`);
 }
-function ɵɵproperty(propName, value, sanitizer) {
+function ??property(propName, value, sanitizer) {
   const lView = getLView();
   const bindingIndex = nextBindingIndex();
   if (bindingUpdated(lView, bindingIndex, value)) {
@@ -12828,22 +12828,22 @@ function ɵɵproperty(propName, value, sanitizer) {
     elementPropertyInternal(tView, tNode, lView, propName, value, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, bindingIndex);
   }
-  return ɵɵproperty;
+  return ??property;
 }
 function setDirectiveInputsWhichShadowsStyling(tView, tNode, lView, value, isClassBased) {
   const inputs = tNode.inputs;
   const property = isClassBased ? "class" : "style";
   setInputsForProperty(tView, lView, inputs[property], property, value);
 }
-function ɵɵstyleProp(prop, value, suffix) {
+function ??styleProp(prop, value, suffix) {
   checkStylingProperty(prop, value, suffix, false);
-  return ɵɵstyleProp;
+  return ??styleProp;
 }
-function ɵɵclassProp(className, value) {
+function ??classProp(className, value) {
   checkStylingProperty(className, value, null, true);
-  return ɵɵclassProp;
+  return ??classProp;
 }
-function ɵɵstyleMap(styles) {
+function ??styleMap(styles) {
   checkStylingMap(styleKeyValueArraySet, styleStringParser, styles, false);
 }
 function styleStringParser(keyValueArray, text) {
@@ -12851,7 +12851,7 @@ function styleStringParser(keyValueArray, text) {
     styleKeyValueArraySet(keyValueArray, getLastParsedKey(text), getLastParsedValue(text));
   }
 }
-function ɵɵclassMap(classes) {
+function ??classMap(classes) {
   checkStylingMap(classKeyValueArraySet, classStringParser, classes, true);
 }
 function classStringParser(keyValueArray, text) {
@@ -13143,52 +13143,52 @@ function normalizeSuffix(value, suffix) {
 function hasStylingInputShadow(tNode, isClassBased) {
   return (tNode.flags & (isClassBased ? 8 : 16)) !== 0;
 }
-function ɵɵclassMapInterpolate1(prefix, v0, suffix) {
+function ??classMapInterpolate1(prefix, v0, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation1(lView, prefix, v0, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate2(prefix, v0, i0, v1, suffix) {
+function ??classMapInterpolate2(prefix, v0, i0, v1, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation2(lView, prefix, v0, i0, v1, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate3(prefix, v0, i0, v1, i1, v2, suffix) {
+function ??classMapInterpolate3(prefix, v0, i0, v1, i1, v2, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation3(lView, prefix, v0, i0, v1, i1, v2, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate4(prefix, v0, i0, v1, i1, v2, i2, v3, suffix) {
+function ??classMapInterpolate4(prefix, v0, i0, v1, i1, v2, i2, v3, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation4(lView, prefix, v0, i0, v1, i1, v2, i2, v3, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate5(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix) {
+function ??classMapInterpolate5(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation5(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate6(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix) {
+function ??classMapInterpolate6(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation6(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate7(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix) {
+function ??classMapInterpolate7(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation7(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix) {
+function ??classMapInterpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵclassMapInterpolateV(values) {
+function ??classMapInterpolateV(values) {
   const lView = getLView();
   const interpolatedValue = interpolationV(lView, values);
   checkStylingMap(keyValueArraySet, classStringParser, interpolatedValue, true);
 }
-function ɵɵcomponentInstance() {
+function ??componentInstance() {
   const instance = getLView()[DECLARATION_COMPONENT_VIEW][CONTEXT];
   ngDevMode && assertDefined(instance, "Expected component instance to be defined");
   return instance;
@@ -13412,7 +13412,7 @@ var UniqueValueMultiKeyMap = class {
     }
   }
 };
-function ɵɵconditional(containerIndex, matchingTemplateIndex, value) {
+function ??conditional(containerIndex, matchingTemplateIndex, value) {
   performanceMarkFeature("NgControlFlow");
   const hostLView = getLView();
   const bindingIndex = nextBindingIndex();
@@ -13448,10 +13448,10 @@ var RepeaterContext = class {
     return this.lContainer.length - CONTAINER_HEADER_OFFSET;
   }
 };
-function ɵɵrepeaterTrackByIndex(index) {
+function ??repeaterTrackByIndex(index) {
   return index;
 }
-function ɵɵrepeaterTrackByIdentity(_, value) {
+function ??repeaterTrackByIdentity(_, value) {
   return value;
 }
 var RepeaterMetadata = class {
@@ -13461,7 +13461,7 @@ var RepeaterMetadata = class {
     this.liveCollection = liveCollection;
   }
 };
-function ɵɵrepeaterCreate(index, templateFn, decls, vars, tagName, attrsIndex, trackByFn, trackByUsesComponentInstance, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, emptyAttrsIndex) {
+function ??repeaterCreate(index, templateFn, decls, vars, tagName, attrsIndex, trackByFn, trackByUsesComponentInstance, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, emptyAttrsIndex) {
   performanceMarkFeature("NgControlFlow");
   ngDevMode && assertFunction(trackByFn, `A track expression must be a function, was ${typeof trackByFn} instead.`);
   const hasEmptyBlock = emptyTemplateFn !== void 0;
@@ -13473,11 +13473,11 @@ function ɵɵrepeaterCreate(index, templateFn, decls, vars, tagName, attrsIndex,
   ) : trackByFn;
   const metadata = new RepeaterMetadata(hasEmptyBlock, boundTrackBy);
   hostLView[HEADER_OFFSET + index] = metadata;
-  ɵɵtemplate(index + 1, templateFn, decls, vars, tagName, attrsIndex);
+  ??template(index + 1, templateFn, decls, vars, tagName, attrsIndex);
   if (hasEmptyBlock) {
     ngDevMode && assertDefined(emptyDecls, "Missing number of declarations for the empty repeater block.");
     ngDevMode && assertDefined(emptyVars, "Missing number of bindings for the empty repeater block.");
-    ɵɵtemplate(index + 2, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, emptyAttrsIndex);
+    ??template(index + 2, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, emptyAttrsIndex);
   }
 }
 var LiveCollectionLContainerImpl = class extends LiveCollection {
@@ -13528,7 +13528,7 @@ var LiveCollectionLContainerImpl = class extends LiveCollection {
     return getExistingLViewFromLContainer(this.lContainer, index);
   }
 };
-function ɵɵrepeater(collection) {
+function ??repeater(collection) {
   const prevConsumer = setActiveConsumer(null);
   const metadataSlotIdx = getSelectedIndex();
   try {
@@ -13604,7 +13604,7 @@ function elementStartFirstCreatePass(index, tView, lView, name, attrsIndex, loca
   }
   return tNode;
 }
-function ɵɵelementStart(index, name, attrsIndex, localRefsIndex) {
+function ??elementStart(index, name, attrsIndex, localRefsIndex) {
   const lView = getLView();
   const tView = getTView();
   const adjustedIndex = HEADER_OFFSET + index;
@@ -13634,9 +13634,9 @@ function ɵɵelementStart(index, name, attrsIndex, localRefsIndex) {
   if (localRefsIndex !== null) {
     saveResolvedLocalsInData(lView, tNode);
   }
-  return ɵɵelementStart;
+  return ??elementStart;
 }
-function ɵɵelementEnd() {
+function ??elementEnd() {
   let currentTNode = getCurrentTNode();
   ngDevMode && assertDefined(currentTNode, "No parent node to close.");
   if (isCurrentTNodeParent()) {
@@ -13669,12 +13669,12 @@ function ɵɵelementEnd() {
   if (tNode.stylesWithoutHost != null && hasStyleInput(tNode)) {
     setDirectiveInputsWhichShadowsStyling(tView, tNode, getLView(), tNode.stylesWithoutHost, false);
   }
-  return ɵɵelementEnd;
+  return ??elementEnd;
 }
-function ɵɵelement(index, name, attrsIndex, localRefsIndex) {
-  ɵɵelementStart(index, name, attrsIndex, localRefsIndex);
-  ɵɵelementEnd();
-  return ɵɵelement;
+function ??element(index, name, attrsIndex, localRefsIndex) {
+  ??elementStart(index, name, attrsIndex, localRefsIndex);
+  ??elementEnd();
+  return ??element;
 }
 var _locateOrCreateElementNode = (tView, lView, tNode, renderer, name, index) => {
   lastNodeWasCreated(true);
@@ -13723,7 +13723,7 @@ function elementContainerStartFirstCreatePass(index, tView, lView, attrsIndex, l
   }
   return tNode;
 }
-function ɵɵelementContainerStart(index, attrsIndex, localRefsIndex) {
+function ??elementContainerStart(index, attrsIndex, localRefsIndex) {
   const lView = getLView();
   const tView = getTView();
   const adjustedIndex = index + HEADER_OFFSET;
@@ -13744,9 +13744,9 @@ function ɵɵelementContainerStart(index, attrsIndex, localRefsIndex) {
   if (localRefsIndex != null) {
     saveResolvedLocalsInData(lView, tNode);
   }
-  return ɵɵelementContainerStart;
+  return ??elementContainerStart;
 }
-function ɵɵelementContainerEnd() {
+function ??elementContainerEnd() {
   let currentTNode = getCurrentTNode();
   const tView = getTView();
   if (isCurrentTNodeParent()) {
@@ -13767,12 +13767,12 @@ function ɵɵelementContainerEnd() {
       tView.queries.elementEnd(currentTNode);
     }
   }
-  return ɵɵelementContainerEnd;
+  return ??elementContainerEnd;
 }
-function ɵɵelementContainer(index, attrsIndex, localRefsIndex) {
-  ɵɵelementContainerStart(index, attrsIndex, localRefsIndex);
-  ɵɵelementContainerEnd();
-  return ɵɵelementContainer;
+function ??elementContainer(index, attrsIndex, localRefsIndex) {
+  ??elementContainerStart(index, attrsIndex, localRefsIndex);
+  ??elementContainerEnd();
+  return ??elementContainer;
 }
 var _locateOrCreateElementContainerNode = (tView, lView, tNode, index) => {
   lastNodeWasCreated(true);
@@ -13801,10 +13801,10 @@ function locateOrCreateElementContainerNode(tView, lView, tNode, index) {
 function enableLocateOrCreateElementContainerNodeImpl() {
   _locateOrCreateElementContainerNode = locateOrCreateElementContainerNode;
 }
-function ɵɵgetCurrentView() {
+function ??getCurrentView() {
   return getLView();
 }
-function ɵɵhostProperty(propName, value, sanitizer) {
+function ??hostProperty(propName, value, sanitizer) {
   const lView = getLView();
   const bindingIndex = nextBindingIndex();
   if (bindingUpdated(lView, bindingIndex, value)) {
@@ -13813,9 +13813,9 @@ function ɵɵhostProperty(propName, value, sanitizer) {
     elementPropertyInternal(tView, tNode, lView, propName, value, lView[RENDERER], sanitizer, true);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, bindingIndex);
   }
-  return ɵɵhostProperty;
+  return ??hostProperty;
 }
-function ɵɵsyntheticHostProperty(propName, value, sanitizer) {
+function ??syntheticHostProperty(propName, value, sanitizer) {
   const lView = getLView();
   const bindingIndex = nextBindingIndex();
   if (bindingUpdated(lView, bindingIndex, value)) {
@@ -13826,7 +13826,7 @@ function ɵɵsyntheticHostProperty(propName, value, sanitizer) {
     elementPropertyInternal(tView, tNode, lView, propName, value, renderer, sanitizer, true);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, bindingIndex);
   }
-  return ɵɵsyntheticHostProperty;
+  return ??syntheticHostProperty;
 }
 if (typeof ngI18nClosureMode === "undefined") {
   (function() {
@@ -13842,7 +13842,7 @@ function plural(val) {
     return 1;
   return 5;
 }
-var localeEn = ["en", [["a", "p"], ["AM", "PM"], u], [["AM", "PM"], u, u], [["S", "M", "T", "W", "T", "F", "S"], ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]], u, [["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]], u, [["B", "A"], ["BC", "AD"], ["Before Christ", "Anno Domini"]], 0, [6, 0], ["M/d/yy", "MMM d, y", "MMMM d, y", "EEEE, MMMM d, y"], ["h:mm a", "h:mm:ss a", "h:mm:ss a z", "h:mm:ss a zzzz"], ["{1}, {0}", u, "{1} 'at' {0}", u], [".", ",", ";", "%", "+", "-", "E", "×", "‰", "∞", "NaN", ":"], ["#,##0.###", "#,##0%", "¤#,##0.00", "#E0"], "USD", "$", "US Dollar", {}, "ltr", plural];
+var localeEn = ["en", [["a", "p"], ["AM", "PM"], u], [["AM", "PM"], u, u], [["S", "M", "T", "W", "T", "F", "S"], ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]], u, [["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]], u, [["B", "A"], ["BC", "AD"], ["Before Christ", "Anno Domini"]], 0, [6, 0], ["M/d/yy", "MMM d, y", "MMMM d, y", "EEEE, MMMM d, y"], ["h:mm a", "h:mm:ss a", "h:mm:ss a z", "h:mm:ss a zzzz"], ["{1}, {0}", u, "{1} 'at' {0}", u], [".", ",", ";", "%", "+", "-", "E", "�", "�", "8", "NaN", ":"], ["#,##0.###", "#,##0%", "�#,##0.00", "#E0"], "USD", "$", "US Dollar", {}, "ltr", plural];
 var LOCALE_DATA = {};
 function registerLocaleData(data, localeId, extraData) {
   if (typeof localeId !== "string") {
@@ -14534,13 +14534,13 @@ var OpCodeParser = class {
     return value;
   }
 };
-var BINDING_REGEXP = /�(\d+):?\d*�/gi;
-var ICU_REGEXP = /({\s*�\d+:?\d*�\s*,\s*\S{6}\s*,[\s\S]*})/gi;
-var NESTED_ICU = /�(\d+)�/;
-var ICU_BLOCK_REGEXP = /^\s*(�\d+:?\d*�)\s*,\s*(select|plural)\s*,/;
-var MARKER = `�`;
-var SUBTEMPLATE_REGEXP = /�\/?\*(\d+:\d+)�/gi;
-var PH_REGEXP = /�(\/?[#*]\d+):?\d*�/gi;
+var BINDING_REGEXP = /?(\d+):?\d*?/gi;
+var ICU_REGEXP = /({\s*?\d+:?\d*?\s*,\s*\S{6}\s*,[\s\S]*})/gi;
+var NESTED_ICU = /?(\d+)?/;
+var ICU_BLOCK_REGEXP = /^\s*(?\d+:?\d*?)\s*,\s*(select|plural)\s*,/;
+var MARKER = `?`;
+var SUBTEMPLATE_REGEXP = /?\/?\*(\d+:\d+)?/gi;
+var PH_REGEXP = /?(\/?[#*]\d+):?\d*?/gi;
 var NGSP_UNICODE_REGEXP = /\uE500/g;
 function replaceNgsp(value) {
   return value.replace(NGSP_UNICODE_REGEXP, " ");
@@ -14779,7 +14779,7 @@ function icuStart(ast, tView, lView, updateOpCodes, parentIdx, icuExpression, an
       const value = valueArr[j];
       if (typeof value !== "string") {
         const icuIndex = nestedIcus.push(value) - 1;
-        valueArr[j] = `<!--�${icuIndex}�-->`;
+        valueArr[j] = `<!--?${icuIndex}?-->`;
       }
     }
     const caseAst = [];
@@ -14992,11 +14992,11 @@ function addCreateAttribute(create, newIndex, attr) {
   create.push(newIndex << 1 | 1, attr.name, attr.value);
 }
 var ROOT_TEMPLATE_ID = 0;
-var PP_MULTI_VALUE_PLACEHOLDERS_REGEXP = /\[(�.+?�?)\]/;
-var PP_PLACEHOLDERS_REGEXP = /\[(�.+?�?)\]|(�\/?\*\d+:\d+�)/g;
+var PP_MULTI_VALUE_PLACEHOLDERS_REGEXP = /\[(?.+???)\]/;
+var PP_PLACEHOLDERS_REGEXP = /\[(?.+???)\]|(?\/?\*\d+:\d+?)/g;
 var PP_ICU_VARS_REGEXP = /({\s*)(VAR_(PLURAL|SELECT)(_\d+)?)(\s*,)/g;
 var PP_ICU_PLACEHOLDERS_REGEXP = /{([A-Z0-9_]+)}/g;
-var PP_ICUS_REGEXP = /�I18N_EXP_(ICU(_\d+)?)�/g;
+var PP_ICUS_REGEXP = /?I18N_EXP_(ICU(_\d+)?)?/g;
 var PP_CLOSE_TEMPLATE_REGEXP = /\/\*/;
 var PP_TEMPLATE_ID_REGEXP = /\d+\:(\d+)/;
 function i18nPostprocess(message, replacements = {}) {
@@ -15058,7 +15058,7 @@ function i18nPostprocess(message, replacements = {}) {
   });
   return result;
 }
-function ɵɵi18nStart(index, messageIndex, subTemplateIndex = -1) {
+function ??i18nStart(index, messageIndex, subTemplateIndex = -1) {
   const tView = getTView();
   const lView = getLView();
   const adjustedIndex = HEADER_OFFSET + index;
@@ -15081,45 +15081,45 @@ function ɵɵi18nStart(index, messageIndex, subTemplateIndex = -1) {
   applyCreateOpCodes(lView, tI18n.create, parentRNode, insertInFrontOf);
   setInI18nBlock(true);
 }
-function ɵɵi18nEnd() {
+function ??i18nEnd() {
   setInI18nBlock(false);
 }
-function ɵɵi18n(index, messageIndex, subTemplateIndex) {
-  ɵɵi18nStart(index, messageIndex, subTemplateIndex);
-  ɵɵi18nEnd();
+function ??i18n(index, messageIndex, subTemplateIndex) {
+  ??i18nStart(index, messageIndex, subTemplateIndex);
+  ??i18nEnd();
 }
-function ɵɵi18nAttributes(index, attrsIndex) {
+function ??i18nAttributes(index, attrsIndex) {
   const tView = getTView();
   ngDevMode && assertDefined(tView, `tView should be defined`);
   const attrs = getConstant(tView.consts, attrsIndex);
   i18nAttributesFirstPass(tView, index + HEADER_OFFSET, attrs);
 }
-function ɵɵi18nExp(value) {
+function ??i18nExp(value) {
   const lView = getLView();
   setMaskBit(bindingUpdated(lView, nextBindingIndex(), value));
-  return ɵɵi18nExp;
+  return ??i18nExp;
 }
-function ɵɵi18nApply(index) {
+function ??i18nApply(index) {
   applyI18n(getTView(), getLView(), index + HEADER_OFFSET);
 }
-function ɵɵi18nPostprocess(message, replacements = {}) {
+function ??i18nPostprocess(message, replacements = {}) {
   return i18nPostprocess(message, replacements);
 }
-function ɵɵlistener(eventName, listenerFn, useCapture, eventTargetResolver) {
+function ??listener(eventName, listenerFn, useCapture, eventTargetResolver) {
   const lView = getLView();
   const tView = getTView();
   const tNode = getCurrentTNode();
   listenerInternal(tView, lView, lView[RENDERER], tNode, eventName, listenerFn, eventTargetResolver);
-  return ɵɵlistener;
+  return ??listener;
 }
-function ɵɵsyntheticHostListener(eventName, listenerFn) {
+function ??syntheticHostListener(eventName, listenerFn) {
   const tNode = getCurrentTNode();
   const lView = getLView();
   const tView = getTView();
   const currentDef = getCurrentDirectiveDef(tView.data);
   const renderer = loadComponentRenderer(currentDef, tNode, lView);
   listenerInternal(tView, lView, renderer, tNode, eventName, listenerFn);
-  return ɵɵsyntheticHostListener;
+  return ??syntheticHostListener;
 }
 function findExistingListener(tView, lView, eventName, tNodeIdx) {
   const tCleanup = tView.cleanup;
@@ -15245,7 +15245,7 @@ function wrapListener(tNode, lView, context, listenerFn, wrapWithPreventDefault)
 function isOutputSubscribable(value) {
   return value != null && typeof value.subscribe === "function";
 }
-function ɵɵnextContext(level = 1) {
+function ??nextContext(level = 1) {
   return nextContextImpl(level);
 }
 function matchingProjectionSlotIndex(tNode, projectionSlots) {
@@ -15268,7 +15268,7 @@ function matchingProjectionSlotIndex(tNode, projectionSlots) {
   }
   return wildcardNgContentIndex;
 }
-function ɵɵprojectionDef(projectionSlots) {
+function ??projectionDef(projectionSlots) {
   const componentNode = getLView()[DECLARATION_COMPONENT_VIEW][T_HOST];
   if (!componentNode.projection) {
     const numProjectionSlots = projectionSlots ? projectionSlots.length : 1;
@@ -15289,7 +15289,7 @@ function ɵɵprojectionDef(projectionSlots) {
     }
   }
 }
-function ɵɵprojection(nodeIndex, selectorIndex = 0, attrs) {
+function ??projection(nodeIndex, selectorIndex = 0, attrs) {
   const lView = getLView();
   const tView = getTView();
   const tProjectionNode = getOrCreateTNode(tView, HEADER_OFFSET + nodeIndex, 16, null, attrs || null);
@@ -15302,11 +15302,11 @@ function ɵɵprojection(nodeIndex, selectorIndex = 0, attrs) {
     applyProjection(tView, lView, tProjectionNode);
   }
 }
-function ɵɵpropertyInterpolate(propName, v0, sanitizer) {
-  ɵɵpropertyInterpolate1(propName, "", v0, "", sanitizer);
-  return ɵɵpropertyInterpolate;
+function ??propertyInterpolate(propName, v0, sanitizer) {
+  ??propertyInterpolate1(propName, "", v0, "", sanitizer);
+  return ??propertyInterpolate;
 }
-function ɵɵpropertyInterpolate1(propName, prefix, v0, suffix, sanitizer) {
+function ??propertyInterpolate1(propName, prefix, v0, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation1(lView, prefix, v0, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15315,9 +15315,9 @@ function ɵɵpropertyInterpolate1(propName, prefix, v0, suffix, sanitizer) {
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 1, prefix, suffix);
   }
-  return ɵɵpropertyInterpolate1;
+  return ??propertyInterpolate1;
 }
-function ɵɵpropertyInterpolate2(propName, prefix, v0, i0, v1, suffix, sanitizer) {
+function ??propertyInterpolate2(propName, prefix, v0, i0, v1, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation2(lView, prefix, v0, i0, v1, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15326,9 +15326,9 @@ function ɵɵpropertyInterpolate2(propName, prefix, v0, i0, v1, suffix, sanitize
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 2, prefix, i0, suffix);
   }
-  return ɵɵpropertyInterpolate2;
+  return ??propertyInterpolate2;
 }
-function ɵɵpropertyInterpolate3(propName, prefix, v0, i0, v1, i1, v2, suffix, sanitizer) {
+function ??propertyInterpolate3(propName, prefix, v0, i0, v1, i1, v2, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation3(lView, prefix, v0, i0, v1, i1, v2, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15337,9 +15337,9 @@ function ɵɵpropertyInterpolate3(propName, prefix, v0, i0, v1, i1, v2, suffix, 
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 3, prefix, i0, i1, suffix);
   }
-  return ɵɵpropertyInterpolate3;
+  return ??propertyInterpolate3;
 }
-function ɵɵpropertyInterpolate4(propName, prefix, v0, i0, v1, i1, v2, i2, v3, suffix, sanitizer) {
+function ??propertyInterpolate4(propName, prefix, v0, i0, v1, i1, v2, i2, v3, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation4(lView, prefix, v0, i0, v1, i1, v2, i2, v3, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15348,9 +15348,9 @@ function ɵɵpropertyInterpolate4(propName, prefix, v0, i0, v1, i1, v2, i2, v3, 
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 4, prefix, i0, i1, i2, suffix);
   }
-  return ɵɵpropertyInterpolate4;
+  return ??propertyInterpolate4;
 }
-function ɵɵpropertyInterpolate5(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix, sanitizer) {
+function ??propertyInterpolate5(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation5(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15359,9 +15359,9 @@ function ɵɵpropertyInterpolate5(propName, prefix, v0, i0, v1, i1, v2, i2, v3, 
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 5, prefix, i0, i1, i2, i3, suffix);
   }
-  return ɵɵpropertyInterpolate5;
+  return ??propertyInterpolate5;
 }
-function ɵɵpropertyInterpolate6(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix, sanitizer) {
+function ??propertyInterpolate6(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation6(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15370,9 +15370,9 @@ function ɵɵpropertyInterpolate6(propName, prefix, v0, i0, v1, i1, v2, i2, v3, 
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 6, prefix, i0, i1, i2, i3, i4, suffix);
   }
-  return ɵɵpropertyInterpolate6;
+  return ??propertyInterpolate6;
 }
-function ɵɵpropertyInterpolate7(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix, sanitizer) {
+function ??propertyInterpolate7(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation7(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15381,9 +15381,9 @@ function ɵɵpropertyInterpolate7(propName, prefix, v0, i0, v1, i1, v2, i2, v3, 
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 7, prefix, i0, i1, i2, i3, i4, i5, suffix);
   }
-  return ɵɵpropertyInterpolate7;
+  return ??propertyInterpolate7;
 }
-function ɵɵpropertyInterpolate8(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix, sanitizer) {
+function ??propertyInterpolate8(propName, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15392,9 +15392,9 @@ function ɵɵpropertyInterpolate8(propName, prefix, v0, i0, v1, i1, v2, i2, v3, 
     elementPropertyInternal(tView, tNode, lView, propName, interpolatedValue, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - 8, prefix, i0, i1, i2, i3, i4, i5, i6, suffix);
   }
-  return ɵɵpropertyInterpolate8;
+  return ??propertyInterpolate8;
 }
-function ɵɵpropertyInterpolateV(propName, values, sanitizer) {
+function ??propertyInterpolateV(propName, values, sanitizer) {
   const lView = getLView();
   const interpolatedValue = interpolationV(lView, values);
   if (interpolatedValue !== NO_CHANGE) {
@@ -15409,15 +15409,15 @@ function ɵɵpropertyInterpolateV(propName, values, sanitizer) {
       storePropertyBindingMetadata(tView.data, tNode, propName, getBindingIndex() - interpolationInBetween.length + 1, ...interpolationInBetween);
     }
   }
-  return ɵɵpropertyInterpolateV;
+  return ??propertyInterpolateV;
 }
-function ɵɵcontentQuery(directiveIndex, predicate, flags, read) {
+function ??contentQuery(directiveIndex, predicate, flags, read) {
   createContentQuery(directiveIndex, predicate, flags, read);
 }
-function ɵɵviewQuery(predicate, flags, read) {
+function ??viewQuery(predicate, flags, read) {
   createViewQuery(predicate, flags, read);
 }
-function ɵɵqueryRefresh(queryList) {
+function ??queryRefresh(queryList) {
   const lView = getLView();
   const tView = getTView();
   const queryIndex = getCurrentQueryIndex();
@@ -15435,16 +15435,16 @@ function ɵɵqueryRefresh(queryList) {
   }
   return false;
 }
-function ɵɵloadQuery() {
+function ??loadQuery() {
   return loadQueryInternal(getLView(), getCurrentQueryIndex());
 }
-function ɵɵcontentQuerySignal(directiveIndex, target, predicate, flags, read) {
+function ??contentQuerySignal(directiveIndex, target, predicate, flags, read) {
   bindQueryToSignal(target, createContentQuery(directiveIndex, predicate, flags, read));
 }
-function ɵɵviewQuerySignal(target, predicate, flags, read) {
+function ??viewQuerySignal(target, predicate, flags, read) {
   bindQueryToSignal(target, createViewQuery(predicate, flags, read));
 }
-function ɵɵqueryAdvance(indexOffset = 1) {
+function ??queryAdvance(indexOffset = 1) {
   setCurrentQueryIndex(getCurrentQueryIndex() + indexOffset);
 }
 function store(tView, lView, index, value) {
@@ -15454,110 +15454,110 @@ function store(tView, lView, index, value) {
   }
   lView[index] = value;
 }
-function ɵɵreference(index) {
+function ??reference(index) {
   const contextLView = getContextLView();
   return load(contextLView, HEADER_OFFSET + index);
 }
-function ɵɵstyleMapInterpolate1(prefix, v0, suffix) {
+function ??styleMapInterpolate1(prefix, v0, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation1(lView, prefix, v0, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate2(prefix, v0, i0, v1, suffix) {
+function ??styleMapInterpolate2(prefix, v0, i0, v1, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation2(lView, prefix, v0, i0, v1, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate3(prefix, v0, i0, v1, i1, v2, suffix) {
+function ??styleMapInterpolate3(prefix, v0, i0, v1, i1, v2, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation3(lView, prefix, v0, i0, v1, i1, v2, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate4(prefix, v0, i0, v1, i1, v2, i2, v3, suffix) {
+function ??styleMapInterpolate4(prefix, v0, i0, v1, i1, v2, i2, v3, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation4(lView, prefix, v0, i0, v1, i1, v2, i2, v3, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate5(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix) {
+function ??styleMapInterpolate5(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation5(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate6(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix) {
+function ??styleMapInterpolate6(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation6(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate7(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix) {
+function ??styleMapInterpolate7(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation7(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix) {
+function ??styleMapInterpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix) {
   const lView = getLView();
   const interpolatedValue = interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstyleMapInterpolateV(values) {
+function ??styleMapInterpolateV(values) {
   const lView = getLView();
   const interpolatedValue = interpolationV(lView, values);
-  ɵɵstyleMap(interpolatedValue);
+  ??styleMap(interpolatedValue);
 }
-function ɵɵstylePropInterpolate1(prop, prefix, v0, suffix, valueSuffix) {
+function ??stylePropInterpolate1(prop, prefix, v0, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation1(lView, prefix, v0, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate1;
+  return ??stylePropInterpolate1;
 }
-function ɵɵstylePropInterpolate2(prop, prefix, v0, i0, v1, suffix, valueSuffix) {
+function ??stylePropInterpolate2(prop, prefix, v0, i0, v1, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation2(lView, prefix, v0, i0, v1, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate2;
+  return ??stylePropInterpolate2;
 }
-function ɵɵstylePropInterpolate3(prop, prefix, v0, i0, v1, i1, v2, suffix, valueSuffix) {
+function ??stylePropInterpolate3(prop, prefix, v0, i0, v1, i1, v2, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation3(lView, prefix, v0, i0, v1, i1, v2, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate3;
+  return ??stylePropInterpolate3;
 }
-function ɵɵstylePropInterpolate4(prop, prefix, v0, i0, v1, i1, v2, i2, v3, suffix, valueSuffix) {
+function ??stylePropInterpolate4(prop, prefix, v0, i0, v1, i1, v2, i2, v3, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation4(lView, prefix, v0, i0, v1, i1, v2, i2, v3, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate4;
+  return ??stylePropInterpolate4;
 }
-function ɵɵstylePropInterpolate5(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix, valueSuffix) {
+function ??stylePropInterpolate5(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation5(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate5;
+  return ??stylePropInterpolate5;
 }
-function ɵɵstylePropInterpolate6(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix, valueSuffix) {
+function ??stylePropInterpolate6(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation6(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate6;
+  return ??stylePropInterpolate6;
 }
-function ɵɵstylePropInterpolate7(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix, valueSuffix) {
+function ??stylePropInterpolate7(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation7(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate7;
+  return ??stylePropInterpolate7;
 }
-function ɵɵstylePropInterpolate8(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix, valueSuffix) {
+function ??stylePropInterpolate8(prop, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolate8;
+  return ??stylePropInterpolate8;
 }
-function ɵɵstylePropInterpolateV(prop, values, valueSuffix) {
+function ??stylePropInterpolateV(prop, values, valueSuffix) {
   const lView = getLView();
   const interpolatedValue = interpolationV(lView, values);
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
-  return ɵɵstylePropInterpolateV;
+  return ??stylePropInterpolateV;
 }
-function ɵɵtext(index, value = "") {
+function ??text(index, value = "") {
   const lView = getLView();
   const tView = getTView();
   const adjustedIndex = index + HEADER_OFFSET;
@@ -15590,83 +15590,83 @@ function locateOrCreateTextNodeImpl(tView, lView, tNode, value, index) {
 function enableLocateOrCreateTextNodeImpl() {
   _locateOrCreateTextNode = locateOrCreateTextNodeImpl;
 }
-function ɵɵtextInterpolate(v0) {
-  ɵɵtextInterpolate1("", v0, "");
-  return ɵɵtextInterpolate;
+function ??textInterpolate(v0) {
+  ??textInterpolate1("", v0, "");
+  return ??textInterpolate;
 }
-function ɵɵtextInterpolate1(prefix, v0, suffix) {
+function ??textInterpolate1(prefix, v0, suffix) {
   const lView = getLView();
   const interpolated = interpolation1(lView, prefix, v0, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate1;
+  return ??textInterpolate1;
 }
-function ɵɵtextInterpolate2(prefix, v0, i0, v1, suffix) {
+function ??textInterpolate2(prefix, v0, i0, v1, suffix) {
   const lView = getLView();
   const interpolated = interpolation2(lView, prefix, v0, i0, v1, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate2;
+  return ??textInterpolate2;
 }
-function ɵɵtextInterpolate3(prefix, v0, i0, v1, i1, v2, suffix) {
+function ??textInterpolate3(prefix, v0, i0, v1, i1, v2, suffix) {
   const lView = getLView();
   const interpolated = interpolation3(lView, prefix, v0, i0, v1, i1, v2, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate3;
+  return ??textInterpolate3;
 }
-function ɵɵtextInterpolate4(prefix, v0, i0, v1, i1, v2, i2, v3, suffix) {
+function ??textInterpolate4(prefix, v0, i0, v1, i1, v2, i2, v3, suffix) {
   const lView = getLView();
   const interpolated = interpolation4(lView, prefix, v0, i0, v1, i1, v2, i2, v3, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate4;
+  return ??textInterpolate4;
 }
-function ɵɵtextInterpolate5(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix) {
+function ??textInterpolate5(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix) {
   const lView = getLView();
   const interpolated = interpolation5(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate5;
+  return ??textInterpolate5;
 }
-function ɵɵtextInterpolate6(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix) {
+function ??textInterpolate6(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix) {
   const lView = getLView();
   const interpolated = interpolation6(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate6;
+  return ??textInterpolate6;
 }
-function ɵɵtextInterpolate7(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix) {
+function ??textInterpolate7(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix) {
   const lView = getLView();
   const interpolated = interpolation7(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate7;
+  return ??textInterpolate7;
 }
-function ɵɵtextInterpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix) {
+function ??textInterpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix) {
   const lView = getLView();
   const interpolated = interpolation8(lView, prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4, v5, i5, v6, i6, v7, suffix);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolate8;
+  return ??textInterpolate8;
 }
-function ɵɵtextInterpolateV(values) {
+function ??textInterpolateV(values) {
   const lView = getLView();
   const interpolated = interpolationV(lView, values);
   if (interpolated !== NO_CHANGE) {
     textBindingInternal(lView, getSelectedIndex(), interpolated);
   }
-  return ɵɵtextInterpolateV;
+  return ??textInterpolateV;
 }
-function ɵɵtwoWayProperty(propName, value, sanitizer) {
+function ??twoWayProperty(propName, value, sanitizer) {
   if (isWritableSignal(value)) {
     value = value();
   }
@@ -15678,19 +15678,19 @@ function ɵɵtwoWayProperty(propName, value, sanitizer) {
     elementPropertyInternal(tView, tNode, lView, propName, value, lView[RENDERER], sanitizer, false);
     ngDevMode && storePropertyBindingMetadata(tView.data, tNode, propName, bindingIndex);
   }
-  return ɵɵtwoWayProperty;
+  return ??twoWayProperty;
 }
-function ɵɵtwoWayBindingSet(target, value) {
+function ??twoWayBindingSet(target, value) {
   const canWrite = isWritableSignal(target);
   canWrite && target.set(value);
   return canWrite;
 }
-function ɵɵtwoWayListener(eventName, listenerFn) {
+function ??twoWayListener(eventName, listenerFn) {
   const lView = getLView();
   const tView = getTView();
   const tNode = getCurrentTNode();
   listenerInternal(tView, lView, lView[RENDERER], tNode, eventName, listenerFn);
-  return ɵɵtwoWayListener;
+  return ??twoWayListener;
 }
 function providersResolver(def, providers, viewProviders) {
   const tView = getTView();
@@ -15722,7 +15722,7 @@ function resolveProvider(provider, tInjectables, lInjectablesBlueprint, isCompon
     const endIndex = tNode.directiveStart;
     const cptViewProvidersCount = tNode.providerIndexes >> 20;
     if (isTypeProvider(provider) || !provider.multi) {
-      const factory = new NodeInjectorFactory(providerFactory, isViewProvider, ɵɵdirectiveInject);
+      const factory = new NodeInjectorFactory(providerFactory, isViewProvider, ??directiveInject);
       const existingFactoryIndex = indexOf(token, tInjectables, isViewProvider ? beginIndex : beginIndex + cptViewProvidersCount, endIndex);
       if (existingFactoryIndex === -1) {
         diPublicInInjector(getOrCreateNodeInjectorForNode(tNode, lView), tView, token);
@@ -15833,14 +15833,14 @@ function multiResolve(factories, result) {
   return result;
 }
 function multiFactory(factoryFn, index, isViewProvider, isComponent2, f) {
-  const factory = new NodeInjectorFactory(factoryFn, isViewProvider, ɵɵdirectiveInject);
+  const factory = new NodeInjectorFactory(factoryFn, isViewProvider, ??directiveInject);
   factory.multi = [];
   factory.index = index;
   factory.componentProviders = 0;
   multiFactoryAdd(factory, f, isComponent2 && !isViewProvider);
   return factory;
 }
-function ɵɵProvidersFeature(providers, viewProviders = []) {
+function ??ProvidersFeature(providers, viewProviders = []) {
   return (definition) => {
     definition.providersResolver = (def, processProvidersFn) => {
       return providersResolver(
@@ -15881,21 +15881,21 @@ var StandaloneService = class _StandaloneService {
     }
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _StandaloneService,
       providedIn: "environment",
-      factory: () => new _StandaloneService(ɵɵinject(EnvironmentInjector))
+      factory: () => new _StandaloneService(??inject(EnvironmentInjector))
     });
   }
 };
-function ɵɵStandaloneFeature(definition) {
+function ??StandaloneFeature(definition) {
   performanceMarkFeature("NgStandalone");
   definition.getStandaloneInjector = (parentInjector) => {
     return parentInjector.get(StandaloneService).getOrCreateStandaloneInjector(definition);
   };
 }
-function ɵɵsetComponentScope(type, directives, pipes) {
-  const def = type.ɵcmp;
+function ??setComponentScope(type, directives, pipes) {
+  const def = type.?cmp;
   def.directiveDefs = extractDefListOrFactory(
     directives,
     /* pipeDef */
@@ -15907,7 +15907,7 @@ function ɵɵsetComponentScope(type, directives, pipes) {
     true
   );
 }
-function ɵɵsetNgModuleScope(type, scope) {
+function ??setNgModuleScope(type, scope) {
   return noSideEffects(() => {
     const ngModuleDef = getNgModuleDef(type, true);
     ngModuleDef.declarations = convertToTypeArray(scope.declarations || EMPTY_ARRAY);
@@ -15933,48 +15933,48 @@ function convertToTypeArray(values) {
 function maybeUnwrapModuleWithProviders(value) {
   return isModuleWithProviders(value) ? value.ngModule : value;
 }
-function ɵɵpureFunction0(slotOffset, pureFn, thisArg) {
+function ??pureFunction0(slotOffset, pureFn, thisArg) {
   const bindingIndex = getBindingRoot() + slotOffset;
   const lView = getLView();
   return lView[bindingIndex] === NO_CHANGE ? updateBinding(lView, bindingIndex, thisArg ? pureFn.call(thisArg) : pureFn()) : getBinding(lView, bindingIndex);
 }
-function ɵɵpureFunction1(slotOffset, pureFn, exp, thisArg) {
+function ??pureFunction1(slotOffset, pureFn, exp, thisArg) {
   return pureFunction1Internal(getLView(), getBindingRoot(), slotOffset, pureFn, exp, thisArg);
 }
-function ɵɵpureFunction2(slotOffset, pureFn, exp1, exp2, thisArg) {
+function ??pureFunction2(slotOffset, pureFn, exp1, exp2, thisArg) {
   return pureFunction2Internal(getLView(), getBindingRoot(), slotOffset, pureFn, exp1, exp2, thisArg);
 }
-function ɵɵpureFunction3(slotOffset, pureFn, exp1, exp2, exp3, thisArg) {
+function ??pureFunction3(slotOffset, pureFn, exp1, exp2, exp3, thisArg) {
   return pureFunction3Internal(getLView(), getBindingRoot(), slotOffset, pureFn, exp1, exp2, exp3, thisArg);
 }
-function ɵɵpureFunction4(slotOffset, pureFn, exp1, exp2, exp3, exp4, thisArg) {
+function ??pureFunction4(slotOffset, pureFn, exp1, exp2, exp3, exp4, thisArg) {
   return pureFunction4Internal(getLView(), getBindingRoot(), slotOffset, pureFn, exp1, exp2, exp3, exp4, thisArg);
 }
-function ɵɵpureFunction5(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, thisArg) {
+function ??pureFunction5(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, thisArg) {
   const bindingIndex = getBindingRoot() + slotOffset;
   const lView = getLView();
   const different = bindingUpdated4(lView, bindingIndex, exp1, exp2, exp3, exp4);
   return bindingUpdated(lView, bindingIndex + 4, exp5) || different ? updateBinding(lView, bindingIndex + 5, thisArg ? pureFn.call(thisArg, exp1, exp2, exp3, exp4, exp5) : pureFn(exp1, exp2, exp3, exp4, exp5)) : getBinding(lView, bindingIndex + 5);
 }
-function ɵɵpureFunction6(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, exp6, thisArg) {
+function ??pureFunction6(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, exp6, thisArg) {
   const bindingIndex = getBindingRoot() + slotOffset;
   const lView = getLView();
   const different = bindingUpdated4(lView, bindingIndex, exp1, exp2, exp3, exp4);
   return bindingUpdated2(lView, bindingIndex + 4, exp5, exp6) || different ? updateBinding(lView, bindingIndex + 6, thisArg ? pureFn.call(thisArg, exp1, exp2, exp3, exp4, exp5, exp6) : pureFn(exp1, exp2, exp3, exp4, exp5, exp6)) : getBinding(lView, bindingIndex + 6);
 }
-function ɵɵpureFunction7(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, exp6, exp7, thisArg) {
+function ??pureFunction7(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, exp6, exp7, thisArg) {
   const bindingIndex = getBindingRoot() + slotOffset;
   const lView = getLView();
   let different = bindingUpdated4(lView, bindingIndex, exp1, exp2, exp3, exp4);
   return bindingUpdated3(lView, bindingIndex + 4, exp5, exp6, exp7) || different ? updateBinding(lView, bindingIndex + 7, thisArg ? pureFn.call(thisArg, exp1, exp2, exp3, exp4, exp5, exp6, exp7) : pureFn(exp1, exp2, exp3, exp4, exp5, exp6, exp7)) : getBinding(lView, bindingIndex + 7);
 }
-function ɵɵpureFunction8(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, thisArg) {
+function ??pureFunction8(slotOffset, pureFn, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, thisArg) {
   const bindingIndex = getBindingRoot() + slotOffset;
   const lView = getLView();
   const different = bindingUpdated4(lView, bindingIndex, exp1, exp2, exp3, exp4);
   return bindingUpdated4(lView, bindingIndex + 4, exp5, exp6, exp7, exp8) || different ? updateBinding(lView, bindingIndex + 8, thisArg ? pureFn.call(thisArg, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8) : pureFn(exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8)) : getBinding(lView, bindingIndex + 8);
 }
-function ɵɵpureFunctionV(slotOffset, pureFn, exps, thisArg) {
+function ??pureFunctionV(slotOffset, pureFn, exps, thisArg) {
   return pureFunctionVInternal(getLView(), getBindingRoot(), slotOffset, pureFn, exps, thisArg);
 }
 function getPureFunctionReturnValue(lView, returnValueIndex) {
@@ -16006,7 +16006,7 @@ function pureFunctionVInternal(lView, bindingRoot, slotOffset, pureFn, exps, thi
   }
   return different ? updateBinding(lView, bindingIndex, pureFn.apply(thisArg, exps)) : getPureFunctionReturnValue(lView, bindingIndex);
 }
-function ɵɵpipe(index, pipeName) {
+function ??pipe(index, pipeName) {
   const tView = getTView();
   let pipeDef;
   const adjustedIndex = index + HEADER_OFFSET;
@@ -16027,7 +16027,7 @@ function ɵɵpipe(index, pipeName) {
       token: pipeDef.type
     });
   }
-  const previousInjectImplementation = setInjectImplementation(ɵɵdirectiveInject);
+  const previousInjectImplementation = setInjectImplementation(??directiveInject);
   try {
     const previousIncludeViewProviders = setIncludeViewProviders(false);
     const pipeInstance = pipeFactory();
@@ -16079,31 +16079,31 @@ function getPipeNotFoundErrorMessage(name) {
   const errorMessage = `The pipe '${name}' could not be found${componentInfoMessage}. ${verifyMessage}`;
   return errorMessage;
 }
-function ɵɵpipeBind1(index, offset, v1) {
+function ??pipeBind1(index, offset, v1) {
   const adjustedIndex = index + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction1Internal(lView, getBindingRoot(), offset, pipeInstance.transform, v1, pipeInstance) : pipeInstance.transform(v1);
 }
-function ɵɵpipeBind2(index, slotOffset, v1, v2) {
+function ??pipeBind2(index, slotOffset, v1, v2) {
   const adjustedIndex = index + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction2Internal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, v1, v2, pipeInstance) : pipeInstance.transform(v1, v2);
 }
-function ɵɵpipeBind3(index, slotOffset, v1, v2, v3) {
+function ??pipeBind3(index, slotOffset, v1, v2, v3) {
   const adjustedIndex = index + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction3Internal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, v1, v2, v3, pipeInstance) : pipeInstance.transform(v1, v2, v3);
 }
-function ɵɵpipeBind4(index, slotOffset, v1, v2, v3, v4) {
+function ??pipeBind4(index, slotOffset, v1, v2, v3, v4) {
   const adjustedIndex = index + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction4Internal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, v1, v2, v3, v4, pipeInstance) : pipeInstance.transform(v1, v2, v3, v4);
 }
-function ɵɵpipeBindV(index, slotOffset, values) {
+function ??pipeBindV(index, slotOffset, values) {
   const adjustedIndex = index + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
@@ -16112,10 +16112,10 @@ function ɵɵpipeBindV(index, slotOffset, values) {
 function isPure(lView, index) {
   return lView[TVIEW].data[index].pure;
 }
-function ɵɵtemplateRefExtractor(tNode, lView) {
+function ??templateRefExtractor(tNode, lView) {
   return createTemplateRef(tNode, lView);
 }
-function ɵɵgetComponentDepsFactory(type, rawImports) {
+function ??getComponentDepsFactory(type, rawImports) {
   return () => {
     try {
       return depsTracker.getComponentDependencies(type, rawImports).dependencies;
@@ -16125,195 +16125,195 @@ function ɵɵgetComponentDepsFactory(type, rawImports) {
     }
   };
 }
-function ɵsetClassDebugInfo(type, debugInfo) {
+function ?setClassDebugInfo(type, debugInfo) {
   const def = getComponentDef(type);
   if (def !== null) {
     def.debugInfo = debugInfo;
   }
 }
 var angularCoreEnv = /* @__PURE__ */ (() => ({
-  "ɵɵattribute": ɵɵattribute,
-  "ɵɵattributeInterpolate1": ɵɵattributeInterpolate1,
-  "ɵɵattributeInterpolate2": ɵɵattributeInterpolate2,
-  "ɵɵattributeInterpolate3": ɵɵattributeInterpolate3,
-  "ɵɵattributeInterpolate4": ɵɵattributeInterpolate4,
-  "ɵɵattributeInterpolate5": ɵɵattributeInterpolate5,
-  "ɵɵattributeInterpolate6": ɵɵattributeInterpolate6,
-  "ɵɵattributeInterpolate7": ɵɵattributeInterpolate7,
-  "ɵɵattributeInterpolate8": ɵɵattributeInterpolate8,
-  "ɵɵattributeInterpolateV": ɵɵattributeInterpolateV,
-  "ɵɵdefineComponent": ɵɵdefineComponent,
-  "ɵɵdefineDirective": ɵɵdefineDirective,
-  "ɵɵdefineInjectable": ɵɵdefineInjectable,
-  "ɵɵdefineInjector": ɵɵdefineInjector,
-  "ɵɵdefineNgModule": ɵɵdefineNgModule,
-  "ɵɵdefinePipe": ɵɵdefinePipe,
-  "ɵɵdirectiveInject": ɵɵdirectiveInject,
-  "ɵɵgetInheritedFactory": ɵɵgetInheritedFactory,
-  "ɵɵinject": ɵɵinject,
-  "ɵɵinjectAttribute": ɵɵinjectAttribute,
-  "ɵɵinvalidFactory": ɵɵinvalidFactory,
-  "ɵɵinvalidFactoryDep": ɵɵinvalidFactoryDep,
-  "ɵɵtemplateRefExtractor": ɵɵtemplateRefExtractor,
-  "ɵɵresetView": ɵɵresetView,
-  "ɵɵHostDirectivesFeature": ɵɵHostDirectivesFeature,
-  "ɵɵNgOnChangesFeature": ɵɵNgOnChangesFeature,
-  "ɵɵProvidersFeature": ɵɵProvidersFeature,
-  "ɵɵCopyDefinitionFeature": ɵɵCopyDefinitionFeature,
-  "ɵɵInheritDefinitionFeature": ɵɵInheritDefinitionFeature,
-  "ɵɵInputTransformsFeature": ɵɵInputTransformsFeature,
-  "ɵɵStandaloneFeature": ɵɵStandaloneFeature,
-  "ɵɵnextContext": ɵɵnextContext,
-  "ɵɵnamespaceHTML": ɵɵnamespaceHTML,
-  "ɵɵnamespaceMathML": ɵɵnamespaceMathML,
-  "ɵɵnamespaceSVG": ɵɵnamespaceSVG,
-  "ɵɵenableBindings": ɵɵenableBindings,
-  "ɵɵdisableBindings": ɵɵdisableBindings,
-  "ɵɵelementStart": ɵɵelementStart,
-  "ɵɵelementEnd": ɵɵelementEnd,
-  "ɵɵelement": ɵɵelement,
-  "ɵɵelementContainerStart": ɵɵelementContainerStart,
-  "ɵɵelementContainerEnd": ɵɵelementContainerEnd,
-  "ɵɵelementContainer": ɵɵelementContainer,
-  "ɵɵpureFunction0": ɵɵpureFunction0,
-  "ɵɵpureFunction1": ɵɵpureFunction1,
-  "ɵɵpureFunction2": ɵɵpureFunction2,
-  "ɵɵpureFunction3": ɵɵpureFunction3,
-  "ɵɵpureFunction4": ɵɵpureFunction4,
-  "ɵɵpureFunction5": ɵɵpureFunction5,
-  "ɵɵpureFunction6": ɵɵpureFunction6,
-  "ɵɵpureFunction7": ɵɵpureFunction7,
-  "ɵɵpureFunction8": ɵɵpureFunction8,
-  "ɵɵpureFunctionV": ɵɵpureFunctionV,
-  "ɵɵgetCurrentView": ɵɵgetCurrentView,
-  "ɵɵrestoreView": ɵɵrestoreView,
-  "ɵɵlistener": ɵɵlistener,
-  "ɵɵprojection": ɵɵprojection,
-  "ɵɵsyntheticHostProperty": ɵɵsyntheticHostProperty,
-  "ɵɵsyntheticHostListener": ɵɵsyntheticHostListener,
-  "ɵɵpipeBind1": ɵɵpipeBind1,
-  "ɵɵpipeBind2": ɵɵpipeBind2,
-  "ɵɵpipeBind3": ɵɵpipeBind3,
-  "ɵɵpipeBind4": ɵɵpipeBind4,
-  "ɵɵpipeBindV": ɵɵpipeBindV,
-  "ɵɵprojectionDef": ɵɵprojectionDef,
-  "ɵɵhostProperty": ɵɵhostProperty,
-  "ɵɵproperty": ɵɵproperty,
-  "ɵɵpropertyInterpolate": ɵɵpropertyInterpolate,
-  "ɵɵpropertyInterpolate1": ɵɵpropertyInterpolate1,
-  "ɵɵpropertyInterpolate2": ɵɵpropertyInterpolate2,
-  "ɵɵpropertyInterpolate3": ɵɵpropertyInterpolate3,
-  "ɵɵpropertyInterpolate4": ɵɵpropertyInterpolate4,
-  "ɵɵpropertyInterpolate5": ɵɵpropertyInterpolate5,
-  "ɵɵpropertyInterpolate6": ɵɵpropertyInterpolate6,
-  "ɵɵpropertyInterpolate7": ɵɵpropertyInterpolate7,
-  "ɵɵpropertyInterpolate8": ɵɵpropertyInterpolate8,
-  "ɵɵpropertyInterpolateV": ɵɵpropertyInterpolateV,
-  "ɵɵpipe": ɵɵpipe,
-  "ɵɵqueryRefresh": ɵɵqueryRefresh,
-  "ɵɵqueryAdvance": ɵɵqueryAdvance,
-  "ɵɵviewQuery": ɵɵviewQuery,
-  "ɵɵviewQuerySignal": ɵɵviewQuerySignal,
-  "ɵɵloadQuery": ɵɵloadQuery,
-  "ɵɵcontentQuery": ɵɵcontentQuery,
-  "ɵɵcontentQuerySignal": ɵɵcontentQuerySignal,
-  "ɵɵreference": ɵɵreference,
-  "ɵɵclassMap": ɵɵclassMap,
-  "ɵɵclassMapInterpolate1": ɵɵclassMapInterpolate1,
-  "ɵɵclassMapInterpolate2": ɵɵclassMapInterpolate2,
-  "ɵɵclassMapInterpolate3": ɵɵclassMapInterpolate3,
-  "ɵɵclassMapInterpolate4": ɵɵclassMapInterpolate4,
-  "ɵɵclassMapInterpolate5": ɵɵclassMapInterpolate5,
-  "ɵɵclassMapInterpolate6": ɵɵclassMapInterpolate6,
-  "ɵɵclassMapInterpolate7": ɵɵclassMapInterpolate7,
-  "ɵɵclassMapInterpolate8": ɵɵclassMapInterpolate8,
-  "ɵɵclassMapInterpolateV": ɵɵclassMapInterpolateV,
-  "ɵɵstyleMap": ɵɵstyleMap,
-  "ɵɵstyleMapInterpolate1": ɵɵstyleMapInterpolate1,
-  "ɵɵstyleMapInterpolate2": ɵɵstyleMapInterpolate2,
-  "ɵɵstyleMapInterpolate3": ɵɵstyleMapInterpolate3,
-  "ɵɵstyleMapInterpolate4": ɵɵstyleMapInterpolate4,
-  "ɵɵstyleMapInterpolate5": ɵɵstyleMapInterpolate5,
-  "ɵɵstyleMapInterpolate6": ɵɵstyleMapInterpolate6,
-  "ɵɵstyleMapInterpolate7": ɵɵstyleMapInterpolate7,
-  "ɵɵstyleMapInterpolate8": ɵɵstyleMapInterpolate8,
-  "ɵɵstyleMapInterpolateV": ɵɵstyleMapInterpolateV,
-  "ɵɵstyleProp": ɵɵstyleProp,
-  "ɵɵstylePropInterpolate1": ɵɵstylePropInterpolate1,
-  "ɵɵstylePropInterpolate2": ɵɵstylePropInterpolate2,
-  "ɵɵstylePropInterpolate3": ɵɵstylePropInterpolate3,
-  "ɵɵstylePropInterpolate4": ɵɵstylePropInterpolate4,
-  "ɵɵstylePropInterpolate5": ɵɵstylePropInterpolate5,
-  "ɵɵstylePropInterpolate6": ɵɵstylePropInterpolate6,
-  "ɵɵstylePropInterpolate7": ɵɵstylePropInterpolate7,
-  "ɵɵstylePropInterpolate8": ɵɵstylePropInterpolate8,
-  "ɵɵstylePropInterpolateV": ɵɵstylePropInterpolateV,
-  "ɵɵclassProp": ɵɵclassProp,
-  "ɵɵadvance": ɵɵadvance,
-  "ɵɵtemplate": ɵɵtemplate,
-  "ɵɵconditional": ɵɵconditional,
-  "ɵɵdefer": ɵɵdefer,
-  "ɵɵdeferWhen": ɵɵdeferWhen,
-  "ɵɵdeferOnIdle": ɵɵdeferOnIdle,
-  "ɵɵdeferOnImmediate": ɵɵdeferOnImmediate,
-  "ɵɵdeferOnTimer": ɵɵdeferOnTimer,
-  "ɵɵdeferOnHover": ɵɵdeferOnHover,
-  "ɵɵdeferOnInteraction": ɵɵdeferOnInteraction,
-  "ɵɵdeferOnViewport": ɵɵdeferOnViewport,
-  "ɵɵdeferPrefetchWhen": ɵɵdeferPrefetchWhen,
-  "ɵɵdeferPrefetchOnIdle": ɵɵdeferPrefetchOnIdle,
-  "ɵɵdeferPrefetchOnImmediate": ɵɵdeferPrefetchOnImmediate,
-  "ɵɵdeferPrefetchOnTimer": ɵɵdeferPrefetchOnTimer,
-  "ɵɵdeferPrefetchOnHover": ɵɵdeferPrefetchOnHover,
-  "ɵɵdeferPrefetchOnInteraction": ɵɵdeferPrefetchOnInteraction,
-  "ɵɵdeferPrefetchOnViewport": ɵɵdeferPrefetchOnViewport,
-  "ɵɵdeferEnableTimerScheduling": ɵɵdeferEnableTimerScheduling,
-  "ɵɵrepeater": ɵɵrepeater,
-  "ɵɵrepeaterCreate": ɵɵrepeaterCreate,
-  "ɵɵrepeaterTrackByIndex": ɵɵrepeaterTrackByIndex,
-  "ɵɵrepeaterTrackByIdentity": ɵɵrepeaterTrackByIdentity,
-  "ɵɵcomponentInstance": ɵɵcomponentInstance,
-  "ɵɵtext": ɵɵtext,
-  "ɵɵtextInterpolate": ɵɵtextInterpolate,
-  "ɵɵtextInterpolate1": ɵɵtextInterpolate1,
-  "ɵɵtextInterpolate2": ɵɵtextInterpolate2,
-  "ɵɵtextInterpolate3": ɵɵtextInterpolate3,
-  "ɵɵtextInterpolate4": ɵɵtextInterpolate4,
-  "ɵɵtextInterpolate5": ɵɵtextInterpolate5,
-  "ɵɵtextInterpolate6": ɵɵtextInterpolate6,
-  "ɵɵtextInterpolate7": ɵɵtextInterpolate7,
-  "ɵɵtextInterpolate8": ɵɵtextInterpolate8,
-  "ɵɵtextInterpolateV": ɵɵtextInterpolateV,
-  "ɵɵi18n": ɵɵi18n,
-  "ɵɵi18nAttributes": ɵɵi18nAttributes,
-  "ɵɵi18nExp": ɵɵi18nExp,
-  "ɵɵi18nStart": ɵɵi18nStart,
-  "ɵɵi18nEnd": ɵɵi18nEnd,
-  "ɵɵi18nApply": ɵɵi18nApply,
-  "ɵɵi18nPostprocess": ɵɵi18nPostprocess,
-  "ɵɵresolveWindow": ɵɵresolveWindow,
-  "ɵɵresolveDocument": ɵɵresolveDocument,
-  "ɵɵresolveBody": ɵɵresolveBody,
-  "ɵɵsetComponentScope": ɵɵsetComponentScope,
-  "ɵɵsetNgModuleScope": ɵɵsetNgModuleScope,
-  "ɵɵregisterNgModuleType": registerNgModuleType,
-  "ɵɵgetComponentDepsFactory": ɵɵgetComponentDepsFactory,
-  "ɵsetClassDebugInfo": ɵsetClassDebugInfo,
-  "ɵɵsanitizeHtml": ɵɵsanitizeHtml,
-  "ɵɵsanitizeStyle": ɵɵsanitizeStyle,
-  "ɵɵsanitizeResourceUrl": ɵɵsanitizeResourceUrl,
-  "ɵɵsanitizeScript": ɵɵsanitizeScript,
-  "ɵɵsanitizeUrl": ɵɵsanitizeUrl,
-  "ɵɵsanitizeUrlOrResourceUrl": ɵɵsanitizeUrlOrResourceUrl,
-  "ɵɵtrustConstantHtml": ɵɵtrustConstantHtml,
-  "ɵɵtrustConstantResourceUrl": ɵɵtrustConstantResourceUrl,
-  "ɵɵvalidateIframeAttribute": ɵɵvalidateIframeAttribute,
+  "??attribute": ??attribute,
+  "??attributeInterpolate1": ??attributeInterpolate1,
+  "??attributeInterpolate2": ??attributeInterpolate2,
+  "??attributeInterpolate3": ??attributeInterpolate3,
+  "??attributeInterpolate4": ??attributeInterpolate4,
+  "??attributeInterpolate5": ??attributeInterpolate5,
+  "??attributeInterpolate6": ??attributeInterpolate6,
+  "??attributeInterpolate7": ??attributeInterpolate7,
+  "??attributeInterpolate8": ??attributeInterpolate8,
+  "??attributeInterpolateV": ??attributeInterpolateV,
+  "??defineComponent": ??defineComponent,
+  "??defineDirective": ??defineDirective,
+  "??defineInjectable": ??defineInjectable,
+  "??defineInjector": ??defineInjector,
+  "??defineNgModule": ??defineNgModule,
+  "??definePipe": ??definePipe,
+  "??directiveInject": ??directiveInject,
+  "??getInheritedFactory": ??getInheritedFactory,
+  "??inject": ??inject,
+  "??injectAttribute": ??injectAttribute,
+  "??invalidFactory": ??invalidFactory,
+  "??invalidFactoryDep": ??invalidFactoryDep,
+  "??templateRefExtractor": ??templateRefExtractor,
+  "??resetView": ??resetView,
+  "??HostDirectivesFeature": ??HostDirectivesFeature,
+  "??NgOnChangesFeature": ??NgOnChangesFeature,
+  "??ProvidersFeature": ??ProvidersFeature,
+  "??CopyDefinitionFeature": ??CopyDefinitionFeature,
+  "??InheritDefinitionFeature": ??InheritDefinitionFeature,
+  "??InputTransformsFeature": ??InputTransformsFeature,
+  "??StandaloneFeature": ??StandaloneFeature,
+  "??nextContext": ??nextContext,
+  "??namespaceHTML": ??namespaceHTML,
+  "??namespaceMathML": ??namespaceMathML,
+  "??namespaceSVG": ??namespaceSVG,
+  "??enableBindings": ??enableBindings,
+  "??disableBindings": ??disableBindings,
+  "??elementStart": ??elementStart,
+  "??elementEnd": ??elementEnd,
+  "??element": ??element,
+  "??elementContainerStart": ??elementContainerStart,
+  "??elementContainerEnd": ??elementContainerEnd,
+  "??elementContainer": ??elementContainer,
+  "??pureFunction0": ??pureFunction0,
+  "??pureFunction1": ??pureFunction1,
+  "??pureFunction2": ??pureFunction2,
+  "??pureFunction3": ??pureFunction3,
+  "??pureFunction4": ??pureFunction4,
+  "??pureFunction5": ??pureFunction5,
+  "??pureFunction6": ??pureFunction6,
+  "??pureFunction7": ??pureFunction7,
+  "??pureFunction8": ??pureFunction8,
+  "??pureFunctionV": ??pureFunctionV,
+  "??getCurrentView": ??getCurrentView,
+  "??restoreView": ??restoreView,
+  "??listener": ??listener,
+  "??projection": ??projection,
+  "??syntheticHostProperty": ??syntheticHostProperty,
+  "??syntheticHostListener": ??syntheticHostListener,
+  "??pipeBind1": ??pipeBind1,
+  "??pipeBind2": ??pipeBind2,
+  "??pipeBind3": ??pipeBind3,
+  "??pipeBind4": ??pipeBind4,
+  "??pipeBindV": ??pipeBindV,
+  "??projectionDef": ??projectionDef,
+  "??hostProperty": ??hostProperty,
+  "??property": ??property,
+  "??propertyInterpolate": ??propertyInterpolate,
+  "??propertyInterpolate1": ??propertyInterpolate1,
+  "??propertyInterpolate2": ??propertyInterpolate2,
+  "??propertyInterpolate3": ??propertyInterpolate3,
+  "??propertyInterpolate4": ??propertyInterpolate4,
+  "??propertyInterpolate5": ??propertyInterpolate5,
+  "??propertyInterpolate6": ??propertyInterpolate6,
+  "??propertyInterpolate7": ??propertyInterpolate7,
+  "??propertyInterpolate8": ??propertyInterpolate8,
+  "??propertyInterpolateV": ??propertyInterpolateV,
+  "??pipe": ??pipe,
+  "??queryRefresh": ??queryRefresh,
+  "??queryAdvance": ??queryAdvance,
+  "??viewQuery": ??viewQuery,
+  "??viewQuerySignal": ??viewQuerySignal,
+  "??loadQuery": ??loadQuery,
+  "??contentQuery": ??contentQuery,
+  "??contentQuerySignal": ??contentQuerySignal,
+  "??reference": ??reference,
+  "??classMap": ??classMap,
+  "??classMapInterpolate1": ??classMapInterpolate1,
+  "??classMapInterpolate2": ??classMapInterpolate2,
+  "??classMapInterpolate3": ??classMapInterpolate3,
+  "??classMapInterpolate4": ??classMapInterpolate4,
+  "??classMapInterpolate5": ??classMapInterpolate5,
+  "??classMapInterpolate6": ??classMapInterpolate6,
+  "??classMapInterpolate7": ??classMapInterpolate7,
+  "??classMapInterpolate8": ??classMapInterpolate8,
+  "??classMapInterpolateV": ??classMapInterpolateV,
+  "??styleMap": ??styleMap,
+  "??styleMapInterpolate1": ??styleMapInterpolate1,
+  "??styleMapInterpolate2": ??styleMapInterpolate2,
+  "??styleMapInterpolate3": ??styleMapInterpolate3,
+  "??styleMapInterpolate4": ??styleMapInterpolate4,
+  "??styleMapInterpolate5": ??styleMapInterpolate5,
+  "??styleMapInterpolate6": ??styleMapInterpolate6,
+  "??styleMapInterpolate7": ??styleMapInterpolate7,
+  "??styleMapInterpolate8": ??styleMapInterpolate8,
+  "??styleMapInterpolateV": ??styleMapInterpolateV,
+  "??styleProp": ??styleProp,
+  "??stylePropInterpolate1": ??stylePropInterpolate1,
+  "??stylePropInterpolate2": ??stylePropInterpolate2,
+  "??stylePropInterpolate3": ??stylePropInterpolate3,
+  "??stylePropInterpolate4": ??stylePropInterpolate4,
+  "??stylePropInterpolate5": ??stylePropInterpolate5,
+  "??stylePropInterpolate6": ??stylePropInterpolate6,
+  "??stylePropInterpolate7": ??stylePropInterpolate7,
+  "??stylePropInterpolate8": ??stylePropInterpolate8,
+  "??stylePropInterpolateV": ??stylePropInterpolateV,
+  "??classProp": ??classProp,
+  "??advance": ??advance,
+  "??template": ??template,
+  "??conditional": ??conditional,
+  "??defer": ??defer,
+  "??deferWhen": ??deferWhen,
+  "??deferOnIdle": ??deferOnIdle,
+  "??deferOnImmediate": ??deferOnImmediate,
+  "??deferOnTimer": ??deferOnTimer,
+  "??deferOnHover": ??deferOnHover,
+  "??deferOnInteraction": ??deferOnInteraction,
+  "??deferOnViewport": ??deferOnViewport,
+  "??deferPrefetchWhen": ??deferPrefetchWhen,
+  "??deferPrefetchOnIdle": ??deferPrefetchOnIdle,
+  "??deferPrefetchOnImmediate": ??deferPrefetchOnImmediate,
+  "??deferPrefetchOnTimer": ??deferPrefetchOnTimer,
+  "??deferPrefetchOnHover": ??deferPrefetchOnHover,
+  "??deferPrefetchOnInteraction": ??deferPrefetchOnInteraction,
+  "??deferPrefetchOnViewport": ??deferPrefetchOnViewport,
+  "??deferEnableTimerScheduling": ??deferEnableTimerScheduling,
+  "??repeater": ??repeater,
+  "??repeaterCreate": ??repeaterCreate,
+  "??repeaterTrackByIndex": ??repeaterTrackByIndex,
+  "??repeaterTrackByIdentity": ??repeaterTrackByIdentity,
+  "??componentInstance": ??componentInstance,
+  "??text": ??text,
+  "??textInterpolate": ??textInterpolate,
+  "??textInterpolate1": ??textInterpolate1,
+  "??textInterpolate2": ??textInterpolate2,
+  "??textInterpolate3": ??textInterpolate3,
+  "??textInterpolate4": ??textInterpolate4,
+  "??textInterpolate5": ??textInterpolate5,
+  "??textInterpolate6": ??textInterpolate6,
+  "??textInterpolate7": ??textInterpolate7,
+  "??textInterpolate8": ??textInterpolate8,
+  "??textInterpolateV": ??textInterpolateV,
+  "??i18n": ??i18n,
+  "??i18nAttributes": ??i18nAttributes,
+  "??i18nExp": ??i18nExp,
+  "??i18nStart": ??i18nStart,
+  "??i18nEnd": ??i18nEnd,
+  "??i18nApply": ??i18nApply,
+  "??i18nPostprocess": ??i18nPostprocess,
+  "??resolveWindow": ??resolveWindow,
+  "??resolveDocument": ??resolveDocument,
+  "??resolveBody": ??resolveBody,
+  "??setComponentScope": ??setComponentScope,
+  "??setNgModuleScope": ??setNgModuleScope,
+  "??registerNgModuleType": registerNgModuleType,
+  "??getComponentDepsFactory": ??getComponentDepsFactory,
+  "?setClassDebugInfo": ?setClassDebugInfo,
+  "??sanitizeHtml": ??sanitizeHtml,
+  "??sanitizeStyle": ??sanitizeStyle,
+  "??sanitizeResourceUrl": ??sanitizeResourceUrl,
+  "??sanitizeScript": ??sanitizeScript,
+  "??sanitizeUrl": ??sanitizeUrl,
+  "??sanitizeUrlOrResourceUrl": ??sanitizeUrlOrResourceUrl,
+  "??trustConstantHtml": ??trustConstantHtml,
+  "??trustConstantResourceUrl": ??trustConstantResourceUrl,
+  "??validateIframeAttribute": ??validateIframeAttribute,
   "forwardRef": forwardRef,
   "resolveForwardRef": resolveForwardRef,
-  "ɵɵtwoWayProperty": ɵɵtwoWayProperty,
-  "ɵɵtwoWayBindingSet": ɵɵtwoWayBindingSet,
-  "ɵɵtwoWayListener": ɵɵtwoWayListener,
-  "ɵɵInputFlags": InputFlags
+  "??twoWayProperty": ??twoWayProperty,
+  "??twoWayBindingSet": ??twoWayBindingSet,
+  "??twoWayListener": ??twoWayListener,
+  "??InputFlags": InputFlags
 }))();
 var jitOptions = null;
 function setJitOptions(options) {
@@ -16385,7 +16385,7 @@ function compileNgModuleDefs(moduleType, ngModule, allowDuplicateDeclarationsInR
           throw new Error(`'${stringifyForError(moduleType)}' module can't import itself`);
         }
         const compiler = getCompilerFacade({ usage: 0, kind: "NgModule", type: moduleType });
-        ngModuleDef = compiler.compileNgModule(angularCoreEnv, `ng:///${moduleType.name}/ɵmod.js`, {
+        ngModuleDef = compiler.compileNgModule(angularCoreEnv, `ng:///${moduleType.name}/?mod.js`, {
           type: moduleType,
           bootstrap: flatten(ngModule.bootstrap || EMPTY_ARRAY).map(resolveForwardRef),
           declarations: declarations.map(resolveForwardRef),
@@ -16406,7 +16406,7 @@ function compileNgModuleDefs(moduleType, ngModule, allowDuplicateDeclarationsInR
     get: () => {
       if (ngFactoryDef === null) {
         const compiler = getCompilerFacade({ usage: 0, kind: "NgModule", type: moduleType });
-        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${moduleType.name}/ɵfac.js`, {
+        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${moduleType.name}/?fac.js`, {
           name: moduleType.name,
           type: moduleType,
           deps: reflectDependencies(moduleType),
@@ -16434,7 +16434,7 @@ function compileNgModuleDefs(moduleType, ngModule, allowDuplicateDeclarationsInR
           ]
         };
         const compiler = getCompilerFacade({ usage: 0, kind: "NgModule", type: moduleType });
-        ngInjectorDef = compiler.compileInjector(angularCoreEnv, `ng:///${moduleType.name}/ɵinj.js`, meta);
+        ngInjectorDef = compiler.compileInjector(angularCoreEnv, `ng:///${moduleType.name}/?inj.js`, meta);
       }
       return ngInjectorDef;
     },
@@ -16676,7 +16676,7 @@ function transitiveScopesFor(type) {
       };
     }
   }
-  throw new Error(`${type.name} does not have a module def (ɵmod property)`);
+  throw new Error(`${type.name} does not have a module def (?mod property)`);
 }
 function transitiveScopesForNgModule(moduleType) {
   const def = getNgModuleDef(moduleType, true);
@@ -16946,7 +16946,7 @@ function compileDirective(type, directive) {
 }
 function getDirectiveMetadata(type, metadata) {
   const name = type && type.name;
-  const sourceMapUrl = `ng:///${name}/ɵdir.js`;
+  const sourceMapUrl = `ng:///${name}/?dir.js`;
   const compiler = getCompilerFacade({ usage: 0, kind: "directive", type });
   const facade = directiveMetadata(type, metadata);
   facade.typeSourceSpan = compiler.createParseSourceSpan("Directive", name, sourceMapUrl);
@@ -16962,7 +16962,7 @@ function addDirectiveFactoryDef(type, metadata) {
       if (ngFactoryDef === null) {
         const meta = getDirectiveMetadata(type, metadata);
         const compiler = getCompilerFacade({ usage: 0, kind: "directive", type });
-        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${type.name}/ɵfac.js`, {
+        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${type.name}/?fac.js`, {
           name: meta.metadata.name,
           type: meta.metadata.type,
           typeArgumentCount: 0,
@@ -17100,7 +17100,7 @@ function compilePipe(type, meta) {
       if (ngFactoryDef === null) {
         const metadata = getPipeMetadata(type, meta);
         const compiler = getCompilerFacade({ usage: 0, kind: "pipe", type: metadata.type });
-        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${metadata.name}/ɵfac.js`, {
+        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${metadata.name}/?fac.js`, {
           name: metadata.name,
           type: metadata.type,
           typeArgumentCount: 0,
@@ -17118,7 +17118,7 @@ function compilePipe(type, meta) {
       if (ngPipeDef === null) {
         const metadata = getPipeMetadata(type, meta);
         const compiler = getCompilerFacade({ usage: 0, kind: "pipe", type: metadata.type });
-        ngPipeDef = compiler.compilePipe(angularCoreEnv, `ng:///${metadata.name}/ɵpipe.js`, metadata);
+        ngPipeDef = compiler.compilePipe(angularCoreEnv, `ng:///${metadata.name}/?pipe.js`, metadata);
       }
       return ngPipeDef;
     },
@@ -17184,12 +17184,12 @@ var Console = class _Console {
     console.warn(message);
   }
   static {
-    this.ɵfac = function Console_Factory(t) {
+    this.?fac = function Console_Factory(t) {
       return new (t || _Console)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _Console, factory: _Console.ɵfac, providedIn: "platform" });
+    this.?prov = ??defineInjectable({ token: _Console, factory: _Console.?fac, providedIn: "platform" });
   }
 };
 (() => {
@@ -17590,15 +17590,15 @@ function getModuleInjectorOfNodeInjector(injector) {
 var GLOBAL_PUBLISH_EXPANDO_KEY = "ng";
 var globalUtilsFunctions = {
   /**
-   * Warning: functions that start with `ɵ` are considered *INTERNAL* and should not be relied upon
+   * Warning: functions that start with `?` are considered *INTERNAL* and should not be relied upon
    * in application's code. The contract of those functions might be changed in any release and/or a
    * function can be removed completely.
    */
-  "ɵgetDependenciesFromInjectable": getDependenciesFromInjectable,
-  "ɵgetInjectorProviders": getInjectorProviders,
-  "ɵgetInjectorResolutionPath": getInjectorResolutionPath,
-  "ɵgetInjectorMetadata": getInjectorMetadata,
-  "ɵsetProfiler": setProfiler,
+  "?getDependenciesFromInjectable": getDependenciesFromInjectable,
+  "?getInjectorProviders": getInjectorProviders,
+  "?getInjectorResolutionPath": getInjectorResolutionPath,
+  "?getInjectorMetadata": getInjectorMetadata,
+  "?setProfiler": setProfiler,
   "getDirectiveMetadata": getDirectiveMetadata$1,
   "getComponent": getComponent$1,
   "getContext": getContext,
@@ -17792,12 +17792,12 @@ var Testability = class _Testability {
     return [];
   }
   static {
-    this.ɵfac = function Testability_Factory(t) {
-      return new (t || _Testability)(ɵɵinject(NgZone), ɵɵinject(TestabilityRegistry), ɵɵinject(TESTABILITY_GETTER));
+    this.?fac = function Testability_Factory(t) {
+      return new (t || _Testability)(??inject(NgZone), ??inject(TestabilityRegistry), ??inject(TESTABILITY_GETTER));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _Testability, factory: _Testability.ɵfac });
+    this.?prov = ??defineInjectable({ token: _Testability, factory: _Testability.?fac });
   }
 };
 (() => {
@@ -17862,12 +17862,12 @@ var TestabilityRegistry = class _TestabilityRegistry {
     return _testabilityGetter?.findTestabilityInTree(this, elem, findInAncestors) ?? null;
   }
   static {
-    this.ɵfac = function TestabilityRegistry_Factory(t) {
+    this.?fac = function TestabilityRegistry_Factory(t) {
       return new (t || _TestabilityRegistry)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _TestabilityRegistry, factory: _TestabilityRegistry.ɵfac, providedIn: "platform" });
+    this.?prov = ??defineInjectable({ token: _TestabilityRegistry, factory: _TestabilityRegistry.?fac, providedIn: "platform" });
   }
 };
 (() => {
@@ -17932,12 +17932,12 @@ var ApplicationInitStatus = class _ApplicationInitStatus {
     this.initialized = true;
   }
   static {
-    this.ɵfac = function ApplicationInitStatus_Factory(t) {
+    this.?fac = function ApplicationInitStatus_Factory(t) {
       return new (t || _ApplicationInitStatus)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _ApplicationInitStatus, factory: _ApplicationInitStatus.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _ApplicationInitStatus, factory: _ApplicationInitStatus.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -18228,12 +18228,12 @@ var ApplicationRef = class _ApplicationRef {
     }
   }
   static {
-    this.ɵfac = function ApplicationRef_Factory(t) {
+    this.?fac = function ApplicationRef_Factory(t) {
       return new (t || _ApplicationRef)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _ApplicationRef, factory: _ApplicationRef.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _ApplicationRef, factory: _ApplicationRef.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -18337,12 +18337,12 @@ var Compiler = class _Compiler {
     return void 0;
   }
   static {
-    this.ɵfac = function Compiler_Factory(t) {
+    this.?fac = function Compiler_Factory(t) {
       return new (t || _Compiler)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _Compiler, factory: _Compiler.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _Compiler, factory: _Compiler.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -18410,12 +18410,12 @@ var NgZoneChangeDetectionScheduler = class _NgZoneChangeDetectionScheduler {
     this._onMicrotaskEmptySubscription?.unsubscribe();
   }
   static {
-    this.ɵfac = function NgZoneChangeDetectionScheduler_Factory(t) {
+    this.?fac = function NgZoneChangeDetectionScheduler_Factory(t) {
       return new (t || _NgZoneChangeDetectionScheduler)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _NgZoneChangeDetectionScheduler, factory: _NgZoneChangeDetectionScheduler.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _NgZoneChangeDetectionScheduler, factory: _NgZoneChangeDetectionScheduler.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -18507,12 +18507,12 @@ var ZoneStablePendingTask = class _ZoneStablePendingTask {
     this.subscription.unsubscribe();
   }
   static {
-    this.ɵfac = function ZoneStablePendingTask_Factory(t) {
+    this.?fac = function ZoneStablePendingTask_Factory(t) {
       return new (t || _ZoneStablePendingTask)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _ZoneStablePendingTask, factory: _ZoneStablePendingTask.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _ZoneStablePendingTask, factory: _ZoneStablePendingTask.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -18664,12 +18664,12 @@ var PlatformRef = class _PlatformRef {
     return this._destroyed;
   }
   static {
-    this.ɵfac = function PlatformRef_Factory(t) {
-      return new (t || _PlatformRef)(ɵɵinject(Injector));
+    this.?fac = function PlatformRef_Factory(t) {
+      return new (t || _PlatformRef)(??inject(Injector));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _PlatformRef, factory: _PlatformRef.ɵfac, providedIn: "platform" });
+    this.?prov = ??defineInjectable({ token: _PlatformRef, factory: _PlatformRef.?fac, providedIn: "platform" });
   }
 };
 (() => {
@@ -19986,7 +19986,7 @@ function defaultIterableDiffersFactory() {
 }
 var IterableDiffers = class _IterableDiffers {
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _IterableDiffers, providedIn: "root", factory: defaultIterableDiffersFactory });
+    this.?prov = ??defineInjectable({ token: _IterableDiffers, providedIn: "root", factory: defaultIterableDiffersFactory });
   }
   constructor(factories) {
     this.factories = factories;
@@ -20045,7 +20045,7 @@ function defaultKeyValueDiffersFactory() {
 }
 var KeyValueDiffers = class _KeyValueDiffers {
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _KeyValueDiffers, providedIn: "root", factory: defaultKeyValueDiffersFactory });
+    this.?prov = ??defineInjectable({ token: _KeyValueDiffers, providedIn: "root", factory: defaultKeyValueDiffersFactory });
   }
   constructor(factories) {
     this.factories = factories;
@@ -20105,15 +20105,15 @@ var ApplicationModule = class _ApplicationModule {
   constructor(appRef) {
   }
   static {
-    this.ɵfac = function ApplicationModule_Factory(t) {
-      return new (t || _ApplicationModule)(ɵɵinject(ApplicationRef));
+    this.?fac = function ApplicationModule_Factory(t) {
+      return new (t || _ApplicationModule)(??inject(ApplicationRef));
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({ type: _ApplicationModule });
+    this.?mod = ??defineNgModule({ type: _ApplicationModule });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({});
+    this.?inj = ??defineInjector({});
   }
 };
 (() => {
@@ -20369,12 +20369,12 @@ var ImagePerformanceWarning = class _ImagePerformanceWarning {
     return oversizedWidth || oversizedHeight;
   }
   static {
-    this.ɵfac = function ImagePerformanceWarning_Factory(t) {
+    this.?fac = function ImagePerformanceWarning_Factory(t) {
       return new (t || _ImagePerformanceWarning)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _ImagePerformanceWarning, factory: _ImagePerformanceWarning.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _ImagePerformanceWarning, factory: _ImagePerformanceWarning.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -20512,12 +20512,12 @@ var ChangeDetectionSchedulerImpl = class _ChangeDetectionSchedulerImpl {
     }
   }
   static {
-    this.ɵfac = function ChangeDetectionSchedulerImpl_Factory(t) {
+    this.?fac = function ChangeDetectionSchedulerImpl_Factory(t) {
       return new (t || _ChangeDetectionSchedulerImpl)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({ token: _ChangeDetectionSchedulerImpl, factory: _ChangeDetectionSchedulerImpl.ɵfac, providedIn: "root" });
+    this.?prov = ??defineInjectable({ token: _ChangeDetectionSchedulerImpl, factory: _ChangeDetectionSchedulerImpl.?fac, providedIn: "root" });
   }
 };
 (() => {
@@ -20956,24 +20956,24 @@ function numberAttribute(value, fallbackValue = NaN) {
   const isNumberValue = !isNaN(parseFloat(value)) && !isNaN(Number(value));
   return isNumberValue ? Number(value) : fallbackValue;
 }
-function ɵɵngDeclareDirective(decl) {
+function ??ngDeclareDirective(decl) {
   const compiler = getCompilerFacade({ usage: 1, kind: "directive", type: decl.type });
-  return compiler.compileDirectiveDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵfac.js`, decl);
+  return compiler.compileDirectiveDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?fac.js`, decl);
 }
-function ɵɵngDeclareClassMetadata(decl) {
+function ??ngDeclareClassMetadata(decl) {
   setClassMetadata(decl.type, decl.decorators, decl.ctorParameters ?? null, decl.propDecorators ?? null);
 }
-function ɵɵngDeclareComponent(decl) {
+function ??ngDeclareComponent(decl) {
   const compiler = getCompilerFacade({ usage: 1, kind: "component", type: decl.type });
-  return compiler.compileComponentDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵcmp.js`, decl);
+  return compiler.compileComponentDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?cmp.js`, decl);
 }
-function ɵɵngDeclareFactory(decl) {
+function ??ngDeclareFactory(decl) {
   const compiler = getCompilerFacade({
     usage: 1,
     kind: getFactoryKind(decl.target),
     type: decl.type
   });
-  return compiler.compileFactoryDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵfac.js`, decl);
+  return compiler.compileFactoryDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?fac.js`, decl);
 }
 function getFactoryKind(target) {
   switch (target) {
@@ -20989,21 +20989,21 @@ function getFactoryKind(target) {
       return "NgModule";
   }
 }
-function ɵɵngDeclareInjectable(decl) {
+function ??ngDeclareInjectable(decl) {
   const compiler = getCompilerFacade({ usage: 1, kind: "injectable", type: decl.type });
-  return compiler.compileInjectableDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵprov.js`, decl);
+  return compiler.compileInjectableDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?prov.js`, decl);
 }
-function ɵɵngDeclareInjector(decl) {
+function ??ngDeclareInjector(decl) {
   const compiler = getCompilerFacade({ usage: 1, kind: "NgModule", type: decl.type });
-  return compiler.compileInjectorDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵinj.js`, decl);
+  return compiler.compileInjectorDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?inj.js`, decl);
 }
-function ɵɵngDeclareNgModule(decl) {
+function ??ngDeclareNgModule(decl) {
   const compiler = getCompilerFacade({ usage: 1, kind: "NgModule", type: decl.type });
-  return compiler.compileNgModuleDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵmod.js`, decl);
+  return compiler.compileNgModuleDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?mod.js`, decl);
 }
-function ɵɵngDeclarePipe(decl) {
+function ??ngDeclarePipe(decl) {
   const compiler = getCompilerFacade({ usage: 1, kind: "pipe", type: decl.type });
-  return compiler.compilePipeDeclaration(angularCoreEnv, `ng:///${decl.type.name}/ɵpipe.js`, decl);
+  return compiler.compilePipeDeclaration(angularCoreEnv, `ng:///${decl.type.name}/?pipe.js`, decl);
 }
 function computed(computation, options) {
   performanceMarkFeature("NgSignals");
@@ -21030,7 +21030,7 @@ var APP_EFFECT_SCHEDULER = new InjectionToken("", {
 });
 var EffectScheduler = class _EffectScheduler {
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _EffectScheduler,
       providedIn: "root",
       factory: () => new ZoneAwareEffectScheduler()
@@ -21186,16 +21186,16 @@ export {
   XSS_SECURITY_URL,
   RuntimeError,
   formatRuntimeError,
-  ɵINPUT_SIGNAL_BRAND_WRITE_TYPE,
+  ?INPUT_SIGNAL_BRAND_WRITE_TYPE,
   noSideEffects,
   _global,
   stringify,
   truncateMiddle,
   forwardRef,
   resolveForwardRef,
-  ɵɵdefineInjectable,
+  ??defineInjectable,
   defineInjectable,
-  ɵɵdefineInjector,
+  ??defineInjector,
   getInjectableDef,
   isInjectable,
   NG_PROV_DEF,
@@ -21210,8 +21210,8 @@ export {
   NG_ELEMENT_ID,
   InjectFlags,
   setCurrentInjector,
-  ɵɵinject,
-  ɵɵinvalidFactoryDep,
+  ??inject,
+  ??invalidFactoryDep,
   inject,
   convertToBitFlags,
   Inject,
@@ -21224,10 +21224,10 @@ export {
   ChangeDetectionStrategy,
   ViewEncapsulation$1,
   InputFlags,
-  ɵɵdefineComponent,
-  ɵɵdefineNgModule,
-  ɵɵdefineDirective,
-  ɵɵdefinePipe,
+  ??defineComponent,
+  ??defineNgModule,
+  ??defineDirective,
+  ??definePipe,
   isStandalone,
   makeEnvironmentProviders,
   importProvidersFrom,
@@ -21240,18 +21240,18 @@ export {
   ReflectionCapabilities,
   CONTAINER_HEADER_OFFSET,
   SimpleChange,
-  ɵɵNgOnChangesFeature,
+  ??NgOnChangesFeature,
   getEnsureDirtyViewsAreAlwaysReachable,
   setEnsureDirtyViewsAreAlwaysReachable,
-  ɵɵenableBindings,
-  ɵɵdisableBindings,
-  ɵɵrestoreView,
-  ɵɵresetView,
-  ɵɵnamespaceSVG,
-  ɵɵnamespaceMathML,
-  ɵɵnamespaceHTML,
-  ɵɵgetInheritedFactory,
-  ɵɵinjectAttribute,
+  ??enableBindings,
+  ??disableBindings,
+  ??restoreView,
+  ??resetView,
+  ??namespaceSVG,
+  ??namespaceMathML,
+  ??namespaceHTML,
+  ??getInheritedFactory,
+  ??injectAttribute,
   Attribute,
   Injectable,
   createInjector,
@@ -21295,28 +21295,28 @@ export {
   _sanitizeUrl,
   _sanitizeHtml,
   SecurityContext,
-  ɵɵsanitizeHtml,
-  ɵɵsanitizeStyle,
-  ɵɵsanitizeUrl,
-  ɵɵsanitizeResourceUrl,
-  ɵɵsanitizeScript,
-  ɵɵtrustConstantHtml,
-  ɵɵtrustConstantResourceUrl,
-  ɵɵsanitizeUrlOrResourceUrl,
+  ??sanitizeHtml,
+  ??sanitizeStyle,
+  ??sanitizeUrl,
+  ??sanitizeResourceUrl,
+  ??sanitizeScript,
+  ??trustConstantHtml,
+  ??trustConstantResourceUrl,
+  ??sanitizeUrlOrResourceUrl,
   CUSTOM_ELEMENTS_SCHEMA,
   NO_ERRORS_SCHEMA,
-  ɵsetUnknownElementStrictMode,
-  ɵgetUnknownElementStrictMode,
-  ɵsetUnknownPropertyStrictMode,
-  ɵgetUnknownPropertyStrictMode,
-  ɵɵresolveWindow,
-  ɵɵresolveDocument,
-  ɵɵresolveBody,
+  ?setUnknownElementStrictMode,
+  ?getUnknownElementStrictMode,
+  ?setUnknownPropertyStrictMode,
+  ?getUnknownPropertyStrictMode,
+  ??resolveWindow,
+  ??resolveDocument,
+  ??resolveBody,
   RendererStyleFlags2,
   NO_CHANGE,
-  ɵɵadvance,
-  ɵɵdirectiveInject,
-  ɵɵinvalidFactory,
+  ??advance,
+  ??directiveInject,
+  ??invalidFactory,
   ViewRef$1,
   TemplateRef,
   ChangeDetectionScheduler,
@@ -21344,7 +21344,7 @@ export {
   LifecycleHooksFeature,
   ViewContainerRef,
   isSignal,
-  ɵunwrapWritableSignal,
+  ?unwrapWritableSignal,
   signal,
   viewChild,
   viewChildren,
@@ -21362,11 +21362,11 @@ export {
   restoreComponentResolutionQueue,
   registerNgModuleType,
   setAllowDuplicateNgModuleIdsForTest,
-  ɵɵvalidateIframeAttribute,
-  ɵɵInheritDefinitionFeature,
-  ɵɵCopyDefinitionFeature,
-  ɵɵHostDirectivesFeature,
-  ɵɵInputTransformsFeature,
+  ??validateIframeAttribute,
+  ??InheritDefinitionFeature,
+  ??CopyDefinitionFeature,
+  ??HostDirectivesFeature,
+  ??InputTransformsFeature,
   NgModuleRef$1,
   NgModuleFactory$1,
   createNgModule,
@@ -21379,68 +21379,68 @@ export {
   setClassMetadata,
   PendingTasks,
   devModeEqual,
-  ɵɵtemplate,
+  ??template,
   DeferBlockState,
   DeferBlockBehavior,
   DEFER_BLOCK_DEPENDENCY_INTERCEPTOR,
   DEFER_BLOCK_CONFIG,
-  ɵɵdeferEnableTimerScheduling,
-  ɵɵdefer,
-  ɵɵdeferWhen,
-  ɵɵdeferPrefetchWhen,
-  ɵɵdeferOnIdle,
-  ɵɵdeferPrefetchOnIdle,
-  ɵɵdeferOnImmediate,
-  ɵɵdeferPrefetchOnImmediate,
-  ɵɵdeferOnTimer,
-  ɵɵdeferPrefetchOnTimer,
-  ɵɵdeferOnHover,
-  ɵɵdeferPrefetchOnHover,
-  ɵɵdeferOnInteraction,
-  ɵɵdeferPrefetchOnInteraction,
-  ɵɵdeferOnViewport,
-  ɵɵdeferPrefetchOnViewport,
+  ??deferEnableTimerScheduling,
+  ??defer,
+  ??deferWhen,
+  ??deferPrefetchWhen,
+  ??deferOnIdle,
+  ??deferPrefetchOnIdle,
+  ??deferOnImmediate,
+  ??deferPrefetchOnImmediate,
+  ??deferOnTimer,
+  ??deferPrefetchOnTimer,
+  ??deferOnHover,
+  ??deferPrefetchOnHover,
+  ??deferOnInteraction,
+  ??deferPrefetchOnInteraction,
+  ??deferOnViewport,
+  ??deferPrefetchOnViewport,
   renderDeferBlockState,
   triggerResourceLoading,
-  ɵɵattribute,
-  ɵɵattributeInterpolate1,
-  ɵɵattributeInterpolate2,
-  ɵɵattributeInterpolate3,
-  ɵɵattributeInterpolate4,
-  ɵɵattributeInterpolate5,
-  ɵɵattributeInterpolate6,
-  ɵɵattributeInterpolate7,
-  ɵɵattributeInterpolate8,
-  ɵɵattributeInterpolateV,
-  ɵɵproperty,
-  ɵɵstyleProp,
-  ɵɵclassProp,
-  ɵɵstyleMap,
-  ɵɵclassMap,
-  ɵɵclassMapInterpolate1,
-  ɵɵclassMapInterpolate2,
-  ɵɵclassMapInterpolate3,
-  ɵɵclassMapInterpolate4,
-  ɵɵclassMapInterpolate5,
-  ɵɵclassMapInterpolate6,
-  ɵɵclassMapInterpolate7,
-  ɵɵclassMapInterpolate8,
-  ɵɵclassMapInterpolateV,
-  ɵɵcomponentInstance,
-  ɵɵconditional,
-  ɵɵrepeaterTrackByIndex,
-  ɵɵrepeaterTrackByIdentity,
-  ɵɵrepeaterCreate,
-  ɵɵrepeater,
-  ɵɵelementStart,
-  ɵɵelementEnd,
-  ɵɵelement,
-  ɵɵelementContainerStart,
-  ɵɵelementContainerEnd,
-  ɵɵelementContainer,
-  ɵɵgetCurrentView,
-  ɵɵhostProperty,
-  ɵɵsyntheticHostProperty,
+  ??attribute,
+  ??attributeInterpolate1,
+  ??attributeInterpolate2,
+  ??attributeInterpolate3,
+  ??attributeInterpolate4,
+  ??attributeInterpolate5,
+  ??attributeInterpolate6,
+  ??attributeInterpolate7,
+  ??attributeInterpolate8,
+  ??attributeInterpolateV,
+  ??property,
+  ??styleProp,
+  ??classProp,
+  ??styleMap,
+  ??classMap,
+  ??classMapInterpolate1,
+  ??classMapInterpolate2,
+  ??classMapInterpolate3,
+  ??classMapInterpolate4,
+  ??classMapInterpolate5,
+  ??classMapInterpolate6,
+  ??classMapInterpolate7,
+  ??classMapInterpolate8,
+  ??classMapInterpolateV,
+  ??componentInstance,
+  ??conditional,
+  ??repeaterTrackByIndex,
+  ??repeaterTrackByIdentity,
+  ??repeaterCreate,
+  ??repeater,
+  ??elementStart,
+  ??elementEnd,
+  ??element,
+  ??elementContainerStart,
+  ??elementContainerEnd,
+  ??elementContainer,
+  ??getCurrentView,
+  ??hostProperty,
+  ??syntheticHostProperty,
   registerLocaleData,
   findLocaleData,
   getLocaleCurrencyCode,
@@ -21449,92 +21449,92 @@ export {
   LocaleDataIndex,
   DEFAULT_LOCALE_ID,
   setLocaleId,
-  ɵɵi18nStart,
-  ɵɵi18nEnd,
-  ɵɵi18n,
-  ɵɵi18nAttributes,
-  ɵɵi18nExp,
-  ɵɵi18nApply,
-  ɵɵi18nPostprocess,
-  ɵɵlistener,
-  ɵɵsyntheticHostListener,
-  ɵɵnextContext,
-  ɵɵprojectionDef,
-  ɵɵprojection,
-  ɵɵpropertyInterpolate,
-  ɵɵpropertyInterpolate1,
-  ɵɵpropertyInterpolate2,
-  ɵɵpropertyInterpolate3,
-  ɵɵpropertyInterpolate4,
-  ɵɵpropertyInterpolate5,
-  ɵɵpropertyInterpolate6,
-  ɵɵpropertyInterpolate7,
-  ɵɵpropertyInterpolate8,
-  ɵɵpropertyInterpolateV,
-  ɵɵcontentQuery,
-  ɵɵviewQuery,
-  ɵɵqueryRefresh,
-  ɵɵloadQuery,
-  ɵɵcontentQuerySignal,
-  ɵɵviewQuerySignal,
-  ɵɵqueryAdvance,
+  ??i18nStart,
+  ??i18nEnd,
+  ??i18n,
+  ??i18nAttributes,
+  ??i18nExp,
+  ??i18nApply,
+  ??i18nPostprocess,
+  ??listener,
+  ??syntheticHostListener,
+  ??nextContext,
+  ??projectionDef,
+  ??projection,
+  ??propertyInterpolate,
+  ??propertyInterpolate1,
+  ??propertyInterpolate2,
+  ??propertyInterpolate3,
+  ??propertyInterpolate4,
+  ??propertyInterpolate5,
+  ??propertyInterpolate6,
+  ??propertyInterpolate7,
+  ??propertyInterpolate8,
+  ??propertyInterpolateV,
+  ??contentQuery,
+  ??viewQuery,
+  ??queryRefresh,
+  ??loadQuery,
+  ??contentQuerySignal,
+  ??viewQuerySignal,
+  ??queryAdvance,
   store,
-  ɵɵreference,
-  ɵɵstyleMapInterpolate1,
-  ɵɵstyleMapInterpolate2,
-  ɵɵstyleMapInterpolate3,
-  ɵɵstyleMapInterpolate4,
-  ɵɵstyleMapInterpolate5,
-  ɵɵstyleMapInterpolate6,
-  ɵɵstyleMapInterpolate7,
-  ɵɵstyleMapInterpolate8,
-  ɵɵstyleMapInterpolateV,
-  ɵɵstylePropInterpolate1,
-  ɵɵstylePropInterpolate2,
-  ɵɵstylePropInterpolate3,
-  ɵɵstylePropInterpolate4,
-  ɵɵstylePropInterpolate5,
-  ɵɵstylePropInterpolate6,
-  ɵɵstylePropInterpolate7,
-  ɵɵstylePropInterpolate8,
-  ɵɵstylePropInterpolateV,
-  ɵɵtext,
-  ɵɵtextInterpolate,
-  ɵɵtextInterpolate1,
-  ɵɵtextInterpolate2,
-  ɵɵtextInterpolate3,
-  ɵɵtextInterpolate4,
-  ɵɵtextInterpolate5,
-  ɵɵtextInterpolate6,
-  ɵɵtextInterpolate7,
-  ɵɵtextInterpolate8,
-  ɵɵtextInterpolateV,
-  ɵɵtwoWayProperty,
-  ɵɵtwoWayBindingSet,
-  ɵɵtwoWayListener,
-  ɵɵProvidersFeature,
-  ɵɵStandaloneFeature,
-  ɵɵsetComponentScope,
-  ɵɵsetNgModuleScope,
-  ɵɵpureFunction0,
-  ɵɵpureFunction1,
-  ɵɵpureFunction2,
-  ɵɵpureFunction3,
-  ɵɵpureFunction4,
-  ɵɵpureFunction5,
-  ɵɵpureFunction6,
-  ɵɵpureFunction7,
-  ɵɵpureFunction8,
-  ɵɵpureFunctionV,
-  ɵɵpipe,
-  ɵɵpipeBind1,
-  ɵɵpipeBind2,
-  ɵɵpipeBind3,
-  ɵɵpipeBind4,
-  ɵɵpipeBindV,
-  ɵɵtemplateRefExtractor,
-  ɵɵgetComponentDepsFactory,
-  ɵsetClassDebugInfo,
+  ??reference,
+  ??styleMapInterpolate1,
+  ??styleMapInterpolate2,
+  ??styleMapInterpolate3,
+  ??styleMapInterpolate4,
+  ??styleMapInterpolate5,
+  ??styleMapInterpolate6,
+  ??styleMapInterpolate7,
+  ??styleMapInterpolate8,
+  ??styleMapInterpolateV,
+  ??stylePropInterpolate1,
+  ??stylePropInterpolate2,
+  ??stylePropInterpolate3,
+  ??stylePropInterpolate4,
+  ??stylePropInterpolate5,
+  ??stylePropInterpolate6,
+  ??stylePropInterpolate7,
+  ??stylePropInterpolate8,
+  ??stylePropInterpolateV,
+  ??text,
+  ??textInterpolate,
+  ??textInterpolate1,
+  ??textInterpolate2,
+  ??textInterpolate3,
+  ??textInterpolate4,
+  ??textInterpolate5,
+  ??textInterpolate6,
+  ??textInterpolate7,
+  ??textInterpolate8,
+  ??textInterpolateV,
+  ??twoWayProperty,
+  ??twoWayBindingSet,
+  ??twoWayListener,
+  ??ProvidersFeature,
+  ??StandaloneFeature,
+  ??setComponentScope,
+  ??setNgModuleScope,
+  ??pureFunction0,
+  ??pureFunction1,
+  ??pureFunction2,
+  ??pureFunction3,
+  ??pureFunction4,
+  ??pureFunction5,
+  ??pureFunction6,
+  ??pureFunction7,
+  ??pureFunction8,
+  ??pureFunctionV,
+  ??pipe,
+  ??pipeBind1,
+  ??pipeBind2,
+  ??pipeBind3,
+  ??pipeBind4,
+  ??pipeBindV,
+  ??templateRefExtractor,
+  ??getComponentDepsFactory,
+  ?setClassDebugInfo,
   resetJitOptions,
   flushModuleScopingQueueAsMuchAsPossible,
   compileNgModule,
@@ -21620,14 +21620,14 @@ export {
   queueStateUpdate,
   booleanAttribute,
   numberAttribute,
-  ɵɵngDeclareDirective,
-  ɵɵngDeclareClassMetadata,
-  ɵɵngDeclareComponent,
-  ɵɵngDeclareFactory,
-  ɵɵngDeclareInjectable,
-  ɵɵngDeclareInjector,
-  ɵɵngDeclareNgModule,
-  ɵɵngDeclarePipe,
+  ??ngDeclareDirective,
+  ??ngDeclareClassMetadata,
+  ??ngDeclareComponent,
+  ??ngDeclareFactory,
+  ??ngDeclareInjectable,
+  ??ngDeclareInjector,
+  ??ngDeclareNgModule,
+  ??ngDeclarePipe,
   computed,
   untracked,
   EffectScheduler,

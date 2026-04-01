@@ -40,7 +40,7 @@ export class AdminProductsComponent implements OnInit {
   form: any = this.blankForm();
 
   blankForm() {
-    return { name:'', category:'Banarasi', description:'', price:0, originalPrice:0, stock:10, origin:'', fabric:'', colors:'Red, Gold', occasion:'Wedding, Party', imageUrl:'', newArrival:false, bestseller:false, featured:false, blouseIncluded:true };
+    return { name:'', category:'Banarasi', description:'', price:0, originalPrice:0, stock:10, origin:'', fabric:'', colors:'Red, Gold', occasion:'Wedding, Party', imageUrl:'', sku:'', tags:'', newArrival:false, bestseller:false, featured:false, blouseIncluded:true };
   }
 
   ngOnInit() {
@@ -79,6 +79,8 @@ export class AdminProductsComponent implements OnInit {
       origin: p.origin, fabric: p.fabric,
       colors: p.colors.join(', '), occasion: p.occasion.join(', '),
       imageUrl: p.images[0]||'',
+      sku: p.sku || '',
+      tags: (p.tags || []).join(', '),
       newArrival: p.newArrival, bestseller: p.bestseller, featured: p.featured, blouseIncluded: p.blouseIncluded,
     };
     this.editing.set(p); this.uploadedUrls.set([]); this.modalOpen.set(true);
@@ -103,7 +105,10 @@ export class AdminProductsComponent implements OnInit {
       colors: this.form.colors.split(',').map((s: string) => s.trim()).filter(Boolean),
       occasion: this.form.occasion.split(',').map((s: string) => s.trim()).filter(Boolean),
       images,
-      tags: [this.form.category, this.form.fabric].filter(Boolean),
+      sku: this.form.sku || undefined,
+      tags: this.form.tags
+        ? this.form.tags.split(',').map((s: string) => s.trim()).filter(Boolean)
+        : [this.form.category, this.form.fabric].filter(Boolean),
       length: '6.3m',
     };
     delete data.imageUrl;

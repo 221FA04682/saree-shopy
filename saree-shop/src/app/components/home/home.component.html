@@ -112,7 +112,25 @@
               <p>{{ cfg().promoBannerOfferSub }}</p>
             </div>
           </div>
-          <a [routerLink]="cfg().promoBannerLink.split('?')[0]" class="btn btn-primary btn-lg">{{ cfg().promoBannerCTA }}</a>
+          <a [routerLink]="getPromoBannerRoute().path" [queryParams]="getPromoBannerRoute().queryParams" class="btn btn-primary btn-lg">{{ cfg().promoBannerCTA }}</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bestseller-section" *ngIf="bestsellers().length > 0">
+      <div class="container">
+        <div class="section-hdr-center">
+          <div class="section-subtitle" style="justify-content:center;display:flex;gap:12px;align-items:center">
+            <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+            Most Loved
+            <span style="width:32px;height:1px;background:var(--gold-light);display:inline-block"></span>
+          </div>
+          <h2 class="section-title" style="text-align:center">Bestsellers</h2>
+          <div class="section-divider" style="margin:0 auto 8px"></div>
+          <p style="text-align:center;color:var(--text-muted);max-width:min(520px,100%);margin:0 auto">The pieces customers come back for again and again, selected by popularity and reviews.</p>
+        </div>
+        <div class="grid grid-4" style="margin-top:40px">
+          <app-product-card *ngFor="let p of bestsellers()" [product]="p"></app-product-card>
         </div>
       </div>
     </section>

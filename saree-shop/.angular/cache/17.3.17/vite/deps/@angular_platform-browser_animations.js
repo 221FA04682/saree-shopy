@@ -19,10 +19,10 @@ import {
   inject,
   performanceMarkFeature,
   setClassMetadata,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule,
-  ɵɵinject
+  ??defineInjectable,
+  ??defineInjector,
+  ??defineNgModule,
+  ??inject
 } from "./chunk-IGJZNA3K.js";
 import "./chunk-CONQKHOI.js";
 import "./chunk-V4GYEGQC.js";
@@ -65,12 +65,12 @@ function style(tokens) {
 }
 var AnimationBuilder = class _AnimationBuilder {
   static {
-    this.ɵfac = function AnimationBuilder_Factory(t) {
+    this.?fac = function AnimationBuilder_Factory(t) {
       return new (t || _AnimationBuilder)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _AnimationBuilder,
       factory: () => (() => inject(BrowserAnimationBuilder))(),
       providedIn: "root"
@@ -116,14 +116,14 @@ var BrowserAnimationBuilder = class _BrowserAnimationBuilder extends AnimationBu
     return new BrowserAnimationFactory(id, this._renderer);
   }
   static {
-    this.ɵfac = function BrowserAnimationBuilder_Factory(t) {
-      return new (t || _BrowserAnimationBuilder)(ɵɵinject(RendererFactory2), ɵɵinject(DOCUMENT));
+    this.?fac = function BrowserAnimationBuilder_Factory(t) {
+      return new (t || _BrowserAnimationBuilder)(??inject(RendererFactory2), ??inject(DOCUMENT));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _BrowserAnimationBuilder,
-      factory: _BrowserAnimationBuilder.ɵfac,
+      factory: _BrowserAnimationBuilder.?fac,
       providedIn: "root"
     });
   }
@@ -216,7 +216,7 @@ function issueAnimationCommand(renderer, element, id, command, args) {
   renderer.setProperty(element, `@@${id}:${command}`, args);
 }
 function unwrapAnimationRenderer(renderer) {
-  const type = renderer.ɵtype;
+  const type = renderer.?type;
   if (type === 0) {
     return renderer;
   } else if (type === 1) {
@@ -225,7 +225,7 @@ function unwrapAnimationRenderer(renderer) {
   return null;
 }
 function isAnimationRenderer(renderer) {
-  const type = renderer.ɵtype;
+  const type = renderer.?type;
   return type === 0 || type === 1;
 }
 var NoopAnimationPlayer = class {
@@ -447,7 +447,7 @@ var AnimationGroupPlayer = class {
     methods.length = 0;
   }
 };
-var ɵPRE_STYLE = "!";
+var ?PRE_STYLE = "!";
 
 // node_modules/@angular/animations/fesm2022/browser.mjs
 var LINE_START = "\n - ";
@@ -576,7 +576,7 @@ function normalizeKeyframes$1(normalizer, keyframes, preStyles = /* @__PURE__ */
       if (prop !== "offset") {
         normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
         switch (normalizedValue) {
-          case ɵPRE_STYLE:
+          case ?PRE_STYLE:
             normalizedValue = preStyles.get(prop);
             break;
           case AUTO_STYLE:
@@ -746,14 +746,14 @@ var NoopAnimationDriver = class _NoopAnimationDriver {
     return new NoopAnimationPlayer(duration, delay);
   }
   static {
-    this.ɵfac = function NoopAnimationDriver_Factory(t) {
+    this.?fac = function NoopAnimationDriver_Factory(t) {
       return new (t || _NoopAnimationDriver)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _NoopAnimationDriver,
-      factory: _NoopAnimationDriver.ɵfac
+      factory: _NoopAnimationDriver.?fac
     });
   }
 };
@@ -2082,7 +2082,7 @@ var TimelineBuilder = class _TimelineBuilder {
     this._keyframes.forEach((keyframe, time) => {
       const finalKeyframe = new Map([...this._backFill, ...keyframe]);
       finalKeyframe.forEach((value, prop) => {
-        if (value === ɵPRE_STYLE) {
+        if (value === ?PRE_STYLE) {
           preStyleProps.add(prop);
         } else if (value === AUTO_STYLE) {
           postStyleProps.add(prop);
@@ -3343,7 +3343,7 @@ var TransitionAnimationEngine = class {
     });
     const preStylesMap = /* @__PURE__ */ new Map();
     enterNodeMap.forEach((nodes, root) => {
-      cloakAndComputeStyles(preStylesMap, this.driver, new Set(nodes), allPreStyleElements, ɵPRE_STYLE);
+      cloakAndComputeStyles(preStylesMap, this.driver, new Set(nodes), allPreStyleElements, ?PRE_STYLE);
     });
     replaceNodes.forEach((node) => {
       const post = postStylesMap.get(node);
@@ -4155,7 +4155,7 @@ var BaseAnimationRenderer = class {
     this.delegate = delegate;
     this.engine = engine;
     this._onDestroy = _onDestroy;
-    this.ɵtype = 0;
+    this.?type = 0;
   }
   get data() {
     return this.delegate.data;
@@ -4395,14 +4395,14 @@ var InjectableAnimationEngine = class _InjectableAnimationEngine extends Animati
     this.flush();
   }
   static {
-    this.ɵfac = function InjectableAnimationEngine_Factory(t) {
-      return new (t || _InjectableAnimationEngine)(ɵɵinject(DOCUMENT), ɵɵinject(AnimationDriver), ɵɵinject(AnimationStyleNormalizer));
+    this.?fac = function InjectableAnimationEngine_Factory(t) {
+      return new (t || _InjectableAnimationEngine)(??inject(DOCUMENT), ??inject(AnimationDriver), ??inject(AnimationStyleNormalizer));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _InjectableAnimationEngine,
-      factory: _InjectableAnimationEngine.ɵfac
+      factory: _InjectableAnimationEngine.?fac
     });
   }
 };
@@ -4476,18 +4476,18 @@ var BrowserAnimationsModule = class _BrowserAnimationsModule {
     };
   }
   static {
-    this.ɵfac = function BrowserAnimationsModule_Factory(t) {
+    this.?fac = function BrowserAnimationsModule_Factory(t) {
       return new (t || _BrowserAnimationsModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _BrowserAnimationsModule,
       exports: [BrowserModule]
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
+    this.?inj = ??defineInjector({
       providers: BROWSER_ANIMATIONS_PROVIDERS,
       imports: [BrowserModule]
     });
@@ -4508,18 +4508,18 @@ function provideAnimations() {
 }
 var NoopAnimationsModule = class _NoopAnimationsModule {
   static {
-    this.ɵfac = function NoopAnimationsModule_Factory(t) {
+    this.?fac = function NoopAnimationsModule_Factory(t) {
       return new (t || _NoopAnimationsModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _NoopAnimationsModule,
       exports: [BrowserModule]
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({
+    this.?inj = ??defineInjector({
       providers: BROWSER_NOOP_ANIMATIONS_PROVIDERS,
       imports: [BrowserModule]
     });
@@ -4543,7 +4543,7 @@ export {
   NoopAnimationsModule,
   provideAnimations,
   provideNoopAnimations,
-  InjectableAnimationEngine as ɵInjectableAnimationEngine
+  InjectableAnimationEngine as ?InjectableAnimationEngine
 };
 /*! Bundled license information:
 

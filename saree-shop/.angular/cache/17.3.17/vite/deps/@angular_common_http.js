@@ -76,10 +76,10 @@ export {
   withNoXsrfProtection,
   withRequestsMadeViaParent,
   withXsrfConfiguration,
-  HTTP_ROOT_INTERCEPTOR_FNS as ɵHTTP_ROOT_INTERCEPTOR_FNS,
-  HttpInterceptorHandler as ɵHttpInterceptingHandler,
-  HttpInterceptorHandler as ɵHttpInterceptorHandler,
-  PRIMARY_HTTP_BACKEND as ɵPRIMARY_HTTP_BACKEND,
-  withHttpTransferCache as ɵwithHttpTransferCache
+  HTTP_ROOT_INTERCEPTOR_FNS as ?HTTP_ROOT_INTERCEPTOR_FNS,
+  HttpInterceptorHandler as ?HttpInterceptingHandler,
+  HttpInterceptorHandler as ?HttpInterceptorHandler,
+  PRIMARY_HTTP_BACKEND as ?PRIMARY_HTTP_BACKEND,
+  withHttpTransferCache as ?withHttpTransferCache
 };
 //# sourceMappingURL=@angular_common_http.js.map

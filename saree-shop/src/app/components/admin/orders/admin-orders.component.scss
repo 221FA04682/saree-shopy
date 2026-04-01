@@ -33,6 +33,44 @@
   font-size: 0.875rem;
 }
 
+.live-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(45, 122, 79, 0.08);
+  color: var(--success);
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.live-pill.syncing {
+  background: rgba(201, 149, 42, 0.12);
+  color: var(--gold-warm);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.sync-time {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
 .empty-row {
   text-align: center;
   padding: 48px !important;
@@ -266,6 +304,7 @@
 }
 
 @media (max-width: 768px) {
+  .live-status { justify-content: flex-start; }
   .orders-toolbar { margin-bottom: 16px; }
   /* Hide less important table columns on mobile */
   table thead th:nth-child(4),

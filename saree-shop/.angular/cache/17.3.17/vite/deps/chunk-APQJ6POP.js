@@ -46,17 +46,17 @@ import {
   stringify,
   untracked,
   unwrapSafeValue,
-  ɵɵInputTransformsFeature,
-  ɵɵNgOnChangesFeature,
-  ɵɵdefineDirective,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule,
-  ɵɵdefinePipe,
-  ɵɵdirectiveInject,
-  ɵɵinject,
-  ɵɵinjectAttribute,
-  ɵɵstyleProp
+  ??InputTransformsFeature,
+  ??NgOnChangesFeature,
+  ??defineDirective,
+  ??defineInjectable,
+  ??defineInjector,
+  ??defineNgModule,
+  ??definePipe,
+  ??directiveInject,
+  ??inject,
+  ??injectAttribute,
+  ??styleProp
 } from "./chunk-IGJZNA3K.js";
 import {
   __spreadProps,
@@ -75,12 +75,12 @@ var DomAdapter = class {
 };
 var PlatformNavigation = class _PlatformNavigation {
   static {
-    this.ɵfac = function PlatformNavigation_Factory(t) {
+    this.?fac = function PlatformNavigation_Factory(t) {
       return new (t || _PlatformNavigation)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _PlatformNavigation,
       factory: () => (() => window.navigation)(),
       providedIn: "platform"
@@ -102,12 +102,12 @@ var PlatformLocation = class _PlatformLocation {
     throw new Error(ngDevMode ? "Not implemented" : "");
   }
   static {
-    this.ɵfac = function PlatformLocation_Factory(t) {
+    this.?fac = function PlatformLocation_Factory(t) {
       return new (t || _PlatformLocation)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _PlatformLocation,
       factory: () => (() => inject(BrowserPlatformLocation))(),
       providedIn: "platform"
@@ -187,12 +187,12 @@ var BrowserPlatformLocation = class _BrowserPlatformLocation extends PlatformLoc
     return this._history.state;
   }
   static {
-    this.ɵfac = function BrowserPlatformLocation_Factory(t) {
+    this.?fac = function BrowserPlatformLocation_Factory(t) {
       return new (t || _BrowserPlatformLocation)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _BrowserPlatformLocation,
       factory: () => (() => new _BrowserPlatformLocation())(),
       providedIn: "platform"
@@ -244,12 +244,12 @@ var LocationStrategy = class _LocationStrategy {
     throw new Error(ngDevMode ? "Not implemented" : "");
   }
   static {
-    this.ɵfac = function LocationStrategy_Factory(t) {
+    this.?fac = function LocationStrategy_Factory(t) {
       return new (t || _LocationStrategy)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _LocationStrategy,
       factory: () => (() => inject(PathLocationStrategy))(),
       providedIn: "root"
@@ -314,14 +314,14 @@ var PathLocationStrategy = class _PathLocationStrategy extends LocationStrategy 
     this._platformLocation.historyGo?.(relativePosition);
   }
   static {
-    this.ɵfac = function PathLocationStrategy_Factory(t) {
-      return new (t || _PathLocationStrategy)(ɵɵinject(PlatformLocation), ɵɵinject(APP_BASE_HREF, 8));
+    this.?fac = function PathLocationStrategy_Factory(t) {
+      return new (t || _PathLocationStrategy)(??inject(PlatformLocation), ??inject(APP_BASE_HREF, 8));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _PathLocationStrategy,
-      factory: _PathLocationStrategy.ɵfac,
+      factory: _PathLocationStrategy.?fac,
       providedIn: "root"
     });
   }
@@ -401,14 +401,14 @@ var HashLocationStrategy = class _HashLocationStrategy extends LocationStrategy 
     this._platformLocation.historyGo?.(relativePosition);
   }
   static {
-    this.ɵfac = function HashLocationStrategy_Factory(t) {
-      return new (t || _HashLocationStrategy)(ɵɵinject(PlatformLocation), ɵɵinject(APP_BASE_HREF, 8));
+    this.?fac = function HashLocationStrategy_Factory(t) {
+      return new (t || _HashLocationStrategy)(??inject(PlatformLocation), ??inject(APP_BASE_HREF, 8));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HashLocationStrategy,
-      factory: _HashLocationStrategy.ɵfac
+      factory: _HashLocationStrategy.?fac
     });
   }
 };
@@ -614,12 +614,12 @@ var Location = class _Location {
     this.stripTrailingSlash = stripTrailingSlash;
   }
   static {
-    this.ɵfac = function Location_Factory(t) {
-      return new (t || _Location)(ɵɵinject(LocationStrategy));
+    this.?fac = function Location_Factory(t) {
+      return new (t || _Location)(??inject(LocationStrategy));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _Location,
       factory: () => createLocation(),
       providedIn: "root"
@@ -639,7 +639,7 @@ var Location = class _Location {
   }], null);
 })();
 function createLocation() {
-  return new Location(ɵɵinject(LocationStrategy));
+  return new Location(??inject(LocationStrategy));
 }
 function _stripBasePath(basePath, url) {
   if (!basePath || !url.startsWith(basePath)) {
@@ -664,16 +664,16 @@ function _stripOrigin(baseHref) {
 }
 var CURRENCIES_EN = {
   "ADP": [void 0, void 0, 0],
-  "AFN": [void 0, "؋", 0],
+  "AFN": [void 0, "?", 0],
   "ALL": [void 0, void 0, 0],
-  "AMD": [void 0, "֏", 2],
+  "AMD": [void 0, "?", 2],
   "AOA": [void 0, "Kz"],
   "ARS": [void 0, "$"],
   "AUD": ["A$", "$"],
-  "AZN": [void 0, "₼"],
+  "AZN": [void 0, "?"],
   "BAM": [void 0, "KM"],
   "BBD": [void 0, "$"],
-  "BDT": [void 0, "৳"],
+  "BDT": [void 0, "?"],
   "BHD": [void 0, void 0, 3],
   "BIF": [void 0, void 0, 0],
   "BMD": [void 0, "$"],
@@ -689,24 +689,24 @@ var CURRENCIES_EN = {
   "CHF": [void 0, void 0, 2],
   "CLF": [void 0, void 0, 4],
   "CLP": [void 0, "$", 0],
-  "CNY": ["CN¥", "¥"],
+  "CNY": ["CN�", "�"],
   "COP": [void 0, "$", 2],
-  "CRC": [void 0, "₡", 2],
+  "CRC": [void 0, "�", 2],
   "CUC": [void 0, "$"],
   "CUP": [void 0, "$"],
-  "CZK": [void 0, "Kč", 2],
+  "CZK": [void 0, "Kc", 2],
   "DJF": [void 0, void 0, 0],
   "DKK": [void 0, "kr", 2],
   "DOP": [void 0, "$"],
-  "EGP": [void 0, "E£"],
-  "ESP": [void 0, "₧", 0],
-  "EUR": ["€"],
+  "EGP": [void 0, "E�"],
+  "ESP": [void 0, "P", 0],
+  "EUR": ["�"],
   "FJD": [void 0, "$"],
-  "FKP": [void 0, "£"],
-  "GBP": ["£"],
-  "GEL": [void 0, "₾"],
-  "GHS": [void 0, "GH₵"],
-  "GIP": [void 0, "£"],
+  "FKP": [void 0, "�"],
+  "GBP": ["�"],
+  "GEL": [void 0, "?"],
+  "GHS": [void 0, "GH?"],
+  "GIP": [void 0, "�"],
   "GNF": [void 0, "FG", 0],
   "GTQ": [void 0, "Q"],
   "GYD": [void 0, "$", 2],
@@ -715,24 +715,24 @@ var CURRENCIES_EN = {
   "HRK": [void 0, "kn"],
   "HUF": [void 0, "Ft", 2],
   "IDR": [void 0, "Rp", 2],
-  "ILS": ["₪"],
-  "INR": ["₹"],
+  "ILS": ["?"],
+  "INR": ["?"],
   "IQD": [void 0, void 0, 0],
   "IRR": [void 0, void 0, 0],
   "ISK": [void 0, "kr", 0],
   "ITL": [void 0, void 0, 0],
   "JMD": [void 0, "$"],
   "JOD": [void 0, void 0, 3],
-  "JPY": ["¥", void 0, 0],
-  "KHR": [void 0, "៛"],
+  "JPY": ["�", void 0, 0],
+  "KHR": [void 0, "?"],
   "KMF": [void 0, "CF", 0],
-  "KPW": [void 0, "₩", 0],
-  "KRW": ["₩", void 0, 0],
+  "KPW": [void 0, "?", 0],
+  "KRW": ["?", void 0, 0],
   "KWD": [void 0, void 0, 3],
   "KYD": [void 0, "$"],
-  "KZT": [void 0, "₸"],
-  "LAK": [void 0, "₭", 0],
-  "LBP": [void 0, "L£", 0],
+  "KZT": [void 0, "?"],
+  "LAK": [void 0, "?", 0],
+  "LBP": [void 0, "L�", 0],
   "LKR": [void 0, "Rs"],
   "LRD": [void 0, "$"],
   "LTL": [void 0, "Lt"],
@@ -742,48 +742,48 @@ var CURRENCIES_EN = {
   "MGA": [void 0, "Ar", 0],
   "MGF": [void 0, void 0, 0],
   "MMK": [void 0, "K", 0],
-  "MNT": [void 0, "₮", 2],
+  "MNT": [void 0, "?", 2],
   "MRO": [void 0, void 0, 0],
   "MUR": [void 0, "Rs", 2],
   "MXN": ["MX$", "$"],
   "MYR": [void 0, "RM"],
   "NAD": [void 0, "$"],
-  "NGN": [void 0, "₦"],
+  "NGN": [void 0, "?"],
   "NIO": [void 0, "C$"],
   "NOK": [void 0, "kr", 2],
   "NPR": [void 0, "Rs"],
   "NZD": ["NZ$", "$"],
   "OMR": [void 0, void 0, 3],
-  "PHP": ["₱"],
+  "PHP": ["?"],
   "PKR": [void 0, "Rs", 2],
-  "PLN": [void 0, "zł"],
-  "PYG": [void 0, "₲", 0],
+  "PLN": [void 0, "zl"],
+  "PYG": [void 0, "?", 0],
   "RON": [void 0, "lei"],
   "RSD": [void 0, void 0, 0],
-  "RUB": [void 0, "₽"],
+  "RUB": [void 0, "?"],
   "RWF": [void 0, "RF", 0],
   "SBD": [void 0, "$"],
   "SEK": [void 0, "kr", 2],
   "SGD": [void 0, "$"],
-  "SHP": [void 0, "£"],
+  "SHP": [void 0, "�"],
   "SLE": [void 0, void 0, 2],
   "SLL": [void 0, void 0, 0],
   "SOS": [void 0, void 0, 0],
   "SRD": [void 0, "$"],
-  "SSP": [void 0, "£"],
+  "SSP": [void 0, "�"],
   "STD": [void 0, void 0, 0],
   "STN": [void 0, "Db"],
-  "SYP": [void 0, "£", 0],
-  "THB": [void 0, "฿"],
+  "SYP": [void 0, "�", 0],
+  "THB": [void 0, "?"],
   "TMM": [void 0, void 0, 0],
   "TND": [void 0, void 0, 3],
   "TOP": [void 0, "T$"],
   "TRL": [void 0, void 0, 0],
-  "TRY": [void 0, "₺"],
+  "TRY": [void 0, "?"],
   "TTD": [void 0, "$"],
   "TWD": ["NT$", "$", 2],
   "TZS": [void 0, void 0, 2],
-  "UAH": [void 0, "₴"],
+  "UAH": [void 0, "?"],
   "UGX": [void 0, void 0, 0],
   "USD": ["$"],
   "UYI": [void 0, void 0, 0],
@@ -791,13 +791,13 @@ var CURRENCIES_EN = {
   "UYW": [void 0, void 0, 4],
   "UZS": [void 0, void 0, 2],
   "VEF": [void 0, "Bs", 2],
-  "VND": ["₫", void 0, 0],
+  "VND": ["?", void 0, 0],
   "VUV": [void 0, void 0, 0],
   "XAF": ["FCFA", void 0, 0],
   "XCD": ["EC$", "$"],
-  "XOF": ["F CFA", void 0, 0],
+  "XOF": ["F?CFA", void 0, 0],
   "XPF": ["CFPF", void 0, 0],
-  "XXX": ["¤"],
+  "XXX": ["�"],
   "YER": [void 0, void 0, 0],
   "ZAR": [void 0, "R"],
   "ZMK": [void 0, void 0, 0],
@@ -884,12 +884,12 @@ var NumberSymbol = {
   SuperscriptingExponent: 7,
   /**
    * Sign for permille (out of 1000).
-   * Example: 23.4‰
+   * Example: 23.4�
    */
   PerMille: 8,
   /**
    * Infinity, can be used with plus and minus.
-   * Example: ∞, +∞, -∞
+   * Example: 8, +8, -8
    */
   Infinity: 9,
   /**
@@ -1012,7 +1012,7 @@ function getLocaleExtraDayPeriodRules(locale) {
   checkFullData(data);
   const rules = data[LocaleDataIndex.ExtraData][
     2
-    /* ɵExtraLocaleDataIndex.ExtraDayPeriodsRules */
+    /* ?ExtraLocaleDataIndex.ExtraDayPeriodsRules */
   ] || [];
   return rules.map((rule) => {
     if (typeof rule === "string") {
@@ -1026,10 +1026,10 @@ function getLocaleExtraDayPeriods(locale, formStyle, width) {
   checkFullData(data);
   const dayPeriodsData = [data[LocaleDataIndex.ExtraData][
     0
-    /* ɵExtraLocaleDataIndex.ExtraDayPeriodFormats */
+    /* ?ExtraLocaleDataIndex.ExtraDayPeriodFormats */
   ], data[LocaleDataIndex.ExtraData][
     1
-    /* ɵExtraLocaleDataIndex.ExtraDayPeriodStandalone */
+    /* ?ExtraLocaleDataIndex.ExtraDayPeriodStandalone */
   ]];
   const dayPeriods = getLastDefinedValue(dayPeriodsData, formStyle) || [];
   return getLastDefinedValue(dayPeriods, width) || [];
@@ -1057,14 +1057,14 @@ function getCurrencySymbol(code, format, locale = "en") {
   const currency = getLocaleCurrencies(locale)[code] || CURRENCIES_EN[code] || [];
   const symbolNarrow = currency[
     1
-    /* ɵCurrencyIndex.SymbolNarrow */
+    /* ?CurrencyIndex.SymbolNarrow */
   ];
   if (format === "narrow" && typeof symbolNarrow === "string") {
     return symbolNarrow;
   }
   return currency[
     0
-    /* ɵCurrencyIndex.Symbol */
+    /* ?CurrencyIndex.Symbol */
   ] || code;
 }
 var DEFAULT_NB_OF_CURRENCY_DIGITS = 2;
@@ -1074,7 +1074,7 @@ function getNumberOfCurrencyDigits(code) {
   if (currency) {
     digits = currency[
       2
-      /* ɵCurrencyIndex.NbOfDigits */
+      /* ?CurrencyIndex.NbOfDigits */
     ];
   }
   return typeof digits === "number" ? digits : DEFAULT_NB_OF_CURRENCY_DIGITS;
@@ -1656,7 +1656,7 @@ var ZERO_CHAR = "0";
 var PATTERN_SEP = ";";
 var GROUP_SEP = ",";
 var DIGIT_CHAR = "#";
-var CURRENCY_CHAR = "¤";
+var CURRENCY_CHAR = "�";
 var PERCENT_CHAR = "%";
 function formatNumberToLocaleString(value, pattern, locale, groupSymbol, decimalSymbol, digitsInfo, isPercent = false) {
   let formattedText = "";
@@ -1911,19 +1911,19 @@ function parseIntAutoRadix(text) {
 }
 var NgLocalization = class _NgLocalization {
   static {
-    this.ɵfac = function NgLocalization_Factory(t) {
+    this.?fac = function NgLocalization_Factory(t) {
       return new (t || _NgLocalization)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _NgLocalization,
       factory: function NgLocalization_Factory(t) {
         let r = null;
         if (t) {
           r = new t();
         } else {
-          r = ((locale) => new NgLocaleLocalization(locale))(ɵɵinject(LOCALE_ID));
+          r = ((locale) => new NgLocaleLocalization(locale))(??inject(LOCALE_ID));
         }
         return r;
       },
@@ -1978,14 +1978,14 @@ var NgLocaleLocalization = class _NgLocaleLocalization extends NgLocalization {
     }
   }
   static {
-    this.ɵfac = function NgLocaleLocalization_Factory(t) {
-      return new (t || _NgLocaleLocalization)(ɵɵinject(LOCALE_ID));
+    this.?fac = function NgLocaleLocalization_Factory(t) {
+      return new (t || _NgLocaleLocalization)(??inject(LOCALE_ID));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _NgLocaleLocalization,
-      factory: _NgLocaleLocalization.ɵfac
+      factory: _NgLocaleLocalization.?fac
     });
   }
 };
@@ -2117,12 +2117,12 @@ var NgClass = class _NgClass {
     }
   }
   static {
-    this.ɵfac = function NgClass_Factory(t) {
-      return new (t || _NgClass)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2));
+    this.?fac = function NgClass_Factory(t) {
+      return new (t || _NgClass)(??directiveInject(ElementRef), ??directiveInject(Renderer2));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgClass,
       selectors: [["", "ngClass", ""]],
       inputs: {
@@ -2220,12 +2220,12 @@ var NgComponentOutlet = class _NgComponentOutlet {
     }
   }
   static {
-    this.ɵfac = function NgComponentOutlet_Factory(t) {
-      return new (t || _NgComponentOutlet)(ɵɵdirectiveInject(ViewContainerRef));
+    this.?fac = function NgComponentOutlet_Factory(t) {
+      return new (t || _NgComponentOutlet)(??directiveInject(ViewContainerRef));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgComponentOutlet,
       selectors: [["", "ngComponentOutlet", ""]],
       inputs: {
@@ -2237,7 +2237,7 @@ var NgComponentOutlet = class _NgComponentOutlet {
         ngComponentOutletNgModuleFactory: "ngComponentOutletNgModuleFactory"
       },
       standalone: true,
-      features: [ɵɵNgOnChangesFeature]
+      features: [??NgOnChangesFeature]
     });
   }
 };
@@ -2412,12 +2412,12 @@ var NgForOf = class _NgForOf {
     return true;
   }
   static {
-    this.ɵfac = function NgForOf_Factory(t) {
-      return new (t || _NgForOf)(ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(TemplateRef), ɵɵdirectiveInject(IterableDiffers));
+    this.?fac = function NgForOf_Factory(t) {
+      return new (t || _NgForOf)(??directiveInject(ViewContainerRef), ??directiveInject(TemplateRef), ??directiveInject(IterableDiffers));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgForOf,
       selectors: [["", "ngFor", "", "ngForOf", ""]],
       inputs: {
@@ -2524,12 +2524,12 @@ var NgIf = class _NgIf {
     return true;
   }
   static {
-    this.ɵfac = function NgIf_Factory(t) {
-      return new (t || _NgIf)(ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(TemplateRef));
+    this.?fac = function NgIf_Factory(t) {
+      return new (t || _NgIf)(??directiveInject(ViewContainerRef), ??directiveInject(TemplateRef));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgIf,
       selectors: [["", "ngIf", ""]],
       inputs: {
@@ -2645,12 +2645,12 @@ var NgSwitch = class _NgSwitch {
     }
   }
   static {
-    this.ɵfac = function NgSwitch_Factory(t) {
+    this.?fac = function NgSwitch_Factory(t) {
       return new (t || _NgSwitch)();
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgSwitch,
       selectors: [["", "ngSwitch", ""]],
       inputs: {
@@ -2690,12 +2690,12 @@ var NgSwitchCase = class _NgSwitchCase {
     this._view.enforceState(this.ngSwitch._matchCase(this.ngSwitchCase));
   }
   static {
-    this.ɵfac = function NgSwitchCase_Factory(t) {
-      return new (t || _NgSwitchCase)(ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(TemplateRef), ɵɵdirectiveInject(NgSwitch, 9));
+    this.?fac = function NgSwitchCase_Factory(t) {
+      return new (t || _NgSwitchCase)(??directiveInject(ViewContainerRef), ??directiveInject(TemplateRef), ??directiveInject(NgSwitch, 9));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgSwitchCase,
       selectors: [["", "ngSwitchCase", ""]],
       inputs: {
@@ -2737,12 +2737,12 @@ var NgSwitchDefault = class _NgSwitchDefault {
     ngSwitch._addDefault(new SwitchView(viewContainer, templateRef));
   }
   static {
-    this.ɵfac = function NgSwitchDefault_Factory(t) {
-      return new (t || _NgSwitchDefault)(ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(TemplateRef), ɵɵdirectiveInject(NgSwitch, 9));
+    this.?fac = function NgSwitchDefault_Factory(t) {
+      return new (t || _NgSwitchDefault)(??directiveInject(ViewContainerRef), ??directiveInject(TemplateRef), ??directiveInject(NgSwitch, 9));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgSwitchDefault,
       selectors: [["", "ngSwitchDefault", ""]],
       standalone: true
@@ -2802,12 +2802,12 @@ var NgPlural = class _NgPlural {
     }
   }
   static {
-    this.ɵfac = function NgPlural_Factory(t) {
-      return new (t || _NgPlural)(ɵɵdirectiveInject(NgLocalization));
+    this.?fac = function NgPlural_Factory(t) {
+      return new (t || _NgPlural)(??directiveInject(NgLocalization));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgPlural,
       selectors: [["", "ngPlural", ""]],
       inputs: {
@@ -2839,12 +2839,12 @@ var NgPluralCase = class _NgPluralCase {
     ngPlural.addCase(isANumber ? `=${value}` : value, new SwitchView(viewContainer, template));
   }
   static {
-    this.ɵfac = function NgPluralCase_Factory(t) {
-      return new (t || _NgPluralCase)(ɵɵinjectAttribute("ngPluralCase"), ɵɵdirectiveInject(TemplateRef), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(NgPlural, 1));
+    this.?fac = function NgPluralCase_Factory(t) {
+      return new (t || _NgPluralCase)(??injectAttribute("ngPluralCase"), ??directiveInject(TemplateRef), ??directiveInject(ViewContainerRef), ??directiveInject(NgPlural, 1));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgPluralCase,
       selectors: [["", "ngPluralCase", ""]],
       standalone: true
@@ -2912,12 +2912,12 @@ var NgStyle = class _NgStyle {
     changes.forEachChangedItem((record) => this._setStyle(record.key, record.currentValue));
   }
   static {
-    this.ɵfac = function NgStyle_Factory(t) {
-      return new (t || _NgStyle)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(KeyValueDiffers), ɵɵdirectiveInject(Renderer2));
+    this.?fac = function NgStyle_Factory(t) {
+      return new (t || _NgStyle)(??directiveInject(ElementRef), ??directiveInject(KeyValueDiffers), ??directiveInject(Renderer2));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgStyle,
       selectors: [["", "ngStyle", ""]],
       inputs: {
@@ -3001,12 +3001,12 @@ var NgTemplateOutlet = class _NgTemplateOutlet {
     });
   }
   static {
-    this.ɵfac = function NgTemplateOutlet_Factory(t) {
-      return new (t || _NgTemplateOutlet)(ɵɵdirectiveInject(ViewContainerRef));
+    this.?fac = function NgTemplateOutlet_Factory(t) {
+      return new (t || _NgTemplateOutlet)(??directiveInject(ViewContainerRef));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgTemplateOutlet,
       selectors: [["", "ngTemplateOutlet", ""]],
       inputs: {
@@ -3015,7 +3015,7 @@ var NgTemplateOutlet = class _NgTemplateOutlet {
         ngTemplateOutletInjector: "ngTemplateOutletInjector"
       },
       standalone: true,
-      features: [ɵɵNgOnChangesFeature]
+      features: [??NgOnChangesFeature]
     });
   }
 };
@@ -3130,12 +3130,12 @@ var AsyncPipe = class _AsyncPipe {
     }
   }
   static {
-    this.ɵfac = function AsyncPipe_Factory(t) {
-      return new (t || _AsyncPipe)(ɵɵdirectiveInject(ChangeDetectorRef, 16));
+    this.?fac = function AsyncPipe_Factory(t) {
+      return new (t || _AsyncPipe)(??directiveInject(ChangeDetectorRef, 16));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "async",
       type: _AsyncPipe,
       pure: false,
@@ -3164,12 +3164,12 @@ var LowerCasePipe = class _LowerCasePipe {
     return value.toLowerCase();
   }
   static {
-    this.ɵfac = function LowerCasePipe_Factory(t) {
+    this.?fac = function LowerCasePipe_Factory(t) {
       return new (t || _LowerCasePipe)();
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "lowercase",
       type: _LowerCasePipe,
       pure: true,
@@ -3196,12 +3196,12 @@ var TitleCasePipe = class _TitleCasePipe {
     return value.replace(unicodeWordMatch, (txt) => txt[0].toUpperCase() + txt.slice(1).toLowerCase());
   }
   static {
-    this.ɵfac = function TitleCasePipe_Factory(t) {
+    this.?fac = function TitleCasePipe_Factory(t) {
       return new (t || _TitleCasePipe)();
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "titlecase",
       type: _TitleCasePipe,
       pure: true,
@@ -3227,12 +3227,12 @@ var UpperCasePipe = class _UpperCasePipe {
     return value.toUpperCase();
   }
   static {
-    this.ɵfac = function UpperCasePipe_Factory(t) {
+    this.?fac = function UpperCasePipe_Factory(t) {
       return new (t || _UpperCasePipe)();
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "uppercase",
       type: _UpperCasePipe,
       pure: true,
@@ -3269,12 +3269,12 @@ var DatePipe = class _DatePipe {
     }
   }
   static {
-    this.ɵfac = function DatePipe_Factory(t) {
-      return new (t || _DatePipe)(ɵɵdirectiveInject(LOCALE_ID, 16), ɵɵdirectiveInject(DATE_PIPE_DEFAULT_TIMEZONE, 24), ɵɵdirectiveInject(DATE_PIPE_DEFAULT_OPTIONS, 24));
+    this.?fac = function DatePipe_Factory(t) {
+      return new (t || _DatePipe)(??directiveInject(LOCALE_ID, 16), ??directiveInject(DATE_PIPE_DEFAULT_TIMEZONE, 24), ??directiveInject(DATE_PIPE_DEFAULT_OPTIONS, 24));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "date",
       type: _DatePipe,
       pure: true,
@@ -3334,12 +3334,12 @@ var I18nPluralPipe = class _I18nPluralPipe {
     return pluralMap[key].replace(_INTERPOLATION_REGEXP, value.toString());
   }
   static {
-    this.ɵfac = function I18nPluralPipe_Factory(t) {
-      return new (t || _I18nPluralPipe)(ɵɵdirectiveInject(NgLocalization, 16));
+    this.?fac = function I18nPluralPipe_Factory(t) {
+      return new (t || _I18nPluralPipe)(??directiveInject(NgLocalization, 16));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "i18nPlural",
       type: _I18nPluralPipe,
       pure: true,
@@ -3378,12 +3378,12 @@ var I18nSelectPipe = class _I18nSelectPipe {
     return "";
   }
   static {
-    this.ɵfac = function I18nSelectPipe_Factory(t) {
+    this.?fac = function I18nSelectPipe_Factory(t) {
       return new (t || _I18nSelectPipe)();
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "i18nSelect",
       type: _I18nSelectPipe,
       pure: true,
@@ -3408,12 +3408,12 @@ var JsonPipe = class _JsonPipe {
     return JSON.stringify(value, null, 2);
   }
   static {
-    this.ɵfac = function JsonPipe_Factory(t) {
+    this.?fac = function JsonPipe_Factory(t) {
       return new (t || _JsonPipe)();
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "json",
       type: _JsonPipe,
       pure: false,
@@ -3463,12 +3463,12 @@ var KeyValuePipe = class _KeyValuePipe {
     return this.keyValues;
   }
   static {
-    this.ɵfac = function KeyValuePipe_Factory(t) {
-      return new (t || _KeyValuePipe)(ɵɵdirectiveInject(KeyValueDiffers, 16));
+    this.?fac = function KeyValuePipe_Factory(t) {
+      return new (t || _KeyValuePipe)(??directiveInject(KeyValueDiffers, 16));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "keyvalue",
       type: _KeyValuePipe,
       pure: false,
@@ -3531,12 +3531,12 @@ var DecimalPipe = class _DecimalPipe {
     }
   }
   static {
-    this.ɵfac = function DecimalPipe_Factory(t) {
-      return new (t || _DecimalPipe)(ɵɵdirectiveInject(LOCALE_ID, 16));
+    this.?fac = function DecimalPipe_Factory(t) {
+      return new (t || _DecimalPipe)(??directiveInject(LOCALE_ID, 16));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "number",
       type: _DecimalPipe,
       pure: true,
@@ -3590,12 +3590,12 @@ var PercentPipe = class _PercentPipe {
     }
   }
   static {
-    this.ɵfac = function PercentPipe_Factory(t) {
-      return new (t || _PercentPipe)(ɵɵdirectiveInject(LOCALE_ID, 16));
+    this.?fac = function PercentPipe_Factory(t) {
+      return new (t || _PercentPipe)(??directiveInject(LOCALE_ID, 16));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "percent",
       type: _PercentPipe,
       pure: true,
@@ -3681,12 +3681,12 @@ var CurrencyPipe = class _CurrencyPipe {
     }
   }
   static {
-    this.ɵfac = function CurrencyPipe_Factory(t) {
-      return new (t || _CurrencyPipe)(ɵɵdirectiveInject(LOCALE_ID, 16), ɵɵdirectiveInject(DEFAULT_CURRENCY_CODE, 16));
+    this.?fac = function CurrencyPipe_Factory(t) {
+      return new (t || _CurrencyPipe)(??directiveInject(LOCALE_ID, 16), ??directiveInject(DEFAULT_CURRENCY_CODE, 16));
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "currency",
       type: _CurrencyPipe,
       pure: true,
@@ -3739,12 +3739,12 @@ var SlicePipe = class _SlicePipe {
     return typeof obj === "string" || Array.isArray(obj);
   }
   static {
-    this.ɵfac = function SlicePipe_Factory(t) {
+    this.?fac = function SlicePipe_Factory(t) {
       return new (t || _SlicePipe)();
     };
   }
   static {
-    this.ɵpipe = ɵɵdefinePipe({
+    this.?pipe = ??definePipe({
       name: "slice",
       type: _SlicePipe,
       pure: false,
@@ -3765,19 +3765,19 @@ var SlicePipe = class _SlicePipe {
 var COMMON_PIPES = [AsyncPipe, UpperCasePipe, LowerCasePipe, JsonPipe, SlicePipe, DecimalPipe, PercentPipe, TitleCasePipe, CurrencyPipe, DatePipe, I18nPluralPipe, I18nSelectPipe, KeyValuePipe];
 var CommonModule = class _CommonModule {
   static {
-    this.ɵfac = function CommonModule_Factory(t) {
+    this.?fac = function CommonModule_Factory(t) {
       return new (t || _CommonModule)();
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _CommonModule,
       imports: [NgClass, NgComponentOutlet, NgForOf, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase, AsyncPipe, UpperCasePipe, LowerCasePipe, JsonPipe, SlicePipe, DecimalPipe, PercentPipe, TitleCasePipe, CurrencyPipe, DatePipe, I18nPluralPipe, I18nSelectPipe, KeyValuePipe],
       exports: [NgClass, NgComponentOutlet, NgForOf, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase, AsyncPipe, UpperCasePipe, LowerCasePipe, JsonPipe, SlicePipe, DecimalPipe, PercentPipe, TitleCasePipe, CurrencyPipe, DatePipe, I18nPluralPipe, I18nSelectPipe, KeyValuePipe]
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({});
+    this.?inj = ??defineInjector({});
   }
 };
 (() => {
@@ -3808,7 +3808,7 @@ function isPlatformWorkerUi(platformId) {
 var VERSION = new Version("17.3.12");
 var ViewportScroller = class _ViewportScroller {
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _ViewportScroller,
       providedIn: "root",
       factory: () => isPlatformBrowser(inject(PLATFORM_ID)) ? new BrowserViewportScroller(inject(DOCUMENT), window) : new NullViewportScroller()
@@ -4199,14 +4199,14 @@ var LCPImageObserver = class _LCPImageObserver {
     this.images.clear();
   }
   static {
-    this.ɵfac = function LCPImageObserver_Factory(t) {
+    this.?fac = function LCPImageObserver_Factory(t) {
       return new (t || _LCPImageObserver)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _LCPImageObserver,
-      factory: _LCPImageObserver.ɵfac,
+      factory: _LCPImageObserver.?fac,
       providedIn: "root"
     });
   }
@@ -4290,14 +4290,14 @@ var PreconnectLinkChecker = class _PreconnectLinkChecker {
     this.alreadySeen.clear();
   }
   static {
-    this.ɵfac = function PreconnectLinkChecker_Factory(t) {
+    this.?fac = function PreconnectLinkChecker_Factory(t) {
       return new (t || _PreconnectLinkChecker)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _PreconnectLinkChecker,
-      factory: _PreconnectLinkChecker.ɵfac,
+      factory: _PreconnectLinkChecker.?fac,
       providedIn: "root"
     });
   }
@@ -4365,14 +4365,14 @@ var PreloadLinkCreator = class _PreloadLinkCreator {
     renderer.appendChild(this.document.head, preload);
   }
   static {
-    this.ɵfac = function PreloadLinkCreator_Factory(t) {
+    this.?fac = function PreloadLinkCreator_Factory(t) {
       return new (t || _PreloadLinkCreator)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _PreloadLinkCreator,
-      factory: _PreloadLinkCreator.ɵfac,
+      factory: _PreloadLinkCreator.?fac,
       providedIn: "root"
     });
   }
@@ -4642,18 +4642,18 @@ var NgOptimizedImage = class _NgOptimizedImage {
     this.renderer.setAttribute(this.imgElement, name, value);
   }
   static {
-    this.ɵfac = function NgOptimizedImage_Factory(t) {
+    this.?fac = function NgOptimizedImage_Factory(t) {
       return new (t || _NgOptimizedImage)();
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _NgOptimizedImage,
       selectors: [["img", "ngSrc", ""]],
       hostVars: 18,
       hostBindings: function NgOptimizedImage_HostBindings(rf, ctx) {
         if (rf & 2) {
-          ɵɵstyleProp("position", ctx.fill ? "absolute" : null)("width", ctx.fill ? "100%" : null)("height", ctx.fill ? "100%" : null)("inset", ctx.fill ? "0" : null)("background-size", ctx.placeholder ? "cover" : null)("background-position", ctx.placeholder ? "50% 50%" : null)("background-repeat", ctx.placeholder ? "no-repeat" : null)("background-image", ctx.placeholder ? ctx.generatePlaceholder(ctx.placeholder) : null)("filter", ctx.placeholder && ctx.shouldBlurPlaceholder(ctx.placeholderConfig) ? "blur(15px)" : null);
+          ??styleProp("position", ctx.fill ? "absolute" : null)("width", ctx.fill ? "100%" : null)("height", ctx.fill ? "100%" : null)("inset", ctx.fill ? "0" : null)("background-size", ctx.placeholder ? "cover" : null)("background-position", ctx.placeholder ? "50% 50%" : null)("background-repeat", ctx.placeholder ? "no-repeat" : null)("background-image", ctx.placeholder ? ctx.generatePlaceholder(ctx.placeholder) : null)("filter", ctx.placeholder && ctx.shouldBlurPlaceholder(ctx.placeholderConfig) ? "blur(15px)" : null);
         }
       },
       inputs: {
@@ -4673,7 +4673,7 @@ var NgOptimizedImage = class _NgOptimizedImage {
         srcset: "srcset"
       },
       standalone: true,
-      features: [ɵɵInputTransformsFeature, ɵɵNgOnChangesFeature]
+      features: [??InputTransformsFeature, ??NgOnChangesFeature]
     });
   }
 };
@@ -4965,7 +4965,7 @@ function assertNonZeroRenderedHeight(dir, img, renderer) {
 }
 function assertValidLoadingInput(dir) {
   if (dir.loading && dir.priority) {
-    throw new RuntimeError(2952, `${imgDirectiveDetails(dir.ngSrc)} the \`loading\` attribute was used on an image that was marked "priority". Setting \`loading\` on priority images is not allowed because these images will always be eagerly loaded. To fix this, remove the “loading” attribute from the priority image.`);
+    throw new RuntimeError(2952, `${imgDirectiveDetails(dir.ngSrc)} the \`loading\` attribute was used on an image that was marked "priority". Setting \`loading\` on priority images is not allowed because these images will always be eagerly loaded. To fix this, remove the �loading� attribute from the priority image.`);
   }
   const validInputs = ["auto", "eager", "lazy"];
   if (typeof dir.loading === "string" && !validInputs.includes(dir.loading)) {

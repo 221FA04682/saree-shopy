@@ -196,16 +196,16 @@ export {
   provideImgixLoader,
   provideNetlifyLoader,
   registerLocaleData,
-  DomAdapter as ɵDomAdapter,
-  NullViewportScroller as ɵNullViewportScroller,
-  PLATFORM_BROWSER_ID as ɵPLATFORM_BROWSER_ID,
-  PLATFORM_SERVER_ID as ɵPLATFORM_SERVER_ID,
-  PLATFORM_WORKER_APP_ID as ɵPLATFORM_WORKER_APP_ID,
-  PLATFORM_WORKER_UI_ID as ɵPLATFORM_WORKER_UI_ID,
-  PlatformNavigation as ɵPlatformNavigation,
-  getDOM as ɵgetDOM,
-  normalizeQueryParams as ɵnormalizeQueryParams,
-  parseCookieValue as ɵparseCookieValue,
-  setRootDomAdapter as ɵsetRootDomAdapter
+  DomAdapter as ?DomAdapter,
+  NullViewportScroller as ?NullViewportScroller,
+  PLATFORM_BROWSER_ID as ?PLATFORM_BROWSER_ID,
+  PLATFORM_SERVER_ID as ?PLATFORM_SERVER_ID,
+  PLATFORM_WORKER_APP_ID as ?PLATFORM_WORKER_APP_ID,
+  PLATFORM_WORKER_UI_ID as ?PLATFORM_WORKER_UI_ID,
+  PlatformNavigation as ?PlatformNavigation,
+  getDOM as ?getDOM,
+  normalizeQueryParams as ?normalizeQueryParams,
+  parseCookieValue as ?parseCookieValue,
+  setRootDomAdapter as ?setRootDomAdapter
 };
 //# sourceMappingURL=@angular_common.js.map

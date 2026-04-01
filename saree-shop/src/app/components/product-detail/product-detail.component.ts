@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from '../../services/product.service';
@@ -22,6 +23,7 @@ export class ProductDetailComponent implements OnInit {
   auth = inject(AuthService);
   toast = inject(ToastService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
 
   product = signal<Product | null>(null);
   related = signal<Product[]>([]);
@@ -39,20 +41,24 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(p => {
       this.loading.set(true);
-      this.ps.getById(p['id']).subscribe({
-        next: (r) => {
-          const prod = { ...r.product, id: r.product._id };
-          this.product.set(prod);
-          this.activeImg.set(prod.images[0] || '');
-          this.selColor.set(prod.colors[0] || '');
-          this.loading.set(false);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          this.ps.getRelated(r.product._id).subscribe(rel => {
-            this.related.set(rel.products.map(p2 => ({ ...p2, id: p2._id })));
-          });
-        },
-        error: () => this.loading.set(false),
-      });
+      this.loadProduct(p['id']);
+    });
+  }
+
+  loadProduct(id: string, keepScroll = false) {
+    this.ps.getById(id).subscribe({
+      next: (r) => {
+        const prod = { ...r.product, id: r.product._id };
+        this.product.set(prod);
+        if (!this.activeImg()) this.activeImg.set(prod.images[0] || '');
+        if (!this.selColor()) this.selColor.set(prod.colors[0] || '');
+        this.loading.set(false);
+        if (!keepScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.ps.getRelated(r.product._id).subscribe(rel => {
+          this.related.set(rel.products.map(p2 => ({ ...p2, id: p2._id })));
+        });
+      },
+      error: () => this.loading.set(false),
     });
   }
 
@@ -75,11 +81,26 @@ export class ProductDetailComponent implements OnInit {
     this.cart.addItem(this.product()!, this.qty(), this.selColor());
     this.toast.success(`${this.product()!.name} added to bag!`);
   }
+  buyNow() {
+    this.addToCart();
+    this.router.navigate(['/cart']);
+  }
   submitReview() {
     if (!this.reviewComment.trim()) { this.toast.error('Please write a comment.'); return; }
     this.submittingReview.set(true);
     this.ps.addReview(this.product()!._id, this.reviewRating(), this.reviewComment).subscribe({
-      next: () => { this.toast.success('Review submitted!'); this.reviewComment = ''; this.submittingReview.set(false); },
+      next: (response: any) => {
+        this.toast.success('Review submitted!');
+        if (response.product) {
+          const updated = { ...response.product, id: response.product._id };
+          this.product.set(updated);
+        } else {
+          this.loadProduct(this.product()!._id, true);
+        }
+        this.reviewComment = '';
+        this.activeTab.set('Reviews');
+        this.submittingReview.set(false);
+      },
       error: (e) => { this.toast.error(e.message); this.submittingReview.set(false); },
     });
   }

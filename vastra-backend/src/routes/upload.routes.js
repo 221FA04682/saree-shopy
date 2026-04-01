@@ -30,13 +30,18 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
+function getBaseUrl(req) {
+  return process.env.SERVER_URL || `${req.protocol}://${req.get('host')}`;
+}
+
 // ── POST /api/upload/product ─── Upload product image ────────
 router.post('/product', protect, adminOnly, upload.array('images', 5), (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, message: 'No files uploaded.' });
     }
-    const urls = req.files.map(f => `${process.env.SERVER_URL || 'http://localhost:5000'}/uploads/products/${f.filename}`);
+    const baseUrl = getBaseUrl(req);
+    const urls = req.files.map(f => `${baseUrl}/uploads/products/${f.filename}`);
     res.json({ success: true, urls });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

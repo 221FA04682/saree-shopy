@@ -58,26 +58,26 @@ import {
   reflectComponentType,
   runInInjectionContext,
   setClassMetadata,
-  ɵɵInputTransformsFeature,
-  ɵɵNgOnChangesFeature,
-  ɵɵStandaloneFeature,
-  ɵɵattribute,
-  ɵɵcontentQuery,
-  ɵɵdefineComponent,
-  ɵɵdefineDirective,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule,
-  ɵɵdirectiveInject,
-  ɵɵelement,
-  ɵɵgetInheritedFactory,
-  ɵɵinject,
-  ɵɵinjectAttribute,
-  ɵɵinvalidFactory,
-  ɵɵlistener,
-  ɵɵloadQuery,
-  ɵɵqueryRefresh,
-  ɵɵsanitizeUrlOrResourceUrl
+  ??InputTransformsFeature,
+  ??NgOnChangesFeature,
+  ??StandaloneFeature,
+  ??attribute,
+  ??contentQuery,
+  ??defineComponent,
+  ??defineDirective,
+  ??defineInjectable,
+  ??defineInjector,
+  ??defineNgModule,
+  ??directiveInject,
+  ??element,
+  ??getInheritedFactory,
+  ??inject,
+  ??injectAttribute,
+  ??invalidFactory,
+  ??listener,
+  ??loadQuery,
+  ??queryRefresh,
+  ??sanitizeUrlOrResourceUrl
 } from "./chunk-IGJZNA3K.js";
 import "./chunk-CONQKHOI.js";
 import {
@@ -364,12 +364,12 @@ function mapChildrenIntoArray(segment, fn) {
 }
 var UrlSerializer = class _UrlSerializer {
   static {
-    this.ɵfac = function UrlSerializer_Factory(t) {
+    this.?fac = function UrlSerializer_Factory(t) {
       return new (t || _UrlSerializer)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _UrlSerializer,
       factory: () => (() => new DefaultUrlSerializer())(),
       providedIn: "root"
@@ -1283,14 +1283,14 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
     return this.contexts.get(childName) || null;
   }
   static {
-    this.ɵfac = function ChildrenOutletContexts_Factory(t) {
+    this.?fac = function ChildrenOutletContexts_Factory(t) {
       return new (t || _ChildrenOutletContexts)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _ChildrenOutletContexts,
-      factory: _ChildrenOutletContexts.ɵfac,
+      factory: _ChildrenOutletContexts.?fac,
       providedIn: "root"
     });
   }
@@ -1742,12 +1742,12 @@ var RouterOutlet = class _RouterOutlet {
     this.activateEvents.emit(this.activated.instance);
   }
   static {
-    this.ɵfac = function RouterOutlet_Factory(t) {
+    this.?fac = function RouterOutlet_Factory(t) {
       return new (t || _RouterOutlet)();
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _RouterOutlet,
       selectors: [["router-outlet"]],
       inputs: {
@@ -1761,7 +1761,7 @@ var RouterOutlet = class _RouterOutlet {
       },
       exportAs: ["outlet"],
       standalone: true,
-      features: [ɵɵNgOnChangesFeature]
+      features: [??NgOnChangesFeature]
     });
   }
 };
@@ -1871,14 +1871,14 @@ var RoutedComponentInputBinder = class _RoutedComponentInputBinder {
     this.outletDataSubscriptions.set(outlet, dataSubscription);
   }
   static {
-    this.ɵfac = function RoutedComponentInputBinder_Factory(t) {
+    this.?fac = function RoutedComponentInputBinder_Factory(t) {
       return new (t || _RoutedComponentInputBinder)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _RoutedComponentInputBinder,
-      factory: _RoutedComponentInputBinder.ɵfac
+      factory: _RoutedComponentInputBinder.?fac
     });
   }
 };
@@ -1951,23 +1951,23 @@ function isRedirectingNavigationCancelingError(error) {
 function isNavigationCancelingError(error) {
   return !!error && error[NAVIGATION_CANCELING_ERROR];
 }
-var ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
+var ?EmptyOutletComponent = class _?EmptyOutletComponent {
   static {
-    this.ɵfac = function ɵEmptyOutletComponent_Factory(t) {
-      return new (t || _ɵEmptyOutletComponent)();
+    this.?fac = function ?EmptyOutletComponent_Factory(t) {
+      return new (t || _?EmptyOutletComponent)();
     };
   }
   static {
-    this.ɵcmp = ɵɵdefineComponent({
-      type: _ɵEmptyOutletComponent,
+    this.?cmp = ??defineComponent({
+      type: _?EmptyOutletComponent,
       selectors: [["ng-component"]],
       standalone: true,
-      features: [ɵɵStandaloneFeature],
+      features: [??StandaloneFeature],
       decls: 1,
       vars: 0,
       template: function _EmptyOutletComponent_Template(rf, ctx) {
         if (rf & 1) {
-          ɵɵelement(0, "router-outlet");
+          ??element(0, "router-outlet");
         }
       },
       dependencies: [RouterOutlet],
@@ -1976,7 +1976,7 @@ var ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
   }
 };
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ɵEmptyOutletComponent, [{
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(?EmptyOutletComponent, [{
     type: Component,
     args: [{
       template: `<router-outlet></router-outlet>`,
@@ -2088,7 +2088,7 @@ function standardizeConfig(r) {
     children
   }) : __spreadValues({}, r);
   if (!c.component && !c.loadComponent && (children || c.loadChildren) && c.outlet && c.outlet !== PRIMARY_OUTLET) {
-    c.component = ɵEmptyOutletComponent;
+    c.component = ?EmptyOutletComponent;
   }
   return c;
 }
@@ -3127,12 +3127,12 @@ var TitleStrategy = class _TitleStrategy {
     return snapshot.data[RouteTitleKey];
   }
   static {
-    this.ɵfac = function TitleStrategy_Factory(t) {
+    this.?fac = function TitleStrategy_Factory(t) {
       return new (t || _TitleStrategy)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _TitleStrategy,
       factory: () => (() => inject(DefaultTitleStrategy))(),
       providedIn: "root"
@@ -3165,14 +3165,14 @@ var DefaultTitleStrategy = class _DefaultTitleStrategy extends TitleStrategy {
     }
   }
   static {
-    this.ɵfac = function DefaultTitleStrategy_Factory(t) {
-      return new (t || _DefaultTitleStrategy)(ɵɵinject(Title));
+    this.?fac = function DefaultTitleStrategy_Factory(t) {
+      return new (t || _DefaultTitleStrategy)(??inject(Title));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DefaultTitleStrategy,
-      factory: _DefaultTitleStrategy.ɵfac,
+      factory: _DefaultTitleStrategy.?fac,
       providedIn: "root"
     });
   }
@@ -3241,14 +3241,14 @@ var RouterConfigLoader = class _RouterConfigLoader {
     return loader;
   }
   static {
-    this.ɵfac = function RouterConfigLoader_Factory(t) {
+    this.?fac = function RouterConfigLoader_Factory(t) {
       return new (t || _RouterConfigLoader)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _RouterConfigLoader,
-      factory: _RouterConfigLoader.ɵfac,
+      factory: _RouterConfigLoader.?fac,
       providedIn: "root"
     });
   }
@@ -3301,12 +3301,12 @@ function maybeUnwrapDefaultExport(input) {
 }
 var UrlHandlingStrategy = class _UrlHandlingStrategy {
   static {
-    this.ɵfac = function UrlHandlingStrategy_Factory(t) {
+    this.?fac = function UrlHandlingStrategy_Factory(t) {
       return new (t || _UrlHandlingStrategy)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _UrlHandlingStrategy,
       factory: () => (() => inject(DefaultUrlHandlingStrategy))(),
       providedIn: "root"
@@ -3333,14 +3333,14 @@ var DefaultUrlHandlingStrategy = class _DefaultUrlHandlingStrategy {
     return newUrlPart;
   }
   static {
-    this.ɵfac = function DefaultUrlHandlingStrategy_Factory(t) {
+    this.?fac = function DefaultUrlHandlingStrategy_Factory(t) {
       return new (t || _DefaultUrlHandlingStrategy)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DefaultUrlHandlingStrategy,
-      factory: _DefaultUrlHandlingStrategy.ɵfac,
+      factory: _DefaultUrlHandlingStrategy.?fac,
       providedIn: "root"
     });
   }
@@ -3719,14 +3719,14 @@ var NavigationTransitions = class _NavigationTransitions {
     return extractedBrowserUrl.toString() !== this.currentTransition?.extractedUrl.toString() && !this.currentTransition?.extras.skipLocationChange;
   }
   static {
-    this.ɵfac = function NavigationTransitions_Factory(t) {
+    this.?fac = function NavigationTransitions_Factory(t) {
       return new (t || _NavigationTransitions)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _NavigationTransitions,
-      factory: _NavigationTransitions.ɵfac,
+      factory: _NavigationTransitions.?fac,
       providedIn: "root"
     });
   }
@@ -3744,12 +3744,12 @@ function isBrowserTriggeredNavigation(source) {
 }
 var RouteReuseStrategy = class _RouteReuseStrategy {
   static {
-    this.ɵfac = function RouteReuseStrategy_Factory(t) {
+    this.?fac = function RouteReuseStrategy_Factory(t) {
       return new (t || _RouteReuseStrategy)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _RouteReuseStrategy,
       factory: () => (() => inject(DefaultRouteReuseStrategy))(),
       providedIn: "root"
@@ -3797,17 +3797,17 @@ var BaseRouteReuseStrategy = class {
 };
 var DefaultRouteReuseStrategy = class _DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   static {
-    this.ɵfac = /* @__PURE__ */ (() => {
-      let ɵDefaultRouteReuseStrategy_BaseFactory;
+    this.?fac = /* @__PURE__ */ (() => {
+      let ?DefaultRouteReuseStrategy_BaseFactory;
       return function DefaultRouteReuseStrategy_Factory(t) {
-        return (ɵDefaultRouteReuseStrategy_BaseFactory || (ɵDefaultRouteReuseStrategy_BaseFactory = ɵɵgetInheritedFactory(_DefaultRouteReuseStrategy)))(t || _DefaultRouteReuseStrategy);
+        return (?DefaultRouteReuseStrategy_BaseFactory || (?DefaultRouteReuseStrategy_BaseFactory = ??getInheritedFactory(_DefaultRouteReuseStrategy)))(t || _DefaultRouteReuseStrategy);
       };
     })();
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _DefaultRouteReuseStrategy,
-      factory: _DefaultRouteReuseStrategy.ɵfac,
+      factory: _DefaultRouteReuseStrategy.?fac,
       providedIn: "root"
     });
   }
@@ -3822,12 +3822,12 @@ var DefaultRouteReuseStrategy = class _DefaultRouteReuseStrategy extends BaseRou
 })();
 var StateManager = class _StateManager {
   static {
-    this.ɵfac = function StateManager_Factory(t) {
+    this.?fac = function StateManager_Factory(t) {
       return new (t || _StateManager)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _StateManager,
       factory: () => (() => inject(HistoryStateManager))(),
       providedIn: "root"
@@ -3871,7 +3871,7 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
     return this.location.getState();
   }
   /**
-   * The ɵrouterPageId of whatever page is currently active in the browser history. This is
+   * The ?routerPageId of whatever page is currently active in the browser history. This is
    * important for computing the target page id for new navigations because we need to ensure each
    * page id in the browser history is 1 more than the previous entry.
    */
@@ -3879,7 +3879,7 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
     if (this.canceledNavigationResolution !== "computed") {
       return this.currentPageId;
     }
-    return this.restoredState()?.ɵrouterPageId ?? this.currentPageId;
+    return this.restoredState()?.?routerPageId ?? this.currentPageId;
   }
   getRouterState() {
     return this.routerState;
@@ -3973,7 +3973,7 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
     if (this.canceledNavigationResolution === "computed") {
       return {
         navigationId,
-        ɵrouterPageId: routerPageId
+        ?routerPageId: routerPageId
       };
     }
     return {
@@ -3981,17 +3981,17 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
     };
   }
   static {
-    this.ɵfac = /* @__PURE__ */ (() => {
-      let ɵHistoryStateManager_BaseFactory;
+    this.?fac = /* @__PURE__ */ (() => {
+      let ?HistoryStateManager_BaseFactory;
       return function HistoryStateManager_Factory(t) {
-        return (ɵHistoryStateManager_BaseFactory || (ɵHistoryStateManager_BaseFactory = ɵɵgetInheritedFactory(_HistoryStateManager)))(t || _HistoryStateManager);
+        return (?HistoryStateManager_BaseFactory || (?HistoryStateManager_BaseFactory = ??getInheritedFactory(_HistoryStateManager)))(t || _HistoryStateManager);
       };
     })();
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _HistoryStateManager,
-      factory: _HistoryStateManager.ɵfac,
+      factory: _HistoryStateManager.?fac,
       providedIn: "root"
     });
   }
@@ -4170,7 +4170,7 @@ var Router = class _Router {
     if (state) {
       const stateCopy = __spreadValues({}, state);
       delete stateCopy.navigationId;
-      delete stateCopy.ɵrouterPageId;
+      delete stateCopy.?routerPageId;
       if (Object.keys(stateCopy).length !== 0) {
         extras.state = stateCopy;
       }
@@ -4460,14 +4460,14 @@ var Router = class _Router {
     });
   }
   static {
-    this.ɵfac = function Router_Factory(t) {
+    this.?fac = function Router_Factory(t) {
       return new (t || _Router)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _Router,
-      factory: _Router.ɵfac,
+      factory: _Router.?fac,
       providedIn: "root"
     });
   }
@@ -4584,14 +4584,14 @@ var RouterLink = class _RouterLink {
       // This class represents a directive that can be added to both `<a>` elements,
       // as well as other elements. As a result, we can't define security context at
       // compile time. So the security context is deferred to runtime.
-      // The `ɵɵsanitizeUrlOrResourceUrl` selects the necessary sanitizer function
+      // The `??sanitizeUrlOrResourceUrl` selects the necessary sanitizer function
       // based on the tag and property names. The logic mimics the one from
       // `packages/compiler/src/schema/dom_security_schema.ts`, which is used at compile time.
       //
       // Note: we should investigate whether we can switch to using `@HostBinding('attr.href')`
       // instead of applying a value via a renderer, after a final merge of the
       // `RouterLinkWithHref` directive.
-      ɵɵsanitizeUrlOrResourceUrl(this.href, this.el.nativeElement.tagName.toLowerCase(), "href")
+      ??sanitizeUrlOrResourceUrl(this.href, this.el.nativeElement.tagName.toLowerCase(), "href")
     );
     this.applyAttributeValue("href", sanitizedValue);
   }
@@ -4619,23 +4619,23 @@ var RouterLink = class _RouterLink {
     });
   }
   static {
-    this.ɵfac = function RouterLink_Factory(t) {
-      return new (t || _RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute("tabindex"), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(LocationStrategy));
+    this.?fac = function RouterLink_Factory(t) {
+      return new (t || _RouterLink)(??directiveInject(Router), ??directiveInject(ActivatedRoute), ??injectAttribute("tabindex"), ??directiveInject(Renderer2), ??directiveInject(ElementRef), ??directiveInject(LocationStrategy));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _RouterLink,
       selectors: [["", "routerLink", ""]],
       hostVars: 1,
       hostBindings: function RouterLink_HostBindings(rf, ctx) {
         if (rf & 1) {
-          ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) {
+          ??listener("click", function RouterLink_click_HostBindingHandler($event) {
             return ctx.onClick($event.button, $event.ctrlKey, $event.shiftKey, $event.altKey, $event.metaKey);
           });
         }
         if (rf & 2) {
-          ɵɵattribute("target", ctx.target);
+          ??attribute("target", ctx.target);
         }
       },
       inputs: {
@@ -4652,7 +4652,7 @@ var RouterLink = class _RouterLink {
         routerLink: "routerLink"
       },
       standalone: true,
-      features: [ɵɵInputTransformsFeature, ɵɵNgOnChangesFeature]
+      features: [??InputTransformsFeature, ??NgOnChangesFeature]
     });
   }
 };
@@ -4820,21 +4820,21 @@ var RouterLinkActive = class _RouterLinkActive {
     return this.link && isActiveCheckFn(this.link) || this.links.some(isActiveCheckFn);
   }
   static {
-    this.ɵfac = function RouterLinkActive_Factory(t) {
-      return new (t || _RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(RouterLink, 8));
+    this.?fac = function RouterLinkActive_Factory(t) {
+      return new (t || _RouterLinkActive)(??directiveInject(Router), ??directiveInject(ElementRef), ??directiveInject(Renderer2), ??directiveInject(ChangeDetectorRef), ??directiveInject(RouterLink, 8));
     };
   }
   static {
-    this.ɵdir = ɵɵdefineDirective({
+    this.?dir = ??defineDirective({
       type: _RouterLinkActive,
       selectors: [["", "routerLinkActive", ""]],
       contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) {
         if (rf & 1) {
-          ɵɵcontentQuery(dirIndex, RouterLink, 5);
+          ??contentQuery(dirIndex, RouterLink, 5);
         }
         if (rf & 2) {
           let _t;
-          ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.links = _t);
+          ??queryRefresh(_t = ??loadQuery()) && (ctx.links = _t);
         }
       },
       inputs: {
@@ -4847,7 +4847,7 @@ var RouterLinkActive = class _RouterLinkActive {
       },
       exportAs: ["routerLinkActive"],
       standalone: true,
-      features: [ɵɵNgOnChangesFeature]
+      features: [??NgOnChangesFeature]
     });
   }
 };
@@ -4903,14 +4903,14 @@ var PreloadAllModules = class _PreloadAllModules {
     return fn().pipe(catchError(() => of(null)));
   }
   static {
-    this.ɵfac = function PreloadAllModules_Factory(t) {
+    this.?fac = function PreloadAllModules_Factory(t) {
       return new (t || _PreloadAllModules)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _PreloadAllModules,
-      factory: _PreloadAllModules.ɵfac,
+      factory: _PreloadAllModules.?fac,
       providedIn: "root"
     });
   }
@@ -4928,14 +4928,14 @@ var NoPreloading = class _NoPreloading {
     return of(null);
   }
   static {
-    this.ɵfac = function NoPreloading_Factory(t) {
+    this.?fac = function NoPreloading_Factory(t) {
       return new (t || _NoPreloading)();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _NoPreloading,
-      factory: _NoPreloading.ɵfac,
+      factory: _NoPreloading.?fac,
       providedIn: "root"
     });
   }
@@ -5010,14 +5010,14 @@ var RouterPreloader = class _RouterPreloader {
     });
   }
   static {
-    this.ɵfac = function RouterPreloader_Factory(t) {
-      return new (t || _RouterPreloader)(ɵɵinject(Router), ɵɵinject(Compiler), ɵɵinject(EnvironmentInjector), ɵɵinject(PreloadingStrategy), ɵɵinject(RouterConfigLoader));
+    this.?fac = function RouterPreloader_Factory(t) {
+      return new (t || _RouterPreloader)(??inject(Router), ??inject(Compiler), ??inject(EnvironmentInjector), ??inject(PreloadingStrategy), ??inject(RouterConfigLoader));
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _RouterPreloader,
-      factory: _RouterPreloader.ɵfac,
+      factory: _RouterPreloader.?fac,
       providedIn: "root"
     });
   }
@@ -5121,14 +5121,14 @@ var RouterScroller = class _RouterScroller {
     this.scrollEventsSubscription?.unsubscribe();
   }
   static {
-    this.ɵfac = function RouterScroller_Factory(t) {
-      ɵɵinvalidFactory();
+    this.?fac = function RouterScroller_Factory(t) {
+      ??invalidFactory();
     };
   }
   static {
-    this.ɵprov = ɵɵdefineInjectable({
+    this.?prov = ??defineInjectable({
       token: _RouterScroller,
-      factory: _RouterScroller.ɵfac
+      factory: _RouterScroller.?fac
     });
   }
 };
@@ -5163,15 +5163,15 @@ function provideRouter(routes, ...features) {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
     useFactory: getBootstrapListener
-  }, features.map((feature) => feature.ɵproviders)]);
+  }, features.map((feature) => feature.?providers)]);
 }
 function rootRoute(router) {
   return router.routerState.root;
 }
 function routerFeature(kind, providers) {
   return {
-    ɵkind: kind,
-    ɵproviders: providers
+    ?kind: kind,
+    ?providers: providers
   };
 }
 var ROUTER_IS_PROVIDED = new InjectionToken("", {
@@ -5369,7 +5369,7 @@ function withViewTransitions(options) {
   }];
   return routerFeature(9, providers);
 }
-var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent];
+var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkActive, ?EmptyOutletComponent];
 var ROUTER_FORROOT_GUARD = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "router duplicate forRoot guard" : "ROUTER_FORROOT_GUARD");
 var ROUTER_PROVIDERS = [
   Location,
@@ -5416,7 +5416,7 @@ var RouterModule = class _RouterModule {
   static forRoot(routes, config) {
     return {
       ngModule: _RouterModule,
-      providers: [ROUTER_PROVIDERS, typeof ngDevMode === "undefined" || ngDevMode ? config?.enableTracing ? withDebugTracing().ɵproviders : [] : [], {
+      providers: [ROUTER_PROVIDERS, typeof ngDevMode === "undefined" || ngDevMode ? config?.enableTracing ? withDebugTracing().?providers : [] : [], {
         provide: ROUTES,
         multi: true,
         useValue: routes
@@ -5427,7 +5427,7 @@ var RouterModule = class _RouterModule {
       }, {
         provide: ROUTER_CONFIGURATION,
         useValue: config ? config : {}
-      }, config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(), provideRouterScroller(), config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).ɵproviders : [], config?.initialNavigation ? provideInitialNavigation(config) : [], config?.bindToComponentInputs ? withComponentInputBinding().ɵproviders : [], config?.enableViewTransitions ? withViewTransitions().ɵproviders : [], provideRouterInitializer()]
+      }, config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(), provideRouterScroller(), config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).?providers : [], config?.initialNavigation ? provideInitialNavigation(config) : [], config?.bindToComponentInputs ? withComponentInputBinding().?providers : [], config?.enableViewTransitions ? withViewTransitions().?providers : [], provideRouterInitializer()]
     };
   }
   /**
@@ -5457,19 +5457,19 @@ var RouterModule = class _RouterModule {
     };
   }
   static {
-    this.ɵfac = function RouterModule_Factory(t) {
-      return new (t || _RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8));
+    this.?fac = function RouterModule_Factory(t) {
+      return new (t || _RouterModule)(??inject(ROUTER_FORROOT_GUARD, 8));
     };
   }
   static {
-    this.ɵmod = ɵɵdefineNgModule({
+    this.?mod = ??defineNgModule({
       type: _RouterModule,
-      imports: [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent],
-      exports: [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent]
+      imports: [RouterOutlet, RouterLink, RouterLinkActive, ?EmptyOutletComponent],
+      exports: [RouterOutlet, RouterLink, RouterLinkActive, ?EmptyOutletComponent]
     });
   }
   static {
-    this.ɵinj = ɵɵdefineInjector({});
+    this.?inj = ??defineInjector({});
   }
 };
 (() => {
@@ -5524,7 +5524,7 @@ function provideForRootGuard(router) {
   return "guarded";
 }
 function provideInitialNavigation(config) {
-  return [config.initialNavigation === "disabled" ? withDisabledInitialNavigation().ɵproviders : [], config.initialNavigation === "enabledBlocking" ? withEnabledBlockingInitialNavigation().ɵproviders : []];
+  return [config.initialNavigation === "disabled" ? withDisabledInitialNavigation().?providers : [], config.initialNavigation === "enabledBlocking" ? withEnabledBlockingInitialNavigation().?providers : []];
 }
 var ROUTER_INITIALIZER = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "Router Initializer" : "");
 function provideRouterInitializer() {
@@ -5631,10 +5631,10 @@ export {
   withPreloading,
   withRouterConfig,
   withViewTransitions,
-  ɵEmptyOutletComponent,
-  ROUTER_PROVIDERS as ɵROUTER_PROVIDERS,
-  afterNextNavigation as ɵafterNextNavigation,
-  loadChildren as ɵloadChildren
+  ?EmptyOutletComponent,
+  ROUTER_PROVIDERS as ?ROUTER_PROVIDERS,
+  afterNextNavigation as ?afterNextNavigation,
+  loadChildren as ?loadChildren
 };
 /*! Bundled license information:
 

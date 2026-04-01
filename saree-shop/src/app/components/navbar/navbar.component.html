@@ -1,12 +1,10 @@
-<!-- ── Announcement Bar (dynamic from admin) ── -->
 <div class="announce-bar" *ngIf="!auth.isAdmin() && announcementActive()">
   <p [innerHTML]="announcementText()"></p>
 </div>
 
-<!-- ── Admin Bar ── -->
 <div class="admin-bar" *ngIf="auth.isAdmin()">
   <span class="material-icons">admin_panel_settings</span>
-  Admin Mode &nbsp;·&nbsp;
+  Admin Mode <span class="ab-sep">·</span>
   <a routerLink="/admin">Dashboard</a><span class="ab-sep">·</span>
   <a routerLink="/admin/orders">Orders</a><span class="ab-sep">·</span>
   <a routerLink="/admin/products">Products</a><span class="ab-sep">·</span>
@@ -18,11 +16,8 @@
   </button>
 </div>
 
-<!-- ── Main Navbar ── -->
 <nav class="navbar" [class.scrolled]="scrolled()" [class.admin-mode]="auth.isAdmin()">
   <div class="nav-container">
-
-    <!-- Logo -->
     <a routerLink="/" class="logo">
       <div class="logo-mark">V</div>
       <div class="logo-text">
@@ -33,31 +28,25 @@
       </div>
     </a>
 
-    <!-- ── CUSTOMER NAV LINKS ── -->
     <ul class="nav-links" *ngIf="!auth.isAdmin()">
       <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       </li>
 
-      <!-- Collections mega menu -->
       <li class="has-mega">
         <a routerLink="/products">Collections <span class="nav-chevron">›</span></a>
         <div class="mega-menu">
           <div class="mega-inner">
-
-            <!-- By Fabric — col 1 (first 6 categories) -->
             <div class="mega-col">
               <h5>By Fabric</h5>
               <a *ngFor="let cat of catCol1()" (click)="navTo(cat.name)">{{ cat.name }}</a>
             </div>
 
-            <!-- By Fabric — col 2 (categories 7-12, if any) -->
             <div class="mega-col" *ngIf="catCol2().length > 0">
               <h5>More Fabrics</h5>
               <a *ngFor="let cat of catCol2()" (click)="navTo(cat.name)">{{ cat.name }}</a>
             </div>
 
-            <!-- By Occasion -->
             <div class="mega-col">
               <h5>By Occasion</h5>
               <a (click)="navToOcc('Wedding')">Bridal & Wedding</a>
@@ -67,86 +56,95 @@
               <a (click)="navToOcc('Office')">Office Wear</a>
             </div>
 
-            <!-- Curated Edits -->
             <div class="mega-col">
               <h5>Curated Edits</h5>
-              <a routerLink="/products" [queryParams]="{filter:'new'}">✦ New Arrivals</a>
-              <a routerLink="/products" [queryParams]="{filter:'bestseller'}">Bestsellers</a>
-              <a routerLink="/products" [queryParams]="{filter:'featured'}">Featured</a>
+              <a routerLink="/products" [queryParams]="{ filter: 'new' }">New Arrivals</a>
+              <a routerLink="/products" [queryParams]="{ filter: 'bestseller' }">Bestsellers</a>
+              <a routerLink="/products" [queryParams]="{ filter: 'featured' }">Featured</a>
             </div>
 
-            <!-- Featured image -->
             <div class="mega-featured">
               <div class="mega-feat-img">
-                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&q=80" alt="Featured">
+                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=300&q=80" alt="Featured" />
                 <div class="mega-feat-overlay">
                   <span>New Season</span>
                   <h4>Bridal Collection</h4>
-                  <a routerLink="/products" [queryParams]="{occasion:'Wedding'}" class="mega-feat-btn">Explore</a>
+                  <a routerLink="/products" [queryParams]="{ occasion: 'Wedding' }" class="mega-feat-btn">Explore</a>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </li>
 
-      <li><a routerLink="/products" [queryParams]="{filter:'new'}">New Arrivals</a></li>
-      <li><a routerLink="/products" [queryParams]="{filter:'bestseller'}">Bestsellers</a></li>
-      <li><a routerLink="/products" [queryParams]="{occasion:'Wedding'}">Bridal</a></li>
+      <li><a routerLink="/products" [queryParams]="{ filter: 'new' }">New Arrivals</a></li>
+      <li><a routerLink="/products" [queryParams]="{ filter: 'bestseller' }">Bestsellers</a></li>
+      <li><a routerLink="/products" [queryParams]="{ occasion: 'Wedding' }">Bridal</a></li>
     </ul>
 
-    <!-- ── ADMIN NAV LINKS ── -->
     <ul class="nav-links admin-nav-links" *ngIf="auth.isAdmin()">
-      <li><a routerLink="/admin"            routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-        <span class="material-icons">dashboard</span> Dashboard
-      </a></li>
-      <li><a routerLink="/admin/orders"     routerLinkActive="active">
-        <span class="material-icons">receipt_long</span> Orders
-      </a></li>
-      <li><a routerLink="/admin/products"   routerLinkActive="active">
-        <span class="material-icons">inventory_2</span> Products
-      </a></li>
-      <li><a routerLink="/admin/categories" routerLinkActive="active">
-        <span class="material-icons">category</span> Categories
-      </a></li>
-      <li><a routerLink="/admin/homepage"   routerLinkActive="active">
-        <span class="material-icons">tune</span> Homepage
-      </a></li>
+      <li><a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><span class="material-icons">dashboard</span> Dashboard</a></li>
+      <li><a routerLink="/admin/orders" routerLinkActive="active"><span class="material-icons">receipt_long</span> Orders</a></li>
+      <li><a routerLink="/admin/products" routerLinkActive="active"><span class="material-icons">inventory_2</span> Products</a></li>
+      <li><a routerLink="/admin/categories" routerLinkActive="active"><span class="material-icons">category</span> Categories</a></li>
+      <li><a routerLink="/admin/homepage" routerLinkActive="active"><span class="material-icons">tune</span> Homepage</a></li>
     </ul>
 
-    <!-- ── Right Actions ── -->
     <div class="nav-actions">
-
-      <!-- Customer actions -->
       <ng-container *ngIf="!auth.isAdmin()">
-        <!-- Search -->
-        <div class="search-wrap" [class.open]="searchOpen()">
+        <div class="search-wrap" [class.open]="searchOpen()" (click)="$event.stopPropagation()">
           <div class="search-field" *ngIf="searchOpen()">
             <span class="material-icons si">search</span>
-            <input [(ngModel)]="searchQ" (keyup.enter)="doSearch()"
-                   placeholder="Search sarees..." autofocus class="search-input">
-            <button class="search-close" (click)="toggleSearch()">
+            <input
+              [ngModel]="searchQ"
+              (ngModelChange)="onSearchInput($event)"
+              (keyup.enter)="doSearch()"
+              placeholder="Search sarees, fabrics, colors..."
+              autofocus
+              class="search-input"
+            />
+            <button type="button" class="search-close" (click)="closeSearch()">
               <span class="material-icons">close</span>
             </button>
           </div>
-          <button class="nav-icon-btn" (click)="toggleSearch()" *ngIf="!searchOpen()">
+
+          <div class="search-suggestions" *ngIf="showSuggestions()">
+            <div class="search-suggestion-head" *ngIf="searching()">Searching...</div>
+
+            <button type="button" class="quick-chip" *ngFor="let item of quickSuggestions()" (click)="chooseQuickSuggestion(item)">
+              <span class="material-icons">history</span>
+              {{ item }}
+            </button>
+
+            <button type="button" class="search-suggestion-item" *ngFor="let item of suggestions()" (click)="chooseSuggestion(item)">
+              <img *ngIf="item.image" [src]="item.image" [alt]="item.name" class="search-suggestion-img" />
+              <div class="search-suggestion-copy">
+                <span class="search-suggestion-name">{{ item.name }}</span>
+                <span class="search-suggestion-meta">{{ item.category }} · {{ item.price | currency:'INR':'symbol':'1.0-0':'en-IN' }}</span>
+              </div>
+              <span class="material-icons search-suggestion-arrow">north_east</span>
+            </button>
+
+            <button type="button" class="search-view-all" *ngIf="searchQ.trim()" (click)="doSearch()">
+              <span class="material-icons">search</span>
+              View all results for "{{ searchQ }}"
+            </button>
+          </div>
+
+          <button type="button" class="nav-icon-btn" (click)="toggleSearch()" *ngIf="!searchOpen()">
             <span class="material-icons">search</span>
           </button>
         </div>
 
-        <!-- Wishlist -->
         <a routerLink="/account" class="nav-icon-btn" title="Wishlist" *ngIf="auth.isLoggedIn()">
           <span class="material-icons">favorite_border</span>
         </a>
 
-        <!-- Cart -->
         <a routerLink="/cart" class="nav-icon-btn cart-btn">
           <span class="material-icons">shopping_bag</span>
           <span *ngIf="cart.count() > 0" class="cart-count">{{ cart.count() }}</span>
         </a>
 
-        <!-- User menu dropdown -->
         <div class="user-wrap" *ngIf="auth.isLoggedIn()">
           <button class="nav-icon-btn" (click)="toggleUserOpen()">
             <div class="user-avatar">{{ auth.currentUser()?.name?.[0] }}</div>
@@ -160,10 +158,10 @@
               </div>
             </div>
             <div class="ud-divider"></div>
-            <a routerLink="/account" (click)="userOpen.set(false)" class="ud-item">
+            <a routerLink="/account" (click)="closeUserMenu()" class="ud-item">
               <span class="material-icons">manage_accounts</span> My Account
             </a>
-            <a routerLink="/orders"  (click)="userOpen.set(false)" class="ud-item">
+            <a routerLink="/orders" (click)="closeUserMenu()" class="ud-item">
               <span class="material-icons">receipt_long</span> My Orders
             </a>
             <div class="ud-divider"></div>
@@ -173,55 +171,54 @@
           </div>
         </div>
 
-        <!-- Sign In button when not logged in -->
         <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn btn-outline btn-sm">Sign In</a>
       </ng-container>
 
-      <!-- Admin badge -->
       <div class="admin-badge" *ngIf="auth.isAdmin()">
         <div class="admin-av">{{ auth.currentUser()?.name?.[0] }}</div>
         <span class="admin-name">{{ auth.currentUser()?.name }}</span>
       </div>
 
-      <!-- Mobile hamburger (customers only) -->
       <button class="nav-icon-btn mobile-menu-btn" (click)="toggleMobile()" *ngIf="!auth.isAdmin()">
         <span class="material-icons">{{ mobileOpen() ? 'close' : 'menu' }}</span>
       </button>
     </div>
   </div>
 
-  <!-- ── Mobile Nav (customers only) ── -->
   <div class="mobile-nav" [class.open]="mobileOpen()" *ngIf="!auth.isAdmin()">
-    <a routerLink="/" (click)="mobileOpen.set(false)">Home</a>
-    <a routerLink="/products" (click)="mobileOpen.set(false)">All Collections</a>
+    <a routerLink="/" (click)="closeMobileMenu()">Home</a>
+    <a routerLink="/products" (click)="closeMobileMenu()">All Collections</a>
 
-    <!-- Dynamic categories in mobile menu -->
     <div class="mobile-cats-section">
       <span class="mobile-cats-label">Shop by Fabric</span>
       <div class="mobile-cats-grid">
-        <a *ngFor="let cat of categories().slice(0, 8)"
-           [routerLink]="['/products']" [queryParams]="{category: cat.name}"
-           (click)="mobileOpen.set(false)" class="mobile-cat-chip">
+        <a
+          *ngFor="let cat of categories().slice(0, 8)"
+          [routerLink]="['/products']"
+          [queryParams]="{ category: cat.name }"
+          (click)="closeMobileMenu()"
+          class="mobile-cat-chip"
+        >
           {{ cat.name }}
         </a>
       </div>
     </div>
 
-    <a routerLink="/products" [queryParams]="{filter:'new'}"        (click)="mobileOpen.set(false)">✦ New Arrivals</a>
-    <a routerLink="/products" [queryParams]="{filter:'bestseller'}" (click)="mobileOpen.set(false)">Bestsellers</a>
-    <a routerLink="/products" [queryParams]="{occasion:'Wedding'}"  (click)="mobileOpen.set(false)">Bridal</a>
-    <a routerLink="/cart"                                           (click)="mobileOpen.set(false)">
+    <a routerLink="/products" [queryParams]="{ filter: 'new' }" (click)="closeMobileMenu()">New Arrivals</a>
+    <a routerLink="/products" [queryParams]="{ filter: 'bestseller' }" (click)="closeMobileMenu()">Bestsellers</a>
+    <a routerLink="/products" [queryParams]="{ occasion: 'Wedding' }" (click)="closeMobileMenu()">Bridal</a>
+    <a routerLink="/cart" (click)="closeMobileMenu()">
       Bag <span *ngIf="cart.count() > 0" class="mobile-cart-ct">{{ cart.count() }}</span>
     </a>
 
     <ng-container *ngIf="auth.isLoggedIn()">
-      <a routerLink="/account" (click)="mobileOpen.set(false)">My Account</a>
-      <a routerLink="/orders"  (click)="mobileOpen.set(false)">My Orders</a>
+      <a routerLink="/account" (click)="closeMobileMenu()">My Account</a>
+      <a routerLink="/orders" (click)="closeMobileMenu()">My Orders</a>
       <button (click)="logout()">Sign Out</button>
     </ng-container>
     <ng-container *ngIf="!auth.isLoggedIn()">
-      <a routerLink="/login"    (click)="mobileOpen.set(false)">Sign In</a>
-      <a routerLink="/register" (click)="mobileOpen.set(false)">Register</a>
+      <a routerLink="/login" (click)="closeMobileMenu()">Sign In</a>
+      <a routerLink="/register" (click)="closeMobileMenu()">Register</a>
     </ng-container>
   </div>
 </nav>

@@ -41,7 +41,10 @@ router.get('/', async (req, res) => {
         .sort({ createdAt: -1 }).limit(4).select('-stockHistory -reviews');
     }
 
-    res.json({ success: true, config: cfg, featuredProducts, newArrivals });
+    const bestsellers = await Product.find({ bestseller: true, isActive: true })
+      .sort({ rating: -1, reviewCount: -1 }).limit(4).select('-stockHistory -reviews');
+
+    res.json({ success: true, config: cfg, featuredProducts, newArrivals, bestsellers });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

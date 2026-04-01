@@ -7,8 +7,19 @@ const reviewSchema = new mongoose.Schema({
   comment: { type: String, required: true },
 }, { timestamps: true });
 
+function generateSlug(name) {
+  return String(name || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 const productSchema = new mongoose.Schema({
   name:        { type: String, required: true, trim: true },
+  slug:        { type: String, lowercase: true, trim: true },
   description: { type: String, required: true },
   category:    { type: String, required: true, trim: true },
   fabric:      { type: String, required: true },
@@ -48,6 +59,9 @@ const productSchema = new mongoose.Schema({
 
 // Auto-calc discount when prices set
 productSchema.pre('save', function (next) {
+  if (this.name && (!this.slug || this.isModified('name'))) {
+    this.slug = generateSlug(this.name);
+  }
   if (this.originalPrice && this.originalPrice > this.price) {
     this.discount = Math.round((1 - this.price / this.originalPrice) * 100);
   } else {
@@ -72,5 +86,6 @@ productSchema.methods.updateStock = function (change, reason, ref) {
 
 productSchema.index({ name: 'text', description: 'text', tags: 'text' });
 productSchema.index({ category: 1, price: 1, rating: -1 });
+productSchema.index({ slug: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model('Product', productSchema);
