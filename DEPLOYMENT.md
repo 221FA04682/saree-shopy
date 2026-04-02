@@ -39,6 +39,12 @@ Set these environment variables in Render:
 - `CLIENT_URL`: your Vercel frontend URL, for example `https://your-app.vercel.app`
 - `SERVER_URL`: your Render backend URL, for example `https://your-render-service.onrender.com`
 - `NODE_ENV`: `production`
+- `ADMIN_EMAIL`: email for the first admin account
+- `ADMIN_PASSWORD`: password for the first admin account
+- `ADMIN_NAME`: optional admin display name
+- `ADMIN_PHONE`: optional admin phone number
+
+If `ADMIN_EMAIL` and `ADMIN_PASSWORD` are set, the backend will auto-create that admin user on startup if it does not already exist.
 
 During local development, you can still keep:
 

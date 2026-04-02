@@ -26,6 +26,21 @@ npm start        # Production
 | Admin | admin@vastrav.com      | Admin@123  |
 | User  | priya@example.com      | User@123   |
 
+## Production Admin Bootstrap
+
+If you deploy without running `node src/seed.js`, new registrations will still be created with role `user`.
+
+To auto-create the first admin account on backend startup, set these environment variables:
+
+```env
+ADMIN_EMAIL=admin@yourstore.com
+ADMIN_PASSWORD=ChooseAStrongPassword123
+ADMIN_NAME=Vastra Admin
+ADMIN_PHONE=9000000000
+```
+
+If the email does not already exist, the backend will create that user with role `admin`.
+
 ## API Endpoints
 
 ### Auth
